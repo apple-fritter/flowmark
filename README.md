@@ -17,7 +17,9 @@ This can be useful for documentation workflows and also to compare LLM outputs t
 Markdown.
 
 Finally, it has options to use heuristics to split on sentences, which can make diffs
-much more readable. (For an example of this, look at the source to this readme file.)
+much more readable. (For an example of this, look at the
+[Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of this
+readme file.)
 
 It aims to be small and simple and have only a few dependencies, currently only
 [`marko`](https://github.com/frostming/marko) and
