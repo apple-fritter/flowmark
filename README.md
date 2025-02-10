@@ -27,6 +27,15 @@ This is a new and simple package (previously I'd implemented something like this
 [for Atom](https://github.com/jlevy/atom-flowmark)) but I plan to add more support for
 command line usage and VSCode/Cursor auto-formatting in the future.
 
+## Installation
+
+```
+# Use pip
+pip install flowmark
+# Or poetry
+poetry add flowmark
+```
+
 * * *
 
 *This project was built from
