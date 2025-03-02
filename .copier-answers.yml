@@ -1,0 +1,9 @@
+# Changes here will be overwritten by Copier. Do not edit manually.
+_commit: 3690f8
+_src_path: gh:jlevy/simple-modern-poetry
+package_author_email: joshua@cal.berkeley.edu
+package_author_name: Joshua Levy
+package_description: Better line wrapping and formatting for plaintext and Markdown
+package_github_org: jlevy
+package_name: flowmark
+package_slug: flowmark
