@@ -1,7 +1,7 @@
 from textwrap import dedent
 
 import marko
-from flowmark.markdown_filling import _normalize_html_comments, normalize_markdown
+from flowmark.markdown_filling import _normalize_html_comments, fill_markdown
 
 
 def test_normalize_html_comments():
@@ -235,7 +235,7 @@ def test_normalize_markdown():
     print("---Parsed")
     print(parsed)
 
-    normalized_doc = normalize_markdown(_original_doc)
+    normalized_doc = fill_markdown(_original_doc, by_sentence=True)
 
     print("---Before")
     print(_original_doc)

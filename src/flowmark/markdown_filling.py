@@ -12,7 +12,7 @@ discussion on why line wrapping this way is convenient.)
 import re
 from contextlib import contextmanager
 from textwrap import dedent
-from typing import Callable, cast, Generator, List, Protocol, Tuple
+from typing import Callable, cast, Generator, List, Optional, Tuple
 
 from marko import block, inline
 from marko.block import HTMLBlock
@@ -20,32 +20,9 @@ from marko.parser import Parser
 from marko.renderer import Renderer
 from marko.source import Source
 
-from .sentence_split_regex import split_sentences_regex
-from .text_wrapping import DEFAULT_LEN_FUNCTION, wrap_paragraph, wrap_paragraph_lines
-
-
-DEFAULT_WRAP_WIDTH = 88
-"""
-Default wrap width for Markdown content. This is a compromise between traditional
-but sometimes impractically narrow 80-char console width and being too wide to
-read comfortably for text, markup, and code. 88 is the same as Black.
-"""
-
-
-DEFAULT_MIN_LINE_LEN = 20
-"""Default minimum line length for sentence breaking."""
-
-
-class LineWrapper(Protocol):
-    """Takes a text string and any indents to use, and returns the wrapped text."""
-
-    def __call__(self, text: str, initial_indent: str, subsequent_indent: str) -> str: ...
-
-
-class SentenceSplitter(Protocol):
-    """Takes a text string and returns a list of sentences."""
-
-    def __call__(self, text: str) -> List[str]: ...
+from flowmark.line_wrappers import line_wrap_by_sentence, line_wrap_to_width, LineWrapper
+from flowmark.sentence_split_regex import split_sentences_regex
+from flowmark.text_filling import DEFAULT_WRAP_WIDTH
 
 
 def _normalize_html_comments(text: str, break_str: str = "\n\n") -> str:
@@ -290,89 +267,33 @@ def split_sentences_no_min_length(text: str) -> List[str]:
     return split_sentences_regex(text, min_length=0)
 
 
-def wrap_lines_to_width(
-    text: str,
-    initial_indent: str,
-    subsequent_indent: str,
+def fill_markdown(
+    markdown_text: str,
+    dedent_input: bool = True,
     width: int = DEFAULT_WRAP_WIDTH,
+    by_sentence: bool = False,
+    line_wrapper: Optional[LineWrapper] = None,
 ) -> str:
     """
-    Wrap lines of text to a given width.
-    """
-    return wrap_paragraph(
-        text,
-        width=width,
-        initial_indent=initial_indent,
-        subsequent_indent=subsequent_indent,
-    )
+    Normalize and wrap Markdown text filling paragraphs to the full width.
 
-
-def wrap_lines_using_sentences(
-    text: str,
-    initial_indent: str,
-    subsequent_indent: str,
-    split_sentences: SentenceSplitter = split_sentences_no_min_length,
-    width: int = DEFAULT_WRAP_WIDTH,
-    min_line_len: int = DEFAULT_MIN_LINE_LEN,
-    len_fn: Callable[[str], int] = DEFAULT_LEN_FUNCTION,
-) -> str:
-    """
-    Wrap lines of text to a given width but also keep sentences on their own lines.
-    If the last line ends up shorter than min_line_len, it's combined with the next sentence.
-    """
-    text = text.replace("\n", " ")
-    lines: List[str] = []
-    first_line = True
-    length = len_fn
-    initial_indent_len = len_fn(initial_indent)
-    subsequent_indent_len = len_fn(subsequent_indent)
-
-    sentences = split_sentences(text)
-
-    for i, sentence in enumerate(sentences):
-        current_column = initial_indent_len if first_line else subsequent_indent_len
-        if len(lines) > 0 and length(lines[-1]) < min_line_len:
-            current_column += length(lines[-1])
-
-        wrapped = wrap_paragraph_lines(
-            sentence,
-            width=width,
-            initial_column=current_column,
-            subsequent_offset=subsequent_indent_len,
-        )
-        # If last line is shorter than min_line_len, combine with next line.
-        # Also handles if the first word doesn't fit.
-        if (
-            len(lines) > 0
-            and length(lines[-1]) < min_line_len
-            and length(lines[-1]) + 1 + length(wrapped[0]) <= width
-        ):
-            lines[-1] += " " + wrapped[0]
-            wrapped.pop(0)
-
-        lines.extend(wrapped)
-
-        first_line = False
-
-    # Now insert the indents and assemble the paragraph.
-    if initial_indent and len(lines) > 0:
-        lines[0] = initial_indent + lines[0]
-    if subsequent_indent and len(lines) > 1:
-        lines[1:] = [subsequent_indent + line for line in lines[1:]]
-
-    return "\n".join(lines)
-
-
-def normalize_markdown(
-    markdown_text: str, line_wrapper: LineWrapper = wrap_lines_using_sentences
-) -> str:
-    """
-    Normalize Markdown text. Wraps lines and adds line breaks within paragraphs and on
+    Wraps lines and adds line breaks within paragraphs and on
     best-guess estimations of sentences, to make diffs more readable.
 
-    Also enforces that all list items have two newlines between them, so that items
-    are separate paragraphs when viewed as plaintext.
+    Also enforces that all list items have two newlines between them, so
+    that items are separate paragraphs when viewed as plaintext.
+
+    Optionally also dedents and strips the input, so it can be used
+    on docstrings.
     """
+    if line_wrapper is None:
+        line_wrapper = (
+            line_wrap_by_sentence(width=width) if by_sentence else line_wrap_to_width(width=width)
+        )
+
+    if dedent_input:
+        markdown_text = dedent(markdown_text).strip()
+
     markdown_text = markdown_text.strip() + "\n"
 
     # If we want to normalize HTML blocks or comments.
@@ -383,17 +304,3 @@ def normalize_markdown(
     parsed = parser.parse(markdown_text)
     result = _MarkdownNormalizer(line_wrapper).render(parsed)
     return result
-
-
-def fill_markdown(
-    markdown_text: str,
-    dedent_input: bool = True,
-    line_wrapper: LineWrapper = wrap_lines_to_width,
-) -> str:
-    """
-    Normalize and wrap Markdown text filling paragraphs to the full width.
-    Also dedents and strips the input, so it can be used on docstrings.
-    """
-    if dedent_input:
-        markdown_text = dedent(markdown_text).strip()
-    return normalize_markdown(markdown_text, line_wrapper=line_wrapper)

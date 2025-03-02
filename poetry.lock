@@ -654,6 +654,18 @@ dev = ["attribution (==1.8.0)", "black (==24.10.0)", "build (>=1)", "coverage (=
 docs = ["sphinx (==8.1.3)", "sphinx-mdinclude (==0.6.2)"]
 
 [[package]]
+name = "strif"
+version = "2.0.0"
+description = "Tiny, useful Python lib for strings and files."
+optional = false
+python-versions = "<4.0,>=3.10"
+groups = ["main"]
+files = [
+    {file = "strif-2.0.0-py3-none-any.whl", hash = "sha256:04c8c3f28bb169f6190bace6d7de11b137629c0cc70913a949bff16473290d61"},
+    {file = "strif-2.0.0.tar.gz", hash = "sha256:f3bdf33dd8cdcb4e899313e800ff3f71c842a82cfcfc4359e11b0690020e490e"},
+]
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -763,4 +775,4 @@ trailrunner = ">=1.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10,<4.0"
-content-hash = "b26552e2dc93b37780bcd78beda310c2627002981dab0e6f1f60a625acf90ca5"
+content-hash = "a9b448654918d06497b5a94acfdfc1be135ed63cda0f4d94e4bc9d05ee6a743e"

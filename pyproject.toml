@@ -24,7 +24,7 @@ build-backend = "poetry_dynamic_versioning.backend"
 
 [project.scripts]
 # Add script entry points here.
-# flowmark = "flowmark:main"
+flowmark = "flowmark.cli:main"
 
 # See:
 # https://github.com/python-poetry/poetry-plugin-shell
@@ -37,6 +37,7 @@ poetry-plugin-up = "^0.9.0"
 python = "^3.10,<4.0"
 marko = "^2.1.2"
 regex = "^2024.11.6"
+strif = "^2.0.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"

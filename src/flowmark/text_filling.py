@@ -2,9 +2,20 @@ import re
 from enum import Enum
 from typing import Callable, List
 
-from .text_wrapping import DEFAULT_LEN_FUNCTION, html_md_word_splitter, WordSplitter, wrap_paragraph
+from flowmark.text_wrapping import (
+    DEFAULT_LEN_FUNCTION,
+    html_md_word_splitter,
+    WordSplitter,
+    wrap_paragraph,
+)
 
 DEFAULT_WRAP_WIDTH = 88
+"""
+Default wrap width. This is a compromise between traditional but sometimes
+impractically narrow 80-char console width and being too wide to read comfortably
+for text, markup, and code. 88 is the same as Black.
+"""
+
 
 DEFAULT_INDENT = "    "
 
