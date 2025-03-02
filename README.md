@@ -2,14 +2,18 @@
 
 Flowmark is a new Python implementation of text line wrapping and filling.
 
-It can be used as a more flexible alternative to Python's
-[`textwrap`](https://docs.python.org/3/library/textwrap.html) with a few more features,
-such as full customizability of initial and subsequent indentation strings, and more
-control over when to split words, so it won't break lines within HTML tags.
+It simplifies and generalizes Python's
+[`textwrap`](https://docs.python.org/3/library/textwrap.html) with a few more
+capabilities:
 
-It also combines line wrapping with support for Markdown and offers Markdown
-auto-formatting, like [markdownfmt](https://github.com/shurcooL/markdownfmt), also with
-controllable line wrapping options.
+- Full customizability of initial and subsequent indentation strings
+
+- Control over when to split words, by default using a word splitter that won't break
+  lines within HTML tags
+
+In addition, it adds optional support for Markdown and offers Markdown auto-formatting,
+like [markdownfmt](https://github.com/shurcooL/markdownfmt), also with controllable line
+wrapping options.
 
 One key use case is to normalize Markdown in a standard, readable way that makes diffs
 easy to read and use on GitHub.
@@ -32,10 +36,7 @@ command line usage and VSCode/Cursor auto-formatting in the future.
 ## Installation
 
 ```
-# Use pip
 pip install flowmark
-# Or poetry
-poetry add flowmark
 ```
 
 * * *

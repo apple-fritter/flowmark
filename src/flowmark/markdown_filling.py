@@ -39,9 +39,7 @@ DEFAULT_MIN_LINE_LEN = 20
 class LineWrapper(Protocol):
     """Takes a text string and any indents to use, and returns the wrapped text."""
 
-    def __call__(
-        self, text: str, initial_indent: str, subsequent_indent: str
-    ) -> str: ...
+    def __call__(self, text: str, initial_indent: str, subsequent_indent: str) -> str: ...
 
 
 class SentenceSplitter(Protocol):
@@ -73,9 +71,7 @@ def _ensure_surrounding_breaks(
     break_str: str = "\n\n",
 ) -> str:
     for start_tag, end_tag in tag_pairs:
-        pattern = re.compile(
-            rf"(\s*{re.escape(start_tag)}.*?{re.escape(end_tag)}\s*)", re.DOTALL
-        )
+        pattern = re.compile(rf"(\s*{re.escape(start_tag)}.*?{re.escape(end_tag)}\s*)", re.DOTALL)
 
         def replacer(match: re.Match[str]) -> str:
             if not filter(match.group(0)):
@@ -123,9 +119,7 @@ class _MarkdownNormalizer(Renderer):
 
     def __init__(self, line_wrapper: LineWrapper) -> None:
         super().__init__()
-        self._prefix: str = (
-            ""  # The prefix on the first line, with a bullet, such as `  - `.
-        )
+        self._prefix: str = ""  # The prefix on the first line, with a bullet, such as `  - `.
         self._second_prefix: str = ""  # The prefix on subsequent lines, such as `    `.
         self._suppress_item_break: bool = True
         self._line_wrapper = line_wrapper
@@ -136,9 +130,7 @@ class _MarkdownNormalizer(Renderer):
         return super().__enter__()
 
     @contextmanager
-    def container(
-        self, prefix: str, second_prefix: str = ""
-    ) -> Generator[None, None, None]:
+    def container(self, prefix: str, second_prefix: str = "") -> Generator[None, None, None]:
         old_prefix, old_second_prefix = self._prefix, self._second_prefix
         self._prefix += prefix
         self._second_prefix += second_prefix
@@ -199,9 +191,7 @@ class _MarkdownNormalizer(Renderer):
         extra_text = f" {extra}" if extra else ""
         lang_text = f"{lang}{extra_text}" if lang else ""
         lines = [f"{self._prefix}```{lang_text}"]
-        lines.extend(
-            f"{self._second_prefix}{line}" for line in code_content.splitlines()
-        )
+        lines.extend(f"{self._second_prefix}{line}" for line in code_content.splitlines())
         lines.append(f"{self._second_prefix}```")
         self._prefix = self._second_prefix
         return "\n".join(lines) + "\n"
@@ -224,9 +214,7 @@ class _MarkdownNormalizer(Renderer):
         return result
 
     def render_heading(self, element: block.Heading) -> str:
-        result = (
-            f"{self._prefix}{'#' * element.level} {self.render_children(element)}\n"
-        )
+        result = f"{self._prefix}{'#' * element.level} {self.render_children(element)}\n"
         self._prefix = self._second_prefix
         return result
 
@@ -259,16 +247,10 @@ class _MarkdownNormalizer(Renderer):
 
     def render_link(self, element: inline.Link) -> str:
         link_text = self.render_children(element)
-        link_title = (
-            '"{}"'.format(element.title.replace('"', '\\"')) if element.title else None
-        )
+        link_title = '"{}"'.format(element.title.replace('"', '\\"')) if element.title else None
         assert self.root_node
         label = next(
-            (
-                k
-                for k, v in self.root_node.link_ref_defs.items()
-                if v == (element.dest, link_title)
-            ),
+            (k for k, v in self.root_node.link_ref_defs.items() if v == (element.dest, link_title)),
             None,
         )
         if label is not None:
@@ -283,9 +265,7 @@ class _MarkdownNormalizer(Renderer):
 
     def render_image(self, element: inline.Image) -> str:
         template = "![{}]({}{})"
-        title = (
-            ' "{}"'.format(element.title.replace('"', '\\"')) if element.title else ""
-        )
+        title = ' "{}"'.format(element.title.replace('"', '\\"')) if element.title else ""
         return template.format(self.render_children(element), element.dest, title)
 
     def render_literal(self, element: inline.Literal) -> str:

@@ -2,12 +2,7 @@ import re
 from enum import Enum
 from typing import Callable, List
 
-from .text_wrapping import (
-    DEFAULT_LEN_FUNCTION,
-    html_md_word_splitter,
-    WordSplitter,
-    wrap_paragraph,
-)
+from .text_wrapping import DEFAULT_LEN_FUNCTION, html_md_word_splitter, WordSplitter, wrap_paragraph
 
 DEFAULT_WRAP_WIDTH = 88
 
@@ -98,11 +93,7 @@ def fill_text(
     """
 
     if not text_wrap.should_wrap:
-        indent = (
-            extra_indent + DEFAULT_INDENT
-            if text_wrap == Wrap.INDENT_ONLY
-            else extra_indent
-        )
+        indent = extra_indent + DEFAULT_INDENT if text_wrap == Wrap.INDENT_ONLY else extra_indent
         lines = text.splitlines()
         if lines:
             return "\n".join(indent + line for line in lines)
