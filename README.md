@@ -35,13 +35,31 @@ command line usage and VSCode/Cursor auto-formatting in the future.
 
 ## Installation
 
-The simplest way to use the tool is to use pipx:
+The simplest way to use the tool is to use [pipx](https://github.com/pypa/pipx):
 
 ```shell
 pipx install flowmark
 ```
 
 To use as a library, use pip or poetry to install `flowmark`.
+
+## Use in VSCode/Cursor
+
+You can use Flowmark to auto-format Markdown on save in VSCode or Cursor. Install
+the "Run on Save" (`emeraldwalk.runonsave`) extension. Then add to your `settings.json`:
+
+```json
+  "emeraldwalk.runonsave": {
+    "commands": [
+        {
+            "match": "\\.md$",
+            "cmd": "flowmark --auto ${file}"
+        }
+    ]
+  }
+```
+
+The `--auto` option is just the same as `--inplace --nobackup --sentences`.
 
 ## Usage
 

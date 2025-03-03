@@ -93,7 +93,7 @@ def _parse_args(args: Optional[List[str]] = None) -> Options:
         "-s",
         "--sentences",
         action="store_true",
-        default=True,
+        default=False,
         help="Enable sentence-based line breaks (only applies to Markdown mode)",
     )
     parser.add_argument(
@@ -104,16 +104,26 @@ def _parse_args(args: Optional[List[str]] = None) -> Options:
         action="store_true",
         help="Do not make a backup of the original file when using --inplace",
     )
-    parsed_args = parser.parse_args(args)
+    parser.add_argument(
+        "--auto",
+        action="store_true",
+        help="Same as `--inplace --nobackup --sentences`, as a convenience for auto-formatting files",
+    )
+    opts = parser.parse_args(args)
+
+    if opts.auto:
+        opts.inplace = True
+        opts.nobackup = True
+        opts.sentences = True
 
     return Options(
-        file=parsed_args.file,
-        output=parsed_args.output,
-        width=parsed_args.width,
-        plaintext=parsed_args.plaintext,
-        sentences=parsed_args.sentences,
-        inplace=parsed_args.inplace,
-        nobackup=parsed_args.nobackup,
+        file=opts.file,
+        output=opts.output,
+        width=opts.width,
+        plaintext=opts.plaintext,
+        sentences=opts.sentences,
+        inplace=opts.inplace,
+        nobackup=opts.nobackup,
     )
 
 
