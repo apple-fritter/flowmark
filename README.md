@@ -4,9 +4,10 @@ Flowmark is a new Python implementation of **text and Markdown line wrapping and
 filling**.
 
 In addition, it adds optional **support for Markdown** and offers **Markdown
-auto-formatting and normalization**. This is like
-[markdownfmt](https://github.com/shurcooL/markdownfmt) but with more with controllable
-line wrapping options.
+auto-formatting and normalization**. This is much like
+[markdownfmt](https://github.com/shurcooL/markdownfmt) or
+[prettier's Markdown support](https://prettier.io/blog/2017/11/07/1.8.0) but is pure
+Python and has (in my humble opinion) better options and defaults.
 
 Use cases:
 
@@ -17,10 +18,14 @@ Use cases:
   running the command.
   This uses a readable format that makes diffs easy to read and use on GitHub.
   It also normalizes all Markdown syntax variations (such as different header or
-  formatting styles). This can be useful for documentation workflows and also to compare
-  LLM outputs that are Markdown.
+  formatting styles). This can be especially useful for documentation and editing
+  workflows where clean diffs and minimal merge conflicts on GitHub are important.
 
-- As a **library to autoformat Markdown**.
+- As a **library to autoformat Markdown**. For example, it is great to normalize the
+  outputs from LLMs to be consistent, or to run on the inputs and outputs of LLM
+  transformations that edit text, so that the resulting diffs are clean.
+  Having this as a simple Python library makes this easy in AI-related document
+  pipelines.
 
 - As a **drop-in replacement library for Python's default
   [`textwrap`](https://docs.python.org/3/library/textwrap.html)** but with more options.
@@ -40,9 +45,13 @@ It aims to be small and simple and have only a few dependencies, currently only
 [`regex`](https://pypi.org/project/regex/), and
 [`strif`](https://github.com/jlevy/strif).
 
-This is a new and simple package (previously I'd implemented something like this
-[for Atom](https://github.com/jlevy/atom-flowmark)) but I plan to add more support for
-command line usage and VSCode/Cursor auto-formatting in the future.
+This is a new and simple package.
+Previously I'd implemented something very similar with
+[for Atom](https://github.com/jlevy/atom-flowmark) but Atom is no more and there seems
+to be greater need for this in Python now.
+From many years experience, I found the Markdown formatting conventions enforced by the
+Atom Flowmark plugin worked well for editing and publishing large or collaboratively
+edited documents.
 
 ## Installation
 
