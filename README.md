@@ -33,12 +33,16 @@ Use cases:
   subsequent indentation** and **when to split words and lines**, e.g. using a word
   splitter that won't break lines within HTML tags.
 
-- For simple (zero dependency) **regex-based sentence splitting**. Flowmark has the
-  option to to use heuristics to break lines on sentences when reasonable, which is an
-  underrated feature that can make diffs between versions of docs and on GitHub much
-  more readable. (For an example of what this looks like, see the
+- Flowmark has the option to to use heuristics to break lines on sentences when
+  reasonable, which is an underrated feature that can **make diffs on GitHub much more
+  readable**. The the change may seem subtle but avoids having paragraphs reflow for
+  very small edits, which does a lot to **minimize merge conflicts**. An example of what
+  sentence-guided wrapping looks like, see the
   [Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of
   this readme file.)
+
+- Very, very simple and fast **regex-based sentence splitting**. This should work fine
+  for many latin/Cyrillic langauges but it hasn't been tested on CJK.
 
 It aims to be small and simple and have only a few dependencies, currently only
 [`marko`](https://github.com/frostming/marko),
