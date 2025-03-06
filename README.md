@@ -15,8 +15,8 @@ Use cases:
   command.
 
 - To **autoformat Markdown on save in VSCode/Cursor** or any other editor that supports
-  running the command.
-  This uses a readable format that makes diffs easy to read and use on GitHub.
+  running a command on save.
+  Flowmark uses a readable format that makes diffs easy to read and use on GitHub.
   It also normalizes all Markdown syntax variations (such as different header or
   formatting styles). This can be especially useful for documentation and editing
   workflows where clean diffs and minimal merge conflicts on GitHub are important.
@@ -42,7 +42,7 @@ Use cases:
   this readme file.)
 
 - Very, very simple and fast **regex-based sentence splitting**. This should work fine
-  for many latin/Cyrillic langauges but it hasn't been tested on CJK.
+  for English and many other latin/Cyrillic langauges but it hasn't been tested on CJK.
 
 It aims to be small and simple and have only a few dependencies, currently only
 [`marko`](https://github.com/frostming/marko),
