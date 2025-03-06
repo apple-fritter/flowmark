@@ -1,33 +1,44 @@
 # flowmark
 
-Flowmark is a new Python implementation of text line wrapping and filling.
+Flowmark is a new Python implementation of **text and Markdown line wrapping and
+filling**.
 
-It simplifies and generalizes Python's
-[`textwrap`](https://docs.python.org/3/library/textwrap.html) with a few more
-capabilities:
+In addition, it adds optional **support for Markdown** and offers **Markdown
+auto-formatting and normalization**. This is like
+[markdownfmt](https://github.com/shurcooL/markdownfmt) but with more with controllable
+line wrapping options.
 
-- Full customizability of initial and subsequent indentation strings
+Use cases:
 
-- Control over when to split words, by default using a word splitter that won't break
-  lines within HTML tags
+- As a **command line formatter** to format text or Markdown files using the `flowmark`
+  command.
 
-In addition, it adds optional support for Markdown and offers Markdown auto-formatting,
-like [markdownfmt](https://github.com/shurcooL/markdownfmt), also with controllable line
-wrapping options.
+- To **autoformat Markdown on save in VSCode/Cursor** or any other editor that supports
+  running the command.
+  This uses a readable format that makes diffs easy to read and use on GitHub.
+  It also normalizes all Markdown syntax variations (such as different header or
+  formatting styles). This can be useful for documentation workflows and also to compare
+  LLM outputs that are Markdown.
 
-One key use case is to normalize Markdown in a standard, readable way that makes diffs
-easy to read and use on GitHub.
-This can be useful for documentation workflows and also to compare LLM outputs that are
-Markdown.
+- As a **library to autoformat Markdown**.
 
-Finally, it has options to use heuristics to split on sentences, which can make diffs
-much more readable. (For an example of this, look at the
-[Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of this
-readme file.)
+- As a **drop-in replacement library for Python's default
+  [`textwrap`](https://docs.python.org/3/library/textwrap.html)** but with more options.
+  It simplifies and generalizes that library, offering better control over **initial and
+  subsequent indentation** and **when to split words and lines**, e.g. using a word
+  splitter that won't break lines within HTML tags.
+
+- For simple (zero dependency) **regex-based sentence splitting**. Flowmark has the
+  option to to use heuristics to break lines on sentences when reasonable, which is an
+  underrated feature that can make diffs between versions of docs and on GitHub much
+  more readable. (For an example of what this looks like, see the
+  [Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of
+  this readme file.)
 
 It aims to be small and simple and have only a few dependencies, currently only
-[`marko`](https://github.com/frostming/marko) and
-[`regex`](https://pypi.org/project/regex/).
+[`marko`](https://github.com/frostming/marko),
+[`regex`](https://pypi.org/project/regex/), and
+[`strif`](https://github.com/jlevy/strif).
 
 This is a new and simple package (previously I'd implemented something like this
 [for Atom](https://github.com/jlevy/atom-flowmark)) but I plan to add more support for
@@ -41,12 +52,20 @@ The simplest way to use the tool is to use [pipx](https://github.com/pypa/pipx):
 pipx install flowmark
 ```
 
-To use as a library, use pip or poetry to install `flowmark`.
+Then
+
+```
+flowmark --help
+```
+
+To use as a library, use pip/poetry/uv to install
+[`flowmark`](https://pypi.org/project/flowmark/).
 
 ## Use in VSCode/Cursor
 
-You can use Flowmark to auto-format Markdown on save in VSCode or Cursor. Install
-the "Run on Save" (`emeraldwalk.runonsave`) extension. Then add to your `settings.json`:
+You can use Flowmark to auto-format Markdown on save in VSCode or Cursor.
+Install the "Run on Save" (`emeraldwalk.runonsave`) extension.
+Then add to your `settings.json`:
 
 ```json
   "emeraldwalk.runonsave": {
