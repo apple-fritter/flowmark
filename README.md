@@ -1,15 +1,58 @@
 # flowmark
 
 Flowmark is a new Python implementation of **text and Markdown line wrapping and
-filling**.
+filling**, with an emphasis on making **git diffs** and **LLM edits** to text documents
+easier to diff and review.
 
-In addition, it adds optional **support for Markdown** and offers **Markdown
-auto-formatting and normalization**. This is much like
-[markdownfmt](https://github.com/shurcooL/markdownfmt) or
+In addition, it adds **support for Markdown** and offers **Markdown auto-formatting and
+normalization** as a library or from the command line.
+This is much like [markdownfmt](https://github.com/shurcooL/markdownfmt) or
 [prettier's Markdown support](https://prettier.io/blog/2017/11/07/1.8.0) but is pure
 Python and has (in my humble opinion) better options and defaults.
 
-Use cases:
+## Installation
+
+The simplest way to use the tool is to use [uv](https://github.com/astral-sh/uv):
+
+```shell
+uv tool install flowmark
+```
+
+Or [pipx](https://github.com/pypa/pipx):
+
+```shell
+pipx install flowmark
+```
+
+Then
+
+```
+flowmark --help
+```
+
+To use as a library, use pip/poetry/uv to install
+[`flowmark`](https://pypi.org/project/flowmark/).
+
+## Use in VSCode/Cursor
+
+You can use Flowmark to auto-format Markdown on save in VSCode or Cursor.
+Install the "Run on Save" (`emeraldwalk.runonsave`) extension.
+Then add to your `settings.json`:
+
+```json
+  "emeraldwalk.runonsave": {
+    "commands": [
+        {
+            "match": "\\.md$",
+            "cmd": "flowmark --auto ${file}"
+        }
+    ]
+  }
+```
+
+The `--auto` option is just the same as `--inplace --nobackup --semantic`.
+
+## Use Cases
 
 - As a **command line formatter** to format text or Markdown files using the `flowmark`
   command.
@@ -53,49 +96,23 @@ It aims to be small and simple and have only a few dependencies, currently only
 Because **YAML frontmatter** is common on Markdown files, the Markdown autoformat
 preserves all frontmatter (content between `---` delimiters at the front of a file).
 
-This is a new and simple package.
+## Why a New Markdown Formatter?
+
 Previously I'd implemented something very similar with
-[for Atom](https://github.com/jlevy/atom-flowmark) but Atom is no more and there seems
-to be greater need for this in Python now.
-From many years experience, I found the Markdown formatting conventions enforced by the
-Atom Flowmark plugin worked well for editing and publishing large or collaboratively
-edited documents.
+[for Atom](https://github.com/jlevy/atom-flowmark).
+I found the Markdown formatting conventions enforced by the that plugin worked really
+well for editing and publishing large or collaboratively edited documents.
 
-## Installation
+This is new, pure Python implementation.
+There are numerous needs for a tool like this on the command line and in Python.
 
-The simplest way to use the tool is to use [pipx](https://github.com/pypa/pipx):
+With LLM tools now using Markdown everywhere, there are enormous advantages to having
+very clean and well-formatted Markdown documents, since you can then cleanly see diffs
+or edits made by LLMs.
 
-```shell
-pipx install flowmark
-```
-
-Then
-
-```
-flowmark --help
-```
-
-To use as a library, use pip/poetry/uv to install
-[`flowmark`](https://pypi.org/project/flowmark/).
-
-## Use in VSCode/Cursor
-
-You can use Flowmark to auto-format Markdown on save in VSCode or Cursor.
-Install the "Run on Save" (`emeraldwalk.runonsave`) extension.
-Then add to your `settings.json`:
-
-```json
-  "emeraldwalk.runonsave": {
-    "commands": [
-        {
-            "match": "\\.md$",
-            "cmd": "flowmark --auto ${file}"
-        }
-    ]
-  }
-```
-
-The `--auto` option is just the same as `--inplace --nobackup --semantic`.
+If you are in a workspace where you are editing lots of text, having them all be
+Markdown with frontmatter, auto-formatted for every git commit makes for a *much* better
+experience.
 
 ## Usage
 
