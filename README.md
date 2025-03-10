@@ -12,7 +12,10 @@ Python and has (in my humble opinion) better options and defaults.
 
 ## Installation
 
-The simplest way to use the tool is to use [uv](https://github.com/astral-sh/uv):
+The simplest way to use the tool is to use [uv](https://github.com/astral-sh/uv).
+Then run `uvx flowmark --help`.
+
+To install the command-line properly:
 
 ```shell
 uv tool install flowmark
@@ -30,7 +33,7 @@ Then
 flowmark --help
 ```
 
-To use as a library, use pip/poetry/uv to install
+To use as a library, use uv/poetry/pip to install
 [`flowmark`](https://pypi.org/project/flowmark/).
 
 ## Use in VSCode/Cursor
