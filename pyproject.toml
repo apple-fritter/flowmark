@@ -88,7 +88,7 @@ disable_error_code = [
 
 [tool.codespell]
 # ignore-words-list = "foo,bar"
-# skip = "foo.py,bar.py"
+skip = "tests/testdocs/*.md"
 
 [tool.pytest.ini_options]
 python_files = ["*.py"]
