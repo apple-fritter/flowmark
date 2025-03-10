@@ -42,7 +42,7 @@ Use cases:
   this readme file.)
 
 - Very, very simple and fast **regex-based sentence splitting**. This should work fine
-  for English and many other latin/Cyrillic langauges but it hasn't been tested on CJK.
+  for English and many other latin/Cyrillic languages but it hasn't been tested on CJK.
 
 It aims to be small and simple and have only a few dependencies, currently only
 [`marko`](https://github.com/frostming/marko),

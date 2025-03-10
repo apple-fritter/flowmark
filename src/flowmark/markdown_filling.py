@@ -127,16 +127,33 @@ class _MarkdownNormalizer(Renderer):
         self._prefix = self._second_prefix
         return wrapped_text + "\n"
 
+    def _has_multiple_paragraphs(self, item: object) -> bool:
+        """
+        Check if a list item contains multiple paragraphs.
+        """
+        list_item = cast(block.ListItem, item)
+        paragraphs = [c for c in list_item.children if isinstance(c, block.Paragraph)]
+        return len(paragraphs) > 1
+
     def render_list(self, element: block.List) -> str:
         result: List[str] = []
-        if element.ordered:
-            for num, child in enumerate(element.children, element.start):
-                with self.container(f"{num}. ", " " * (len(str(num)) + 2)):
-                    result.append(self.render(child))
-        else:
-            for child in element.children:
-                with self.container(f"{element.bullet} ", "  "):
-                    result.append(self.render(child))
+
+        for i, child in enumerate(element.children):
+            # Configure the appropriate prefix based on list type
+            if element.ordered:
+                num = i + element.start
+                prefix = f"{num}. "
+                subsequent_indent = " " * (len(str(num)) + 2)
+            else:
+                prefix = f"{element.bullet} "
+                subsequent_indent = "  "
+
+            with self.container(prefix, subsequent_indent):
+                # Add an extra newline before multi-paragraph list items (except the first)
+                if i > 0 and self._has_multiple_paragraphs(child):
+                    result.append(self._second_prefix.strip() + "\n")
+
+                result.append(self.render(child))
 
         self._prefix = self._second_prefix
         return "".join(result)
@@ -150,6 +167,7 @@ class _MarkdownNormalizer(Renderer):
             # Add the newline between paragraphs. Normally this would be an empty line but
             # within a quote block it would be the secondary prefix, like `> `.
             result += self._second_prefix.strip() + "\n"
+
         result += self.render_children(element)
         return result
 

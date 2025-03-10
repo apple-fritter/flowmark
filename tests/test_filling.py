@@ -245,12 +245,42 @@ def test_normalize_markdown():
     assert normalized_doc == _expected_doc
 
 
-# FIXME: Normalization looks like this on multi-para bulleted items, which
-# is ugly. Should have another newline:
-#
-# - **`make_parent_dirs(path: str | Path, mode: int = 0o777) -> Path`**
-#
-#   Ensures that the parent directories for a file exist, creating them if necessary.
-# - **`rmtree_or_file(path: str | Path, ignore_errors: bool = False)`**
-#
-#   Removes the target even if it's a file, directory, or symlink.
+def test_multi_paragraph_list_items():
+    # Test that multi-paragraph list items get proper spacing between them.
+    input_doc = dedent(
+        """
+    - **`make_parent_dirs(path: str | Path, mode: int = 0o777) -> Path`**
+
+      Ensures that the parent directories for a file exist, creating them if necessary.
+    - **`rmtree_or_file(path: str | Path, ignore_errors: bool = False)`**
+
+      Removes the target even if it's a file, directory, or symlink.
+    """
+    ).strip()
+
+    # The normalized output includes a trailing newline
+    expected_doc = (
+        dedent(
+            """
+    - **`make_parent_dirs(path: str | Path, mode: int = 0o777) -> Path`**
+
+      Ensures that the parent directories for a file exist, creating them if necessary.
+
+    - **`rmtree_or_file(path: str | Path, ignore_errors: bool = False)`**
+
+      Removes the target even if it's a file, directory, or symlink.
+    """
+        ).strip()
+        + "\n"
+    )
+
+    normalized_doc = fill_markdown(input_doc, by_sentence=True)
+
+    print("---Input")
+    print(input_doc)
+    print("---Expected")
+    print(expected_doc)
+    print("---Output")
+    print(normalized_doc)
+
+    assert normalized_doc == expected_doc
