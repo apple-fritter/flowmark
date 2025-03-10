@@ -33,7 +33,7 @@ def test_reference_doc_formats():
             processed_content = f.read()
 
         # Process the original file using fill_markdown with appropriate option
-        expected_content = fill_markdown(orig_content, by_sentence=case["by_sentence"])
+        expected_content = fill_markdown(orig_content, semantic=case["by_sentence"])
 
         # Compare the processed content with the expected output
         assert (

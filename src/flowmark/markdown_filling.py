@@ -289,7 +289,7 @@ def fill_markdown(
     markdown_text: str,
     dedent_input: bool = True,
     width: int = DEFAULT_WRAP_WIDTH,
-    by_sentence: bool = False,
+    semantic: bool = False,
     line_wrapper: Optional[LineWrapper] = None,
 ) -> str:
     """
@@ -303,10 +303,13 @@ def fill_markdown(
 
     Optionally also dedents and strips the input, so it can be used
     on docstrings.
+
+    With `semantic` enabled, the line breaks are wrapped approximately
+    by sentence boundaries, to make diffs more readable.
     """
     if line_wrapper is None:
         line_wrapper = (
-            line_wrap_by_sentence(width=width) if by_sentence else line_wrap_to_width(width=width)
+            line_wrap_by_sentence(width=width) if semantic else line_wrap_to_width(width=width)
         )
 
     if dedent_input:

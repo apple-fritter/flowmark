@@ -160,7 +160,7 @@ def main(args: Optional[List[str]] = None) -> int:
         result = fill_markdown(
             text,
             width=options.width,
-            by_sentence=options.semantic,
+            semantic=options.semantic,
             dedent_input=True,
         )
 

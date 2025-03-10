@@ -235,7 +235,7 @@ def test_normalize_markdown():
     print("---Parsed")
     print(parsed)
 
-    normalized_doc = fill_markdown(_original_doc, by_sentence=True)
+    normalized_doc = fill_markdown(_original_doc, semantic=True)
 
     print("---Before")
     print(_original_doc)
@@ -274,7 +274,7 @@ def test_multi_paragraph_list_items():
         + "\n"
     )
 
-    normalized_doc = fill_markdown(input_doc, by_sentence=True)
+    normalized_doc = fill_markdown(input_doc, semantic=True)
 
     print("---Input")
     print(input_doc)
