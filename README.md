@@ -33,11 +33,12 @@ Use cases:
   subsequent indentation** and **when to split words and lines**, e.g. using a word
   splitter that won't break lines within HTML tags.
 
-- Flowmark has the option to to use heuristics to break lines semantically (roughly on
-  sentences) when reasonable, which is an underrated feature that can **make diffs on
-  GitHub much more readable**. The the change may seem subtle but avoids having
-  paragraphs reflow for very small edits, which does a lot to **minimize merge
-  conflicts**. An example of what sentence-guided wrapping looks like, see the
+- Flowmark has the option to to use **semantic line breaks** (using a heuristic to break
+  lines on sentences sentences when that is reasonable), which is an underrated feature
+  that can **make diffs on GitHub much more readable**. The the change may seem subtle
+  but avoids having paragraphs reflow for very small edits, which does a lot to
+  **minimize merge conflicts**. An example of what sentence-guided wrapping looks like,
+  see the
   [Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of
   this readme file.)
 
@@ -48,6 +49,9 @@ It aims to be small and simple and have only a few dependencies, currently only
 [`marko`](https://github.com/frostming/marko),
 [`regex`](https://pypi.org/project/regex/), and
 [`strif`](https://github.com/jlevy/strif).
+
+Because **YAML frontmatter** is common on Markdown files, the Markdown autoformat
+preserves all frontmatter (content between `---` delimiters at the front of a file).
 
 This is a new and simple package.
 Previously I'd implemented something very similar with
