@@ -1,3 +1,13 @@
+---
+title: Test Document
+author: Test Author
+date: 2023-01-01
+tags:
+  - markdown
+  - formatting
+  - test
+---
+
 ## Test document
 
 This is a simple test document to verify Flowmark usage. It's sort of a "transparent box" test of the Flowmark auto-formatter.

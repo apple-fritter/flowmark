@@ -20,6 +20,7 @@ from marko.parser import Parser
 from marko.renderer import Renderer
 from marko.source import Source
 
+from flowmark.frontmatter import split_frontmatter
 from flowmark.line_wrappers import line_wrap_by_sentence, line_wrap_to_width, LineWrapper
 from flowmark.sentence_split_regex import split_sentences_regex
 from flowmark.text_filling import DEFAULT_WRAP_WIDTH
@@ -306,11 +307,21 @@ def fill_markdown(
 
     With `semantic` enabled, the line breaks are wrapped approximately
     by sentence boundaries, to make diffs more readable.
+
+    Preserves YAML frontmatter (delimited by --- lines) if present at the
+    beginning of the document.
     """
     if line_wrapper is None:
         line_wrapper = (
             line_wrap_by_sentence(width=width) if semantic else line_wrap_to_width(width=width)
         )
+
+    # Extract frontmatter before any processing
+    frontmatter, content = split_frontmatter(markdown_text)
+
+    # Only format the content part if there's frontmatter
+    if frontmatter:
+        markdown_text = content
 
     if dedent_input:
         markdown_text = dedent(markdown_text).strip()
@@ -324,4 +335,9 @@ def fill_markdown(
     parser = CustomParser()
     parsed = parser.parse(markdown_text)
     result = _MarkdownNormalizer(line_wrapper).render(parsed)
+
+    # Reattach frontmatter if it was present
+    if frontmatter:
+        result = frontmatter + result
+
     return result
