@@ -33,11 +33,11 @@ Use cases:
   subsequent indentation** and **when to split words and lines**, e.g. using a word
   splitter that won't break lines within HTML tags.
 
-- Flowmark has the option to to use heuristics to break lines on sentences when
-  reasonable, which is an underrated feature that can **make diffs on GitHub much more
-  readable**. The the change may seem subtle but avoids having paragraphs reflow for
-  very small edits, which does a lot to **minimize merge conflicts**. An example of what
-  sentence-guided wrapping looks like, see the
+- Flowmark has the option to to use heuristics to break lines semantically (roughly on
+  sentences) when reasonable, which is an underrated feature that can **make diffs on
+  GitHub much more readable**. The the change may seem subtle but avoids having
+  paragraphs reflow for very small edits, which does a lot to **minimize merge
+  conflicts**. An example of what sentence-guided wrapping looks like, see the
   [Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of
   this readme file.)
 
@@ -91,7 +91,7 @@ Then add to your `settings.json`:
   }
 ```
 
-The `--auto` option is just the same as `--inplace --nobackup --sentences`.
+The `--auto` option is just the same as `--inplace --nobackup --semantic`.
 
 ## Usage
 
@@ -111,7 +111,7 @@ options:
   -o, --output OUTPUT  Output file (use '-' for stdout)
   -w, --width WIDTH    Line width to wrap to
   -p, --plaintext      Process as plaintext (no Markdown parsing)
-  -s, --sentences      Enable sentence-based line breaks (only applies to Markdown mode)
+  -s, --semantic       Enable sentence-based line breaks (only applies to Markdown mode)
   -i, --inplace        Edit the file in place (ignores --output)
   --nobackup           Do not make a backup of the original file when using --inplace
 
@@ -143,7 +143,7 @@ Command-line usage examples:
   flowmark --plaintext text.txt
 
   # Use sentences to guide line breaks (good for many purposes git history and diffs)
-  flowmark --sentences README.md
+  flowmark --semantic README.md
 
 For more details, see: https://github.com/jlevy/flowmark
 ```

@@ -29,8 +29,9 @@ Command-line usage examples:
   # Process plaintext instead of Markdown
   flowmark --plaintext text.txt
 
-  # Use sentences to guide line breaks (good for many purposes git history and diffs)
-  flowmark --sentences README.md
+  # Use semantic line breaks (based on sentences, which is helpful to reduce
+  # irrelevant line wrap diffs in git history)
+  flowmark --semantic README.md
 
 For more details, see: https://github.com/jlevy/flowmark
 """
@@ -53,7 +54,7 @@ class Options:
     output: str
     width: int
     plaintext: bool
-    sentences: bool
+    semantic: bool
     inplace: bool
     nobackup: bool
 
@@ -91,10 +92,10 @@ def _parse_args(args: Optional[List[str]] = None) -> Options:
     )
     parser.add_argument(
         "-s",
-        "--sentences",
+        "--semantic",
         action="store_true",
         default=False,
-        help="Enable sentence-based line breaks (only applies to Markdown mode)",
+        help="Enable semantic (sentence-based) line breaks (only applies to Markdown mode)",
     )
     parser.add_argument(
         "-i", "--inplace", action="store_true", help="Edit the file in place (ignores --output)"
@@ -107,21 +108,21 @@ def _parse_args(args: Optional[List[str]] = None) -> Options:
     parser.add_argument(
         "--auto",
         action="store_true",
-        help="Same as `--inplace --nobackup --sentences`, as a convenience for auto-formatting files",
+        help="Same as `--inplace --nobackup --semantic`, as a convenience for auto-formatting files",
     )
     opts = parser.parse_args(args)
 
     if opts.auto:
         opts.inplace = True
         opts.nobackup = True
-        opts.sentences = True
+        opts.semantic = True
 
     return Options(
         file=opts.file,
         output=opts.output,
         width=opts.width,
         plaintext=opts.plaintext,
-        sentences=opts.sentences,
+        semantic=opts.semantic,
         inplace=opts.inplace,
         nobackup=opts.nobackup,
     )
@@ -159,7 +160,7 @@ def main(args: Optional[List[str]] = None) -> int:
         result = fill_markdown(
             text,
             width=options.width,
-            by_sentence=options.sentences,
+            by_sentence=options.semantic,
             dedent_input=True,
         )
 
