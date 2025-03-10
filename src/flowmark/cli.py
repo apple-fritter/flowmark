@@ -37,6 +37,7 @@ For more details, see: https://github.com/jlevy/flowmark
 """
 
 import argparse
+import importlib.metadata
 import sys
 from dataclasses import dataclass
 from typing import List, Optional
@@ -57,6 +58,7 @@ class Options:
     semantic: bool
     inplace: bool
     nobackup: bool
+    version: bool
 
 
 def _parse_args(args: Optional[List[str]] = None) -> Options:
@@ -110,6 +112,11 @@ def _parse_args(args: Optional[List[str]] = None) -> Options:
         action="store_true",
         help="Same as `--inplace --nobackup --semantic`, as a convenience for auto-formatting files",
     )
+    parser.add_argument(
+        "--version",
+        action="store_true",
+        help="Show version information and exit",
+    )
     opts = parser.parse_args(args)
 
     if opts.auto:
@@ -125,6 +132,7 @@ def _parse_args(args: Optional[List[str]] = None) -> Options:
         semantic=opts.semantic,
         inplace=opts.inplace,
         nobackup=opts.nobackup,
+        version=opts.version,
     )
 
 
@@ -139,6 +147,15 @@ def main(args: Optional[List[str]] = None) -> int:
         Exit code (0 for success, non-zero for errors)
     """
     options = _parse_args(args)
+
+    # Display version information if requested
+    if options.version:
+        try:
+            version = importlib.metadata.version("flowmark")
+            print(f"v{version}")
+        except importlib.metadata.PackageNotFoundError:
+            print("unknown (package not installed)")
+        return 0
 
     # Handle input.
     if options.file == "-":
