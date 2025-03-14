@@ -1,9 +1,9 @@
-from typing import Callable, List, Protocol
+from collections.abc import Callable
+from typing import Protocol
 
 from flowmark.sentence_split_regex import split_sentences_regex
 from flowmark.text_filling import DEFAULT_WRAP_WIDTH
 from flowmark.text_wrapping import DEFAULT_LEN_FUNCTION, wrap_paragraph, wrap_paragraph_lines
-
 
 DEFAULT_MIN_LINE_LEN = 20
 """Default minimum line length for sentence breaking."""
@@ -20,10 +20,10 @@ class LineWrapper(Protocol):
 class SentenceSplitter(Protocol):
     """Takes a text string and returns a list of sentences."""
 
-    def __call__(self, text: str) -> List[str]: ...
+    def __call__(self, text: str) -> list[str]: ...
 
 
-def split_sentences_no_min_length(text: str) -> List[str]:
+def split_sentences_no_min_length(text: str) -> list[str]:
     return split_sentences_regex(text, min_length=0)
 
 
@@ -61,7 +61,7 @@ def line_wrap_by_sentence(
 
     def line_wrapper(text: str, initial_indent: str, subsequent_indent: str) -> str:
         text = text.replace("\n", " ")
-        lines: List[str] = []
+        lines: list[str] = []
         first_line = True
         length = len_fn
         initial_indent_len = len_fn(initial_indent)
@@ -69,7 +69,7 @@ def line_wrap_by_sentence(
 
         sentences = split_sentences(text)
 
-        for i, sentence in enumerate(sentences):
+        for sentence in sentences:
             current_column = initial_indent_len if first_line else subsequent_indent_len
             if len(lines) > 0 and length(lines[-1]) < min_line_len:
                 current_column += length(lines[-1])

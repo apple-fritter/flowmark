@@ -10,9 +10,10 @@ discussion on why line wrapping this way is convenient.)
 """
 
 import re
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from textwrap import dedent
-from typing import Callable, cast, Generator, List, Optional, Tuple
+from typing import cast
 
 from marko import block, inline
 from marko.block import HTMLBlock
@@ -21,7 +22,7 @@ from marko.renderer import Renderer
 from marko.source import Source
 
 from flowmark.frontmatter import split_frontmatter
-from flowmark.line_wrappers import line_wrap_by_sentence, line_wrap_to_width, LineWrapper
+from flowmark.line_wrappers import LineWrapper, line_wrap_by_sentence, line_wrap_to_width
 from flowmark.sentence_split_regex import split_sentences_regex
 from flowmark.text_filling import DEFAULT_WRAP_WIDTH
 
@@ -44,10 +45,11 @@ def _normalize_html_comments(text: str, break_str: str = "\n\n") -> str:
 
 def _ensure_surrounding_breaks(
     html: str,
-    tag_pairs: List[Tuple[str, str]],
+    tag_pairs: list[tuple[str, str]],
     filter: Callable[[str], bool] = lambda _: True,
     break_str: str = "\n\n",
 ) -> str:
+    html_len = len(html)
     for start_tag, end_tag in tag_pairs:
         pattern = re.compile(rf"(\s*{re.escape(start_tag)}.*?{re.escape(end_tag)}\s*)", re.DOTALL)
 
@@ -60,7 +62,7 @@ def _ensure_surrounding_breaks(
 
             if match.start() == 0:
                 before = ""
-            if match.end() == len(html):
+            if match.end() == html_len:
                 after = ""
 
             return f"{before}{content}{after}"
@@ -137,7 +139,7 @@ class _MarkdownNormalizer(Renderer):
         return len(paragraphs) > 1
 
     def render_list(self, element: block.List) -> str:
-        result: List[str] = []
+        result: list[str] = []
 
         for i, child in enumerate(element.children):
             # Configure the appropriate prefix based on list type
@@ -282,7 +284,7 @@ class _MarkdownNormalizer(Renderer):
         return f"`{element.children}`"
 
 
-def split_sentences_no_min_length(text: str) -> List[str]:
+def split_sentences_no_min_length(text: str) -> list[str]:
     return split_sentences_regex(text, min_length=0)
 
 
@@ -291,7 +293,7 @@ def fill_markdown(
     dedent_input: bool = True,
     width: int = DEFAULT_WRAP_WIDTH,
     semantic: bool = False,
-    line_wrapper: Optional[LineWrapper] = None,
+    line_wrapper: LineWrapper | None = None,
 ) -> str:
     """
     Normalize and wrap Markdown text filling paragraphs to the full width.

@@ -13,7 +13,7 @@ def test_reference_doc_formats():
     assert orig_path.exists(), f"Original test document not found at {orig_path}"
 
     # Read the original content
-    with open(orig_path, "r") as f:
+    with open(orig_path) as f:
         orig_content = f.read()
 
     # Test configurations
@@ -24,18 +24,18 @@ def test_reference_doc_formats():
 
     for case in test_cases:
         output_path = testdoc_dir / case["filename"]
-        assert (
-            output_path.exists()
-        ), f"{case['name'].capitalize()}-processed document not found at {output_path}"
+        assert output_path.exists(), (
+            f"{case['name'].capitalize()}-processed document not found at {output_path}"
+        )
 
         # Read the processed content
-        with open(output_path, "r") as f:
+        with open(output_path) as f:
             processed_content = f.read()
 
         # Process the original file using fill_markdown with appropriate option
         expected_content = fill_markdown(orig_content, semantic=case["by_sentence"])
 
         # Compare the processed content with the expected output
-        assert (
-            expected_content == processed_content
-        ), f"{case['name'].capitalize()} flowmark processing doesn't match expected output"
+        assert expected_content == processed_content, (
+            f"{case['name'].capitalize()} flowmark processing doesn't match expected output"
+        )

@@ -1,7 +1,4 @@
-from typing import Tuple
-
-
-def split_frontmatter(text: str) -> Tuple[str, str]:
+def split_frontmatter(text: str) -> tuple[str, str]:
     """
     Split a text document into frontmatter and content parts.
 

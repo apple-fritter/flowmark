@@ -1,6 +1,6 @@
 import re
-from typing import Callable, List, Protocol, Tuple
-
+from collections.abc import Callable
+from typing import Protocol
 
 DEFAULT_LEN_FUNCTION = len
 """
@@ -11,10 +11,10 @@ to use a smarter function that does not count ANSI escape codes.
 
 
 class WordSplitter(Protocol):
-    def __call__(self, text: str) -> List[str]: ...
+    def __call__(self, text: str) -> list[str]: ...
 
 
-def simple_word_splitter(text: str) -> List[str]:
+def simple_word_splitter(text: str) -> list[str]:
     """
     Split words on whitespace. This is like Python's normal `textwrap`.
     """
@@ -38,7 +38,7 @@ class _HtmlMdWordSplitter:
             for pattern_group in self.patterns
         ]
 
-    def __call__(self, text: str) -> List[str]:
+    def __call__(self, text: str) -> list[str]:
         words = text.split()
         result = []
         i = 0
@@ -52,17 +52,17 @@ class _HtmlMdWordSplitter:
                 i += 1
         return result
 
-    def coalesce_words(self, words: List[str]) -> int:
+    def coalesce_words(self, words: list[str]) -> int:
         for pattern_group in self.compiled_patterns:
             if self.match_pattern_group(words, pattern_group):
                 return len(pattern_group)
         return 0
 
-    def match_pattern_group(self, words: List[str], patterns: Tuple[re.Pattern, ...]) -> bool:
+    def match_pattern_group(self, words: list[str], patterns: tuple[re.Pattern, ...]) -> bool:
         if len(words) < len(patterns):
             return False
 
-        return all(pattern.match(word) for pattern, word in zip(patterns, words))
+        return all(pattern.match(word) for pattern, word in zip(patterns, words, strict=False))
 
 
 html_md_word_splitter: WordSplitter = _HtmlMdWordSplitter()
@@ -80,7 +80,7 @@ def wrap_paragraph_lines(
     drop_whitespace: bool = True,
     splitter: WordSplitter = html_md_word_splitter,
     len_fn: Callable[[str], int] = DEFAULT_LEN_FUNCTION,
-) -> List[str]:
+) -> list[str]:
     """
     Wrap a single paragraph of text, returning a list of wrapped lines.
     Rewritten to simplify and generalize Python's textwrap.py.
@@ -90,8 +90,8 @@ def wrap_paragraph_lines(
 
     words = splitter(text)
 
-    lines: List[str] = []
-    current_line: List[str] = []
+    lines: list[str] = []
+    current_line: list[str] = []
     current_width = initial_column
 
     # Walk through words, breaking them into lines.

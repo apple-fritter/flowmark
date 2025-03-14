@@ -40,11 +40,10 @@ import argparse
 import importlib.metadata
 import sys
 from dataclasses import dataclass
-from typing import List, Optional
 
 from strif import atomic_output_file
 
-from flowmark import fill_markdown, fill_text, html_md_word_splitter, Wrap
+from flowmark import Wrap, fill_markdown, fill_text, html_md_word_splitter
 
 
 @dataclass
@@ -61,7 +60,7 @@ class Options:
     version: bool
 
 
-def _parse_args(args: Optional[List[str]] = None) -> Options:
+def _parse_args(args: list[str] | None = None) -> Options:
     """Parse command-line arguments for the flowmark tool."""
     # Use the module's docstring as the description
     module_doc = __doc__ or ""
@@ -136,7 +135,7 @@ def _parse_args(args: Optional[List[str]] = None) -> Options:
     )
 
 
-def main(args: Optional[List[str]] = None) -> int:
+def main(args: list[str] | None = None) -> int:
     """
     Main entry point for the flowmark CLI.
 
@@ -161,7 +160,7 @@ def main(args: Optional[List[str]] = None) -> int:
     if options.file == "-":
         text = sys.stdin.read()
     else:
-        with open(options.file, "r") as f:
+        with open(options.file) as f:
             text = f.read()
 
     if options.plaintext:

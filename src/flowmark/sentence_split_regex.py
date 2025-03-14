@@ -1,7 +1,6 @@
-from typing import Callable, List
+from collections.abc import Callable
 
 import regex
-
 
 # These heuristics are from Flowmark:
 # https://github.com/jlevy/atom-flowmark/blob/master/lib/remark-smart-word-wrap.js#L17-L33
@@ -35,7 +34,7 @@ def split_sentences_regex(
     text: str,
     heuristic: Callable[[str], bool] = heuristic_end_of_sentence,
     min_length: int = SENTENCE_MIN_LENGTH,
-) -> List[str]:
+) -> list[str]:
     """
     Split text into sentences using an approximate, fast regex heuristic. (English.)
     Goal is to be conservative, not perfect, avoiding excessive breaks.
@@ -46,8 +45,8 @@ def split_sentences_regex(
     :return: A list of sentences.
     """
     words = text.split()
-    sentences: List[str] = []
-    sentence: List[str] = []
+    sentences: list[str] = []
+    sentence: list[str] = []
     words_len = 0
     for word in words:
         sentence.append(word)

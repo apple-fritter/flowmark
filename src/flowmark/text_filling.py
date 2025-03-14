@@ -1,11 +1,11 @@
 import re
+from collections.abc import Callable
 from enum import Enum
-from typing import Callable, List
 
 from flowmark.text_wrapping import (
     DEFAULT_LEN_FUNCTION,
-    html_md_word_splitter,
     WordSplitter,
+    html_md_word_splitter,
     wrap_paragraph,
 )
 
@@ -20,7 +20,7 @@ for text, markup, and code. 88 is the same as Black.
 DEFAULT_INDENT = "    "
 
 
-def split_paragraphs(text: str) -> List[str]:
+def split_paragraphs(text: str) -> list[str]:
     return [p.strip() for p in re.split(r"\n{2,}", text)]
 
 
