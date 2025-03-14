@@ -1,9 +1,9 @@
 # Changes here will be overwritten by Copier. Do not edit manually.
-_commit: 1742e95
+_commit: bec29b1
 _src_path: gh:jlevy/simple-modern-uv
 package_author_email: joshua@cal.berkeley.edu
 package_author_name: Joshua Levy
 package_description: Better line wrapping and formatting for plaintext and Markdown
 package_github_org: jlevy
+package_module: flowmark
 package_name: flowmark
-package_slug: flowmark
