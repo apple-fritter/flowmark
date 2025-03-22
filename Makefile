@@ -3,7 +3,7 @@
 
 .DEFAULT_GOAL := default
 
-.PHONY: default install lint test build clean gen_test_docs
+.PHONY: default install lint test upgrade build clean gen_test_docs
 
 default: install lint test
 

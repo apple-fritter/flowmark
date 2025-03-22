@@ -25,7 +25,7 @@ class _HtmlMdWordSplitter:
     def __init__(self):
         # Sequences of whitespace-delimited words that should be coalesced and treated
         # like a single word.
-        self.patterns = [
+        self.patterns: list[tuple[str, ...]] = [
             # HTML tags:
             (r"<[^>]+", r"[^<>]+>[^<>]*"),
             (r"<[^>]+", r"[^<>]+", r"[^<>]+>[^<>]*"),
@@ -33,14 +33,14 @@ class _HtmlMdWordSplitter:
             (r"\[", r"[^\[\]]+\][^\[\]]*"),
             (r"\[", r"[^\[\]]+", r"[^\[\]]+\][^\[\]]*"),
         ]
-        self.compiled_patterns = [
+        self.compiled_patterns: list[tuple[re.Pattern[str], ...]] = [
             tuple(re.compile(pattern) for pattern in pattern_group)
             for pattern_group in self.patterns
         ]
 
     def __call__(self, text: str) -> list[str]:
         words = text.split()
-        result = []
+        result: list[str] = []
         i = 0
         while i < len(words):
             coalesced = self.coalesce_words(words[i:])
@@ -58,7 +58,7 @@ class _HtmlMdWordSplitter:
                 return len(pattern_group)
         return 0
 
-    def match_pattern_group(self, words: list[str], patterns: tuple[re.Pattern, ...]) -> bool:
+    def match_pattern_group(self, words: list[str], patterns: tuple[re.Pattern[str], ...]) -> bool:
         if len(words) < len(patterns):
             return False
 

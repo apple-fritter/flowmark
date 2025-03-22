@@ -87,8 +87,8 @@ class Wrap(Enum):
 
 def fill_text(
     text: str,
-    text_wrap=Wrap.WRAP,
-    width=DEFAULT_WRAP_WIDTH,
+    text_wrap: Wrap = Wrap.WRAP,
+    width: int = DEFAULT_WRAP_WIDTH,
     extra_indent: str = "",
     empty_indent: str = "",
     initial_column: int = 0,
@@ -121,7 +121,7 @@ def fill_text(
         replace_whitespace = text_wrap.replace_whitespace
 
         paragraphs = split_paragraphs(text)
-        wrapped_paragraphs = []
+        wrapped_paragraphs: list[str] = []
 
         # Wrap each paragraph.
         for i, paragraph in enumerate(paragraphs):

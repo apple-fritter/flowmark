@@ -9,17 +9,20 @@ semi-semantically (e.g. on sentence boundaries when appropriate).
 discussion on why line wrapping this way is convenient.)
 """
 
+from __future__ import annotations
+
 import re
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from textwrap import dedent
-from typing import cast
+from typing import Any, cast
 
 from marko import block, inline
 from marko.block import HTMLBlock
 from marko.parser import Parser
 from marko.renderer import Renderer
 from marko.source import Source
+from typing_extensions import override
 
 from flowmark.frontmatter import split_frontmatter
 from flowmark.line_wrappers import LineWrapper, line_wrap_by_sentence, line_wrap_to_width
@@ -79,6 +82,7 @@ def _ensure_surrounding_breaks(
 # normalization, to avoid this confusion?
 # For now, just ignoring block tags.
 class CustomHTMLBlock(HTMLBlock):
+    @override
     @classmethod
     def match(cls, source: Source) -> int | bool:
         return False
@@ -102,9 +106,10 @@ class _MarkdownNormalizer(Renderer):
         self._prefix: str = ""  # The prefix on the first line, with a bullet, such as `  - `.
         self._second_prefix: str = ""  # The prefix on subsequent lines, such as `    `.
         self._suppress_item_break: bool = True
-        self._line_wrapper = line_wrapper
+        self._line_wrapper: LineWrapper = line_wrapper
 
-    def __enter__(self) -> "_MarkdownNormalizer":
+    @override
+    def __enter__(self) -> _MarkdownNormalizer:
         self._prefix = ""
         self._second_prefix = ""
         return super().__enter__()
@@ -121,7 +126,7 @@ class _MarkdownNormalizer(Renderer):
         # Suppress item breaks on list items following a top-level paragraph.
         if not self._prefix:
             self._suppress_item_break = True
-        children = self.render_children(element)
+        children: Any = self.render_children(element)
         wrapped_text = self._line_wrapper(
             children,
             self._prefix,
@@ -217,7 +222,7 @@ class _MarkdownNormalizer(Renderer):
         return result
 
     def render_setext_heading(self, element: block.SetextHeading) -> str:
-        return self.render_heading(cast("block.Heading", element))
+        return self.render_heading(cast(block.Heading, element))  # pyright: ignore
 
     def render_blank_line(self, element: block.BlankLine) -> str:
         if self._prefix.strip():

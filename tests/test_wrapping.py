@@ -1,7 +1,7 @@
 from textwrap import dedent
 
 from flowmark.text_wrapping import (
-    _HtmlMdWordSplitter,
+    _HtmlMdWordSplitter,  # pyright: ignore
     html_md_word_splitter,
     simple_word_splitter,
     wrap_paragraph,

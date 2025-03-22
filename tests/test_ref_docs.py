@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import TypedDict
 
 from flowmark.markdown_filling import fill_markdown
 
@@ -16,8 +17,13 @@ def test_reference_doc_formats():
     with open(orig_path) as f:
         orig_content = f.read()
 
+    class TestCase(TypedDict):
+        name: str
+        filename: str
+        by_sentence: bool
+
     # Test configurations
-    test_cases = [
+    test_cases: list[TestCase] = [
         {"name": "plain", "filename": "testdoc.out.plain.md", "by_sentence": False},
         {"name": "semantic", "filename": "testdoc.out.semantic.md", "by_sentence": True},
     ]
