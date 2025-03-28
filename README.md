@@ -4,7 +4,7 @@ Flowmark is a new Python implementation of **text and Markdown line wrapping and
 filling**, with an emphasis on making **git diffs** and **LLM edits** to text documents
 easier to diff and review.
 
-In addition, it adds **support for Markdown** and offers **Markdown auto-formatting and
+In addition, it offers **Markdown auto-formatting and
 normalization** as a library or from the command line.
 This is much like [markdownfmt](https://github.com/shurcooL/markdownfmt) or
 [prettier's Markdown support](https://prettier.io/blog/2017/11/07/1.8.0) but is pure
