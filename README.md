@@ -154,7 +154,6 @@ Markdown content. It can:
 
 - Optionally break lines at sentence boundaries for better diff readability
 
-
 - Process plaintext with HTML-aware word splitting
 
 It is both a library and a command-line tool.
