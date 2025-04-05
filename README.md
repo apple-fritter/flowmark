@@ -2,10 +2,10 @@
 
 Flowmark is a new Python implementation of **text and Markdown line wrapping and
 filling**, with an emphasis on making **git diffs** and **LLM edits** to text documents
-easier to diff and review after updating.
+easier to diff and review.
 
-In addition, it adds **support for Markdown** and offers **Markdown auto-formatting and
-normalization** as a library or from the command line.
+In addition, it offers **Markdown auto-formatting and normalization** as a library or
+from the command line.
 This is much like [markdownfmt](https://github.com/shurcooL/markdownfmt) or
 [prettier's Markdown support](https://prettier.io/blog/2017/11/07/1.8.0) but is pure
 Python and has (in my humble opinion) better options and defaults.
@@ -57,8 +57,7 @@ The `--auto` option is just the same as `--inplace --nobackup --semantic`.
 
 ## Use Cases
 
-- As a **command line formatter** to format text or Markdown files using the `flowmark`
-  command.
+The main ways to use Flowmark are:
 
 - To **autoformat Markdown on save in VSCode/Cursor** or any other editor that supports
   running a command on save.
@@ -66,6 +65,9 @@ The `--auto` option is just the same as `--inplace --nobackup --semantic`.
   It also normalizes all Markdown syntax variations (such as different header or
   formatting styles). This can be especially useful for documentation and editing
   workflows where clean diffs and minimal merge conflicts on GitHub are important.
+
+- As a **command line formatter** to format text or Markdown files using the `flowmark`
+  command.
 
 - As a **library to autoformat Markdown**. For example, it is great to normalize the
   outputs from LLMs to be consistent, or to run on the inputs and outputs of LLM
@@ -79,6 +81,8 @@ The `--auto` option is just the same as `--inplace --nobackup --semantic`.
   subsequent indentation** and **when to split words and lines**, e.g. using a word
   splitter that won't break lines within HTML tags.
 
+Other features:
+
 - Flowmark has the option to to use **semantic line breaks** (using a heuristic to break
   lines on sentences sentences when that is reasonable), which is an underrated feature
   that can **make diffs on GitHub much more readable**. The the change may seem subtle
@@ -88,8 +92,11 @@ The `--auto` option is just the same as `--inplace --nobackup --semantic`.
   [Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of
   this readme file.)
 
-- Very, very simple and fast **regex-based sentence splitting**. This should work fine
-  for English and many other latin/Cyrillic languages but it hasn't been tested on CJK.
+- Very simple and fast **regex-based sentence splitting**. It's just based on letters
+  and punctuation so isn't perfect but works well for these purposes (and is much faster
+  and simpler than a proper sentence parser like SpaCy).
+  It should work fine for English and many other latin/Cyrillic languages but hasn't
+  been tested on CJK.
 
 It aims to be small and simple and have only a few dependencies, currently only
 [`marko`](https://github.com/frostming/marko),
