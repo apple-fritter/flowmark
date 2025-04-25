@@ -78,15 +78,15 @@ If the noteholders had converted their $420K at the 20% discount, they would be 
 ## Legalese
 
 > ⚖️
->
+> 
 > ↔️ CONVERTIBLE PROMISSORY NOTE
->
+> 
 > Note Series: `___________________________`
 >
 > e. **Amendment and Waiver.**
 > Any term of this Note may be amended or waived with the written consent of Company and
 > the Majority Holders.
->
+> 
 > f. **Governing Law; Venue.** This Note shall be governed by and construed under the laws of the State of `________`, as
 > applied to agreements among `_______` residents, made and to be performed entirely within the State of `______`, without giving effect to conflicts of laws principles. The venue for any dispute arising out of or related to this Note will lie exclusively in the state or federal courts located in King County, Washington, and the parties to this Note irrevocably waive any right to raise forum non conveniens or any other argument that King County, Washington is not the proper venue. The parties to this Note irrevocably consent to personal jurisdiction in the state and federal courts of the state of Washington.
 
@@ -94,7 +94,7 @@ If the noteholders had converted their $420K at the 20% discount, they would be 
 > Without in any way limiting the representations set forth above, the Holder further
 > agrees not to make any disposition of all or any portion of the Securities unless and
 > until:
->
+> 
 > 1\. There is then in effect a registration statement under the Act covering such proposed
 > disposition and such disposition is made in accordance with such registration statement;
 > or
@@ -117,6 +117,7 @@ the Center for American Entrepreneurship.)
 ### A few paragraphs and bullets
 
 A good heuristic is to assume your readers will be **100% intelligent and 100% ignorant**. Of course, in reality, varied experience exists within an individual reader. Most people may already know *something*, and some people are quicker learners than others. Even world class experts most likely only really know parts of a subject, and contributors may have practical experience in one role--perhaps they have been an entrepreneur, for example, but not an investor. So writing with the assumption that each reader could be both has a variety of advantages:  
+
 
 - Assuming 100% ignorance will help people who think they know a lot about a subject understand **what they didn't know they didn't know**, and fill in the gaps in their knowledge. It encourages contribution from experts and people with practical experience.
 - Assuming 100% intelligence makes readers feel respected, and feel proud to be associated with the material. It will incline beginners to contribute their feedback.
@@ -280,6 +281,34 @@ of General Social Survey data).
 
 - **Visionary projects.**
   Projects that were in a completely brand-new space without a precedent, going from 0 to 1.
+
+Recommendations:
+
+- Use `z` (zoxide) instead of `cd`.
+
+  ```shell
+  # Use z in place of cd: switch directories (first time):
+  z ~/some/long/path/to/foo
+  # Thereafter it's faster:
+  z foo
+  ```
+- Use `eza` instead of `ls`. It has color support, support for Nerd Font icons, and
+  other improvements.
+
+### **3.6 Comparative Features Matrix**
+
+The following table summarizes the native capabilities of the primary platforms evaluated against the core requirements:
+
+| **Feature** | **Vercel** | **Netlify** | **Cloudflare Pages** | **AWS (S3/CloudFront)** |
+| --- | --- | --- | --- | --- |
+| **CLI Tool Availability** | Yes (vercel) 1 | Yes (netlify) 2 | Yes (wrangler) 3 | Yes (aws) 4 |
+| **Primary CLI Auth Method** | User Access Token 9 | Personal Access Token (PAT) 2 | API Token 10 | IAM Credentials / STS Token 11 |
+| **Native Token/Key Scoping** | User/Team Level 24 | User/Site Level 30 | Account Level (for Pages Edit) 3 | Path/Prefix Level (via IAM) 4 |
+| **Path-Based Deploy Permissions** | No Native Support 14 | No Native Support 2 | No Native Support 3 | Yes (IAM Policies) 4 |
+| **Primary Native Isolation Method** | Project | Site | Project (but weak permissions) | Path Prefix (with IAM) 4 |
+| **Programmatic File Delete/Update** | Deployment API 14 | Deployment API 28 | Deployment API (via Wrangler) | Direct S3 Object API 12-55 |
+| **Programmatic Invalidation API** | Automatic / Limited | Automatic / Limited | Yes (Cloudflare API) | Yes (CloudFront API) 15-16 |
+| **Basic Cost Model** | Per User / Usage 5 | Per User / Usage 5 | Generous Free Tier / Usage | Usage-Based Components 20-64 |
 
 ### Boldface, italics, and links
 

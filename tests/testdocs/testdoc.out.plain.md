@@ -433,6 +433,36 @@ Social Survey data).
 - **Visionary projects.** Projects that were in a completely brand-new space without a
   precedent, going from 0 to 1.
 
+Recommendations:
+
+- Use `z` (zoxide) instead of `cd`.
+
+  ```shell
+  # Use z in place of cd: switch directories (first time):
+  z ~/some/long/path/to/foo
+  # Thereafter it's faster:
+  z foo
+  ```
+
+- Use `eza` instead of `ls`. It has color support, support for Nerd Font icons, and
+  other improvements.
+
+### **3.6 Comparative Features Matrix**
+
+The following table summarizes the native capabilities of the primary platforms
+evaluated against the core requirements:
+
+| **Feature** | **Vercel** | **Netlify** | **Cloudflare Pages** | **AWS (S3/CloudFront)** |
+| --- | --- | --- | --- | --- |
+| **CLI Tool Availability** | Yes (vercel) 1 | Yes (netlify) 2 | Yes (wrangler) 3 | Yes (aws) 4 |
+| **Primary CLI Auth Method** | User Access Token 9 | Personal Access Token (PAT) 2 | API Token 10 | IAM Credentials / STS Token 11 |
+| **Native Token/Key Scoping** | User/Team Level 24 | User/Site Level 30 | Account Level (for Pages Edit) 3 | Path/Prefix Level (via IAM) 4 |
+| **Path-Based Deploy Permissions** | No Native Support 14 | No Native Support 2 | No Native Support 3 | Yes (IAM Policies) 4 |
+| **Primary Native Isolation Method** | Project | Site | Project (but weak permissions) | Path Prefix (with IAM) 4 |
+| **Programmatic File Delete/Update** | Deployment API 14 | Deployment API 28 | Deployment API (via Wrangler) | Direct S3 Object API 12-55 |
+| **Programmatic Invalidation API** | Automatic / Limited | Automatic / Limited | Yes (Cloudflare API) | Yes (CloudFront API) 15-16 |
+| **Basic Cost Model** | Per User / Usage 5 | Per User / Usage 5 | Generous Free Tier / Usage | Usage-Based Components 20-64 |
+
 ### Boldface, italics, and links
 
 X [New York City](https://en.wikipedia.org/wiki/New_York_City). XX
