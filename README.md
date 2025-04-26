@@ -179,6 +179,12 @@ Command-line usage examples:
 For more details, see: https://github.com/jlevy/flowmark
 ```
 
+## Project Docs
+
+For how to install uv and Python, see [installation.md](installation.md).
+
+For development workflows, see [development.md](development.md).
+
 For instructions on publishing to PyPI, see [publishing.md](publishing.md).
 
 * * *
