@@ -55,6 +55,7 @@ class Options:
     width: int
     plaintext: bool
     semantic: bool
+    cleanups: bool
     inplace: bool
     nobackup: bool
     version: bool
@@ -99,6 +100,13 @@ def _parse_args(args: list[str] | None = None) -> Options:
         help="Enable semantic (sentence-based) line breaks (only applies to Markdown mode)",
     )
     parser.add_argument(
+        "-c",
+        "--cleanups",
+        action="store_true",
+        default=False,
+        help="Enable (safe) cleanups for common issues (only applies to Markdown mode)",
+    )
+    parser.add_argument(
         "-i", "--inplace", action="store_true", help="Edit the file in place (ignores --output)"
     )
     parser.add_argument(
@@ -129,6 +137,7 @@ def _parse_args(args: list[str] | None = None) -> Options:
         width=opts.width,
         plaintext=opts.plaintext,
         semantic=opts.semantic,
+        cleanups=opts.cleanups,
         inplace=opts.inplace,
         nobackup=opts.nobackup,
         version=opts.version,
@@ -177,6 +186,7 @@ def main(args: list[str] | None = None) -> int:
             text,
             width=options.width,
             semantic=options.semantic,
+            cleanups=options.cleanups,
             dedent_input=True,
         )
 

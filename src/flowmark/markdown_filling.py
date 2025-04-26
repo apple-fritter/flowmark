@@ -15,6 +15,7 @@ import re
 from collections.abc import Callable
 from textwrap import dedent
 
+from flowmark.cleanups import doc_cleanups
 from flowmark.custom_marko import custom_marko
 from flowmark.frontmatter import split_frontmatter
 from flowmark.line_wrappers import LineWrapper, line_wrap_by_sentence, line_wrap_to_width
@@ -76,6 +77,7 @@ def fill_markdown(
     dedent_input: bool = True,
     width: int = DEFAULT_WRAP_WIDTH,
     semantic: bool = False,
+    cleanups: bool = False,
     line_wrapper: LineWrapper | None = None,
 ) -> str:
     """
@@ -118,7 +120,10 @@ def fill_markdown(
 
     # Parse and render.
     marko = custom_marko(line_wrapper)
-    result = marko.convert(markdown_text)
+    document = marko.parse(markdown_text)
+    if cleanups:
+        doc_cleanups(document)
+    result = marko.render(document)
 
     # Reattach frontmatter if it was present
     if frontmatter:

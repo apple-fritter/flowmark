@@ -23,18 +23,22 @@ def test_reference_doc_formats():
     class TestCase:
         name: str
         filename: str
-        by_sentence: bool
+        semantic: bool
+        cleanups: bool
 
     test_cases: list[TestCase] = [
-        TestCase(name="plain", filename="testdoc.out.plain.md", by_sentence=False),
-        TestCase(name="semantic", filename="testdoc.out.semantic.md", by_sentence=True),
+        TestCase(name="plain", filename="testdoc.out.plain.md", semantic=False, cleanups=False),
+        TestCase(
+            name="semantic", filename="testdoc.out.semantic.md", semantic=True, cleanups=False
+        ),
+        TestCase(name="cleaned", filename="testdoc.out.cleaned.md", semantic=True, cleanups=True),
     ]
 
     for case in test_cases:
         test_doc = testdoc_dir / case.filename
         expected = test_doc.read_text()
 
-        actual = fill_markdown(orig_content, semantic=case.by_sentence)
+        actual = fill_markdown(orig_content, semantic=case.semantic, cleanups=case.cleanups)
         if actual != expected:
             actual_path = testdoc_dir / f"testdoc.actual.{case.name}.md"
             print(f"actual was different from expected for {case.name}!")
