@@ -17,10 +17,11 @@ from contextlib import contextmanager
 from textwrap import dedent
 from typing import Any, cast
 
-from marko import block, inline
+from marko import Renderer, block, inline
 from marko.block import HTMLBlock
+from marko.ext.gfm import GFM
+from marko.ext.gfm import elements as gfm_elements
 from marko.parser import Parser
-from marko.renderer import Renderer
 from marko.source import Source
 from typing_extensions import override
 
@@ -96,9 +97,14 @@ class CustomParser(Parser):
 
 class _MarkdownNormalizer(Renderer):
     """
-    Render Markdown in normalized form. This is the internal implementation.
+    Render Markdown in normalized form. This is the internal implementation
+    which overrides most of `MarkdownRenderer`.
+
     You likely want to use `normalize_markdown()` instead.
-    Based on: https://github.com/frostming/marko/blob/master/marko/md_renderer.py
+
+    Based on:
+    https://github.com/frostming/marko/blob/master/marko/md_renderer.py
+    https://github.com/frostming/marko/blob/master/marko/ext/gfm/renderer.py
     """
 
     def __init__(self, line_wrapper: LineWrapper) -> None:
@@ -126,7 +132,14 @@ class _MarkdownNormalizer(Renderer):
         # Suppress item breaks on list items following a top-level paragraph.
         if not self._prefix:
             self._suppress_item_break = True
+
         children: Any = self.render_children(element)
+
+        # GFM checkbox support.
+        if hasattr(element, "checked"):
+            children = f"[{'x' if element.checked else ' '}] {children}"  # pyright: ignore
+
+        # Wrap the text.
         wrapped_text = self._line_wrapper(
             children,
             self._prefix,
@@ -288,6 +301,33 @@ class _MarkdownNormalizer(Renderer):
             return f"`` {text} ``"
         return f"`{element.children}`"
 
+    # --- GFM Renderer Methods ---
+
+    def render_strikethrough(self, element: gfm_elements.Strikethrough) -> str:
+        return f"~~{self.render_children(element)}~~"
+
+    def render_table(self, element: gfm_elements.Table) -> str:
+        """Render a GFM table."""
+        lines: list[str] = []
+        head, *body = element.children
+        lines.append(self.render(head))
+        lines.append(f"| {' | '.join(element.delimiters)} |\n")
+        for row in body:
+            lines.append(self.render(row))
+        return "".join(lines)
+
+    def render_table_row(self, element: gfm_elements.TableRow) -> str:
+        """Render a row within a GFM table."""
+        return f"| {' | '.join(self.render(cell) for cell in element.children)} |\n"
+
+    def render_table_cell(self, element: gfm_elements.TableCell) -> str:
+        """Render a cell within a GFM table row."""
+        return self.render_children(element).replace("|", "\\|")
+
+    def render_url(self, element: gfm_elements.Url) -> str:
+        """For GFM autolink URLs, just output the URL directly."""
+        return element.dest
+
 
 def split_sentences_no_min_length(text: str) -> list[str]:
     return split_sentences_regex(text, min_length=0)
@@ -338,10 +378,19 @@ def fill_markdown(
     # If we want to normalize HTML blocks or comments.
     markdown_text = _normalize_html_comments(markdown_text)
 
-    # Normalize the markdown and wrap lines.
+    # Set up our custom parser, and mix in GFM elements.
+    # Using Marko's full extension system is tricky with our customizations so simpler
+    # to do this manually.
     parser = CustomParser()
+    for e in GFM.elements:
+        assert e not in parser.block_elements and e not in parser.inline_elements
+        parser.add_element(e)
+
+    renderer = _MarkdownNormalizer(line_wrapper)
+
+    # Parse and render.
     parsed = parser.parse(markdown_text)
-    result = _MarkdownNormalizer(line_wrapper).render(parsed)
+    result = renderer.render(parsed)
 
     # Reattach frontmatter if it was present
     if frontmatter:

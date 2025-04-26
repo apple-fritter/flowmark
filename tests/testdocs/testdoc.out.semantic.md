@@ -466,7 +466,6 @@ Recommendations:
   # Thereafter it's faster:
   z foo
   ```
-
 - Use `eza` instead of `ls`. It has color support, support for Nerd Font icons, and
   other improvements.
 
@@ -933,16 +932,13 @@ valuation, shares, fundraising, and dilution (<a
 href="http://ownyourventure.com/equitySim.html">source</a>) <br> </div>
 
 | Specific AWS Services | Basics | Tips | Gotchas |
-|---------------------------------------|--------------------------------|-------------------------------|------------------------------------------------|
-| [Security and IAM](#security-and-iam) | [📗](#security-and-iam-basics) |
-[📘](#security-and-iam-tips) | [📙](#security-and-iam-gotchas-and-limitations) | |
-[S3](#s3) | [📗](#s3-basics) | [📘](#s3-tips) | [📙](#s3-gotchas-and-limitations) | |
-[EC2](#ec2) | [📗](#ec2-basics) | [📘](#ec2-tips) | [📙](#ec2-gotchas-and-limitations) | |
-[CloudWatch](#cloudwatch) | [📗](#cloudwatch-basics) | [📘](#cloudwatch-tips) |
-[📙](#cloudwatch-gotchas-and-limitations) | | [AMIs](#amis) | [📗](#ami-basics) |
-[📘](#ami-tips) | [📙](#ami-gotchas-and-limitations) | | [Auto Scaling](#auto-scaling) |
-[📗](#auto-scaling-basics) | [📘](#auto-scaling-tips) |
-[📙](#auto-scaling-gotchas-and-limitations) |
+| --------------------------------------- | -------------------------------- | ------------------------------- | ------------------------------------------------ |
+| [Security and IAM](#security-and-iam) | [📗](#security-and-iam-basics) | [📘](#security-and-iam-tips) | [📙](#security-and-iam-gotchas-and-limitations) |
+| [S3](#s3) | [📗](#s3-basics) | [📘](#s3-tips) | [📙](#s3-gotchas-and-limitations) |
+| [EC2](#ec2) | [📗](#ec2-basics) | [📘](#ec2-tips) | [📙](#ec2-gotchas-and-limitations) |
+| [CloudWatch](#cloudwatch) | [📗](#cloudwatch-basics) | [📘](#cloudwatch-tips) | [📙](#cloudwatch-gotchas-and-limitations) |
+| [AMIs](#amis) | [📗](#ami-basics) | [📘](#ami-tips) | [📙](#ami-gotchas-and-limitations) |
+| [Auto Scaling](#auto-scaling) | [📗](#auto-scaling-basics) | [📘](#auto-scaling-tips) | [📙](#auto-scaling-gotchas-and-limitations) |
 
 - 📒 [FAQ](https://aws.amazon.com/cloudwatch/faqs/) ∙
   [Pricing](https://aws.amazon.com/cloudwatch/pricing/) - 🔹Blahxxx - ❗Blahxxx
