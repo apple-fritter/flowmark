@@ -71,6 +71,29 @@ Split words, but not within HTML tags or Markdown links.
 """
 
 
+# Pattern to identify words that need escaping if they start a wrapped markdown line.
+# Matches list markers (*, +, -) bare or before a space (but not before a letter for
+# example), blockquotes (> ), headings (#, ##, etc.).
+_md_specials_pat = re.compile(r"^[-*+](?: |$)|> |#+$")
+
+# Separate pattern to specifically find the numbered list cases for targeted escaping
+_md_numeral_pat = re.compile(r"^[0-9]+[.)]$")
+
+
+def markdown_escape_word(word: str) -> str:
+    """
+    Prepends a backslash to a word if it matches markdown patterns
+    that need escaping at the start of a wrapped line.
+    For numbered lists (e.g., "1.", "1)"), inserts the backslash before the dot/paren.
+    """
+    if _md_numeral_pat.match(word):
+        # Insert backslash before the `.` or `)`
+        return word[:-1] + "\\" + word[-1]
+    elif _md_specials_pat.match(word):
+        return "\\" + word
+    return word
+
+
 def wrap_paragraph_lines(
     text: str,
     width: int,
@@ -80,10 +103,13 @@ def wrap_paragraph_lines(
     drop_whitespace: bool = True,
     splitter: WordSplitter = html_md_word_splitter,
     len_fn: Callable[[str], int] = DEFAULT_LEN_FUNCTION,
+    is_markdown: bool = False,
 ) -> list[str]:
     """
     Wrap a single paragraph of text, returning a list of wrapped lines.
     Rewritten to simplify and generalize Python's textwrap.py.
+    Set `is_markdown` to True when wrapping markdown text to automatically
+    escape special markdown characters at the start of wrapped lines.
     """
     if replace_whitespace:
         text = re.sub(r"\s+", " ", text)
@@ -93,6 +119,7 @@ def wrap_paragraph_lines(
     lines: list[str] = []
     current_line: list[str] = []
     current_width = initial_column
+    first_line = True
 
     # Walk through words, breaking them into lines.
     for word in words:
@@ -110,9 +137,21 @@ def wrap_paragraph_lines(
                 if drop_whitespace:
                     line = line.strip()
                 lines.append(line)
-            current_line = [word]
-            current_width = subsequent_offset + word_width
+                first_line = False
 
+            # Check if word needs escaping at the start of this wrapped line.
+            escaped_word = word
+            if is_markdown and not first_line:
+                escaped_word = markdown_escape_word(word)
+
+            # Recalculate width after potential escaping for the new line.
+            escaped_word_width = len_fn(escaped_word)
+
+            # Start the new line with the (potentially escaped) word
+            current_line = [escaped_word]
+            current_width = subsequent_offset + escaped_word_width
+
+    # Add the last line if necessary.
     if current_line:
         line = " ".join(current_line)
         if drop_whitespace:
@@ -132,6 +171,7 @@ def wrap_paragraph(
     drop_whitespace: bool = True,
     word_splitter: WordSplitter = html_md_word_splitter,
     len_fn: Callable[[str], int] = DEFAULT_LEN_FUNCTION,
+    is_markdown: bool = False,
 ) -> str:
     """
     Wrap lines of a single paragraph of plain text, returning a new string.
@@ -146,6 +186,7 @@ def wrap_paragraph(
         initial_column=initial_column + len_fn(initial_indent),
         subsequent_offset=len_fn(subsequent_indent),
         len_fn=len_fn,
+        is_markdown=is_markdown,
     )
     # Now insert indents on first and subsequent lines, if needed.
     if initial_indent and initial_column == 0 and len(lines) > 0:

@@ -129,8 +129,7 @@ experience.
 Flowmark can be used as a library or as a CLI.
 
 ```
-$ flowmark --help
-usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-i] [--nobackup] [file]
+usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-i] [--nobackup] [--auto] [--version] [file]
 
 Flowmark: Better line wrapping and formatting for plaintext and Markdown
 
@@ -142,9 +141,11 @@ options:
   -o, --output OUTPUT  Output file (use '-' for stdout)
   -w, --width WIDTH    Line width to wrap to
   -p, --plaintext      Process as plaintext (no Markdown parsing)
-  -s, --semantic       Enable sentence-based line breaks (only applies to Markdown mode)
+  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to Markdown mode)
   -i, --inplace        Edit the file in place (ignores --output)
   --nobackup           Do not make a backup of the original file when using --inplace
+  --auto               Same as `--inplace --nobackup --semantic`, as a convenience for auto-formatting files
+  --version            Show version information and exit
 
 Flowmark provides enhanced text wrapping capabilities with special handling for
 Markdown content. It can:
@@ -173,11 +174,25 @@ Command-line usage examples:
   # Process plaintext instead of Markdown
   flowmark --plaintext text.txt
 
-  # Use sentences to guide line breaks (good for many purposes git history and diffs)
+  # Use semantic line breaks (based on sentences, which is helpful to reduce
+  # irrelevant line wrap diffs in git history)
   flowmark --semantic README.md
 
 For more details, see: https://github.com/jlevy/flowmark
 ```
+
+## Other Notes
+
+- This enables
+  [GitHub-flavored Markdown support](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+  using
+  [Marko's extension](https://github.com/frostming/marko/blob/master/marko/ext/footnote.py).
+
+- GFM-style tables are supported and also auto-formatted.
+
+- GFM-style footnotes are supported.
+  But note these aren't actually in the GFM spec, but we follow
+  [micromark's conventions](https://github.com/frostming/marko/blob/master/marko/ext/footnote.py).
 
 ## Project Docs
 

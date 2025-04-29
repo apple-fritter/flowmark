@@ -30,6 +30,7 @@ def split_sentences_no_min_length(text: str) -> list[str]:
 def line_wrap_to_width(
     width: int = DEFAULT_WRAP_WIDTH,
     len_fn: Callable[[str], int] = DEFAULT_LEN_FUNCTION,
+    is_markdown: bool = False,
 ) -> LineWrapper:
     """
     Wrap lines of text to a given width.
@@ -42,6 +43,7 @@ def line_wrap_to_width(
             initial_indent=initial_indent,
             subsequent_indent=subsequent_indent,
             len_fn=len_fn,
+            is_markdown=is_markdown,
         )
 
     return line_wrapper
@@ -52,6 +54,7 @@ def line_wrap_by_sentence(
     width: int = DEFAULT_WRAP_WIDTH,
     min_line_len: int = DEFAULT_MIN_LINE_LEN,
     len_fn: Callable[[str], int] = DEFAULT_LEN_FUNCTION,
+    is_markdown: bool = False,
 ) -> LineWrapper:
     """
     Wrap lines of text to a given width but also keep sentences on their own lines.
@@ -79,6 +82,7 @@ def line_wrap_by_sentence(
                 width=width,
                 initial_column=current_column,
                 subsequent_offset=subsequent_indent_len,
+                is_markdown=is_markdown,
             )
             # If last line is shorter than min_line_len, combine with next line.
             # Also handles if the first word doesn't fit.

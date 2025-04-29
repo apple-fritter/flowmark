@@ -99,9 +99,10 @@ def fill_markdown(
     beginning of the document.
     """
     if line_wrapper is None:
-        line_wrapper = (
-            line_wrap_by_sentence(width=width) if semantic else line_wrap_to_width(width=width)
-        )
+        if semantic:
+            line_wrapper = line_wrap_by_sentence(width=width, is_markdown=True)
+        else:
+            line_wrapper = line_wrap_to_width(width=width, is_markdown=True)
 
     # Extract frontmatter before any processing
     frontmatter, content = split_frontmatter(markdown_text)

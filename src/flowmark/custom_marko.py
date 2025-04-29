@@ -7,6 +7,7 @@ from typing import Any, cast
 
 from marko import Markdown, Renderer, block, inline
 from marko.block import HTMLBlock
+from marko.ext import footnote
 from marko.ext.gfm import GFM
 from marko.ext.gfm import elements as gfm_elements
 from marko.parser import Parser
@@ -187,10 +188,17 @@ class MarkdownNormalizer(Renderer):
         return result
 
     def render_link_ref_def(self, element: block.LinkRefDef) -> str:
+        """Render a standard link reference definition:
+        [label]: url "title"
+        """
         link_text = element.dest
         if element.title:
-            link_text += f" {element.title}"
-        return f"[{element.label}]: {link_text}\n"
+            # Ensure title quotes are handled correctly
+            link_text += f' "{element.title.replace('"', '\\"')}"'
+        result = f"{self._prefix}[{element.label}]: {link_text}\n"
+        self._prefix = self._second_prefix
+        self._suppress_item_break = True
+        return result
 
     def render_emphasis(self, element: inline.Emphasis) -> str:
         return f"*{self.render_children(element)}*"
@@ -243,6 +251,29 @@ class MarkdownNormalizer(Renderer):
 
     # --- GFM Renderer Methods ---
 
+    def render_footnote_ref(self, element: footnote.FootnoteRef) -> str:
+        """Render an inline footnote reference like [^label]."""
+        return f"[^{element.label}]"
+
+    def render_footnote_def(self, element: footnote.FootnoteDef) -> str:
+        """
+        Render a GFM footnote definition, handling content wrapping.
+        Note multiline footnotes aren't very well specified but we use
+        standard 4-space indentation. See:
+        https://github.com/micromark/micromark-extension-gfm-footnote
+        """
+        # Render label and the rest within an indented container.
+        label_part = f"[^{element.label}]: "
+        with self.container(label_part, "    "):
+            content = self.render_children(element)
+
+        # Set up state for the *next* block element using the restored outer secondary prefix.
+        self._prefix = self._second_prefix
+        self._suppress_item_break = True  # This definition acts as a block separator.
+
+        # Footnote defs should be separated by extra newlines.
+        return content.rstrip("\n") + "\n\n"
+
     def render_strikethrough(self, element: gfm_elements.Strikethrough) -> str:
         return f"~~{self.render_children(element)}~~"
 
@@ -288,12 +319,19 @@ def custom_marko(line_wrapper: LineWrapper) -> Markdown:
             # Using Marko's full extension system is tricky with our customizations so simpler
             # to do this manually.
             custom_parser = CustomParser()
+            # Add GFM support.
             for e in GFM.elements:
                 assert (
                     e not in custom_parser.block_elements and e not in custom_parser.inline_elements
                 )
                 custom_parser.add_element(e)
-
+            # Add GFM footnote support.
+            footnote_ext = footnote.make_extension()
+            for e in footnote_ext.elements:
+                assert (
+                    e not in custom_parser.block_elements and e not in custom_parser.inline_elements
+                )
+                custom_parser.add_element(e)
             self.parser: Parser = custom_parser
             self.renderer: Renderer = CustomRenderer()
 

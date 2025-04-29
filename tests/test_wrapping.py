@@ -3,10 +3,103 @@ from textwrap import dedent
 from flowmark.text_wrapping import (
     _HtmlMdWordSplitter,  # pyright: ignore
     html_md_word_splitter,
+    markdown_escape_word,
     simple_word_splitter,
     wrap_paragraph,
     wrap_paragraph_lines,
 )
+
+
+def test_markdown_escape_word_function() -> None:
+    # Cases that should be escaped
+    assert markdown_escape_word("-") == "\\-"
+    assert markdown_escape_word("+") == "\\+"
+    assert markdown_escape_word("*") == "\\*"
+    assert markdown_escape_word(">") == ">"
+    assert markdown_escape_word("#") == "\\#"
+    assert markdown_escape_word("##") == "\\##"
+    assert markdown_escape_word("1.") == "1\\."
+    assert markdown_escape_word("10.") == "10\\."
+    assert markdown_escape_word("1)") == "1\\)"
+    assert markdown_escape_word("99)") == "99\\)"
+
+    # Cases that should NOT be escaped
+    assert markdown_escape_word("word") == "word"
+    assert markdown_escape_word("-word") == "-word"  # Starts with char, but not just char
+    assert markdown_escape_word("word-") == "word-"  # Ends with char
+    assert markdown_escape_word("#word") == "#word"
+    assert markdown_escape_word("word#") == "word#"
+    assert markdown_escape_word("1.word") == "1.word"
+    assert markdown_escape_word("word1.") == "word1."
+    assert markdown_escape_word("1)word") == "1)word"
+    assert markdown_escape_word("word1)") == "word1)"
+    assert markdown_escape_word("<tag>") == "<tag>"  # Other symbols
+    assert markdown_escape_word("[link]") == "[link]"
+    assert markdown_escape_word("1") == "1"  # Just number
+    assert markdown_escape_word(".") == "."  # Just dot
+
+
+def test_wrap_paragraph_lines_markdown_escaping():
+    assert wrap_paragraph_lines(text="- word", width=10, is_markdown=True) == ["- word"]
+
+    text = "word - word * word + word > word # word ## word 1. word 2) word"
+
+    assert wrap_paragraph_lines(text=text, width=5, is_markdown=True) == [
+        "word",
+        "\\-",
+        "word",
+        "\\*",
+        "word",
+        "\\+",
+        "word",
+        ">",
+        "word",
+        "\\#",
+        "word",
+        "\\##",
+        "word",
+        "1\\.",
+        "word",
+        "2\\)",
+        "word",
+    ]
+    assert wrap_paragraph_lines(text=text, width=10, is_markdown=True) == [
+        "word -",
+        "word *",
+        "word +",
+        "word >",
+        "word #",
+        "word ##",
+        "word 1.",
+        "word 2)",
+        "word",
+    ]
+    assert wrap_paragraph_lines(text=text, width=15, is_markdown=True) == [
+        "word - word *",
+        "word + word >",
+        "word # word ##",
+        "word 1. word 2)",
+        "word",
+    ]
+    assert wrap_paragraph_lines(text=text, width=20, is_markdown=True) == [
+        "word - word * word +",
+        "word > word # word",
+        "\\## word 1. word 2)",
+        "word",
+    ]
+    assert wrap_paragraph_lines(text=text, width=20, is_markdown=False) == [
+        "word - word * word +",
+        "word > word # word",
+        "## word 1. word 2)",
+        "word",
+    ]
+
+    test2 = """Testing - : Is Ketamine Contraindicated in Patients with Psychiatric Disorders? - REBEL EM - more words - accessed April 24, 2025, <https://rebelem.com/is-ketamine-contraindicated-in-patients-with-psychiatric-disorders/>"""
+    assert wrap_paragraph_lines(text=test2, width=80, is_markdown=True) == [
+        "Testing - : Is Ketamine Contraindicated in Patients with Psychiatric Disorders?",
+        "\\- REBEL EM - more words - accessed April 24, 2025,",
+        "<https://rebelem.com/is-ketamine-contraindicated-in-patients-with-psychiatric-disorders/>",
+    ]
 
 
 def test_smart_splitter():
