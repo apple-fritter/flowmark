@@ -194,7 +194,8 @@ class MarkdownNormalizer(Renderer):
         link_text = element.dest
         if element.title:
             # Ensure title quotes are handled correctly
-            link_text += f' "{element.title.replace('"', '\\"')}"'
+            escaped_title = element.title.replace('"', '\\"')
+            link_text += f' "{escaped_title}"'
         result = f"{self._prefix}[{element.label}]: {link_text}\n"
         self._prefix = self._second_prefix
         self._suppress_item_break = True
