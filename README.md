@@ -129,7 +129,9 @@ experience.
 Flowmark can be used as a library or as a CLI.
 
 ```
-usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-i] [--nobackup] [--auto] [--version] [file]
+usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-c] [-i] [--nobackup] [--auto]
+                [--version]
+                [file]
 
 Flowmark: Better line wrapping and formatting for plaintext and Markdown
 
@@ -141,10 +143,14 @@ options:
   -o, --output OUTPUT  Output file (use '-' for stdout)
   -w, --width WIDTH    Line width to wrap to
   -p, --plaintext      Process as plaintext (no Markdown parsing)
-  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to Markdown mode)
+  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to
+                       Markdown mode)
+  -c, --cleanups       Enable (safe) cleanups for common issues like accidentally
+                       boldfaced section headers (only applies to Markdown mode)
   -i, --inplace        Edit the file in place (ignores --output)
   --nobackup           Do not make a backup of the original file when using --inplace
-  --auto               Same as `--inplace --nobackup --semantic`, as a convenience for auto-formatting files
+  --auto               Same as `--inplace --nobackup --semantic --cleanups`, as a
+                       convenience for fully auto-formatting files
   --version            Show version information and exit
 
 Flowmark provides enhanced text wrapping capabilities with special handling for

@@ -41,9 +41,7 @@ import importlib.metadata
 import sys
 from dataclasses import dataclass
 
-from strif import atomic_output_file
-
-from flowmark import Wrap, fill_markdown, fill_text, html_md_word_splitter
+from flowmark.reformat_api import reformat_file
 
 
 @dataclass
@@ -104,7 +102,8 @@ def _parse_args(args: list[str] | None = None) -> Options:
         "--cleanups",
         action="store_true",
         default=False,
-        help="Enable (safe) cleanups for common issues (only applies to Markdown mode)",
+        help="Enable (safe) cleanups for common issues like accidentally boldfaced section "
+        "headers (only applies to Markdown mode)",
     )
     parser.add_argument(
         "-i", "--inplace", action="store_true", help="Edit the file in place (ignores --output)"
@@ -117,7 +116,8 @@ def _parse_args(args: list[str] | None = None) -> Options:
     parser.add_argument(
         "--auto",
         action="store_true",
-        help="Same as `--inplace --nobackup --semantic`, as a convenience for auto-formatting files",
+        help="Same as `--inplace --nobackup --semantic --cleanups`, as a convenience for "
+        "fully auto-formatting files",
     )
     parser.add_argument(
         "--version",
@@ -130,6 +130,7 @@ def _parse_args(args: list[str] | None = None) -> Options:
         opts.inplace = True
         opts.nobackup = True
         opts.semantic = True
+        opts.cleanups = True
 
     return Options(
         file=opts.file,
@@ -165,46 +166,26 @@ def main(args: list[str] | None = None) -> int:
             print("unknown (package not installed)")
         return 0
 
-    # Handle input.
-    if options.file == "-":
-        text = sys.stdin.read()
-    else:
-        with open(options.file) as f:
-            text = f.read()
-
-    if options.plaintext:
-        # Plaintext mode
-        result = fill_text(
-            text,
-            text_wrap=Wrap.WRAP,
+    try:
+        reformat_file(
+            path=options.file,
+            output=options.output,
             width=options.width,
-            word_splitter=html_md_word_splitter,  # Still use HTML/MD aware splitter by default
-        )
-    else:
-        # Markdown mode
-        result = fill_markdown(
-            text,
-            width=options.width,
+            inplace=options.inplace,
+            nobackup=options.nobackup,
+            plaintext=options.plaintext,
             semantic=options.semantic,
             cleanups=options.cleanups,
-            dedent_input=True,
+            make_parents=True,
         )
-
-    # Handle output
-    if options.inplace:
-        if options.file == "-":
-            print("Error: Cannot use --inplace with stdin", file=sys.stderr)
-            return 1
-        backup_suffix = ".orig" if not options.nobackup else ""
-        with atomic_output_file(options.file, backup_suffix=backup_suffix) as tmp_path:
-            with open(tmp_path, "w") as f:
-                f.write(result)
-    else:
-        if options.output == "-":
-            sys.stdout.write(result)
-        else:
-            with open(options.output, "w") as f:
-                f.write(result)
+    except ValueError as e:
+        # Handle errors reported by reformat_file, like using --inplace with stdin.
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+    except Exception as e:
+        # Catch other potential file or processing errors.
+        print(f"Error: {e}", file=sys.stderr)
+        return 2
 
     return 0
 
