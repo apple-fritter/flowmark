@@ -63,12 +63,10 @@ def reformat_file(
         make_parents: Whether to make parent directories if they don't exist.
     """
     read_stdin = path == "-"
-    write_stdout = output == "-"
+    write_stdout = output == "-" or not output
 
     if inplace and read_stdin:
         raise ValueError("Cannot use `inplace` with stdin")
-    if inplace and output and output != path:
-        raise ValueError("Cannot use `inplace` with an output path")
 
     if read_stdin:
         text = sys.stdin.read()
