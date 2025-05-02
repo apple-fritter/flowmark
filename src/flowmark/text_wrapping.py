@@ -74,7 +74,7 @@ Split words, but not within HTML tags or Markdown links.
 # Pattern to identify words that need escaping if they start a wrapped markdown line.
 # Matches list markers (*, +, -) bare or before a space (but not before a letter for
 # example), blockquotes (> ), headings (#, ##, etc.).
-_md_specials_pat = re.compile(r"^[-*+](?: |$)|> |#+$")
+_md_specials_pat = re.compile(r"^([-*+>]|#+)$")
 
 # Separate pattern to specifically find the numbered list cases for targeted escaping
 _md_numeral_pat = re.compile(r"^[0-9]+[.)]$")

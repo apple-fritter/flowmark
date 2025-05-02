@@ -867,6 +867,11 @@ not complaining)[^urbanthowt.wy49lp].
 ❗️️️ Having multiple automatic conversion thresholds can give the investor with a higher
 threshold leverage to block an IPO.[^210]
 
+1. **Initial Scan with -X importtime:** Run the application with python -X importtime...
+   \> import.log. Visualize the output using tuna import.log.<sup>42</sup> Look for
+   modules with large *cumulative* times at the top level or deep in the call stack.
+   These are the primary candidates for further investigation.<sup>1</sup>
+
 [^2]: Aulet, Bill. *Disciplined Entrepreneurship*: 24 Steps to a Successful Startup (Kindle
     Location 1220). Wiley, 2013. Kindle Edition.
 

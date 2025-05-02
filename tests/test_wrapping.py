@@ -15,7 +15,7 @@ def test_markdown_escape_word_function() -> None:
     assert markdown_escape_word("-") == "\\-"
     assert markdown_escape_word("+") == "\\+"
     assert markdown_escape_word("*") == "\\*"
-    assert markdown_escape_word(">") == ">"
+    assert markdown_escape_word(">") == "\\>"
     assert markdown_escape_word("#") == "\\#"
     assert markdown_escape_word("##") == "\\##"
     assert markdown_escape_word("1.") == "1\\."
@@ -52,7 +52,7 @@ def test_wrap_paragraph_lines_markdown_escaping():
         "word",
         "\\+",
         "word",
-        ">",
+        "\\>",
         "word",
         "\\#",
         "word",
