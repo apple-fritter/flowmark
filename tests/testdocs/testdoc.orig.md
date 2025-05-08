@@ -310,6 +310,20 @@ The following table summarizes the native capabilities of the primary platforms 
 | **Programmatic Invalidation API** | Automatic / Limited | Automatic / Limited | Yes (Cloudflare API) | Yes (CloudFront API) 15-16 |
 | **Basic Cost Model** | Per User / Usage 5 | Per User / Usage 5 | Generous Free Tier / Usage | Usage-Based Components 20-64 |
 
+## **3\. Platform\-Specific Mechanisms**
+
+Each major operating system provides its own set of system calls, APIs, and conventions for managing temporary files and directories.
+
+### **3\.1\. Linux**
+
+Linux offers a rich set of POSIX\-compliant and Linux\-specific mechanisms.
+
+* **APIs:**
+    + mkstemp(3\): Generates a unique filename based on a template (prefixXXXXXX), creates the file with 0600 permissions, opens it, and returns a file descriptor. It uses O\_EXCL for atomic creation, preventing race conditions.<sup>19</sup> The caller is responsible for unlinking the file.
+    + mkdtemp(3\): Similar to mkstemp but creates a unique directory with 0700 permissions based on a template (prefixXXXXXX), returning the path.<sup>19</sup> The caller must remove the directory.
+    + tmpfile(3\): Creates an unnamed temporary file opened in wb\+ mode (binary read/write), automatically deleted when closed or on process termination.<sup>19</sup> While convenient, POSIX notes potential permission issues and recommends mkstemp followed by
+      fdopen for multithreaded apps to avoid leaking file descriptors.<sup>59</sup>
+
 ### Boldface, italics, and links
 
 X [New York City](https://en.wikipedia.org/wiki/New_York_City).
