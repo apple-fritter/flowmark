@@ -105,18 +105,52 @@ def wrap_paragraph_lines(
     len_fn: Callable[[str], int] = DEFAULT_LEN_FUNCTION,
     is_markdown: bool = False,
 ) -> list[str]:
-    """
+    r"""
     Wrap a single paragraph of text, returning a list of wrapped lines.
     Rewritten to simplify and generalize Python's textwrap.py.
-    Set `is_markdown` to True when wrapping markdown text to automatically
-    escape special markdown characters at the start of wrapped lines.
+
+    Set `is_markdown` to True when wrapping markdown text to enable Markdown mode.
+    This automatically escapes special markdown characters at the start of wrapped
+    lines. It also will preserve line breaks with an explicit Markdown line break,
+    i.e. "\\\n" (backslash-newline) or "  \n" (two spaces followed by newline) at the
+    end of the line. Hard line breaks are normalized to always use "\\\n" as the line
+    break.
     """
+    lines: list[str] = []
+
+    # Handling Markdown line breaks:
+    # We don't want to ever wrap across hard line breaks, so we just treat each as
+    # its own paragraph and then join them back together.
+    if is_markdown:
+        # Split text only on explicit line breaks (`\\` or `  `).
+        splits = re.split(r"\\\n|  \n", text)
+        if len(splits) > 1:
+            for i, split in enumerate(splits):
+                # Determine the effective initial column for this segment's wrapping.
+                cur_initial_column = initial_column if i == 0 else subsequent_offset
+                wrapped_lines = wrap_paragraph_lines(
+                    split,
+                    width,
+                    initial_column=cur_initial_column,
+                    subsequent_offset=subsequent_offset,
+                    replace_whitespace=replace_whitespace,
+                    drop_whitespace=drop_whitespace,
+                    splitter=splitter,
+                    len_fn=len_fn,
+                    is_markdown=is_markdown,
+                )
+
+                if i < len(splits) - 1 and len(wrapped_lines) > 0:
+                    # Normalize to backslash-newline line breaks.
+                    wrapped_lines[-1] += "\\"
+                lines.extend(wrapped_lines)
+            return lines
+
     if replace_whitespace:
         text = re.sub(r"\s+", " ", text)
 
     words = splitter(text)
 
-    lines: list[str] = []
     current_line: list[str] = []
     current_width = initial_column
     first_line = True

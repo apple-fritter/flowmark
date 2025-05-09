@@ -221,3 +221,38 @@ def test_wrap_width():
     print(wrapped)
     print([len(line) for line in wrapped])
     assert all(len(line) <= width for line in wrapped)
+
+
+def test_markdown_line_breaks():
+    # Test trailing space line breaks
+    text_with_spaces = "This line ends with spaces  \nThis is a new line"
+    wrapped_spaces = wrap_paragraph_lines(text_with_spaces, width=80, is_markdown=True)
+    assert wrapped_spaces == ["This line ends with spaces\\", "This is a new line"]
+
+    # Test backslash line breaks
+    text_with_backslash = "This line ends with backslash\\\nThis is a new line"
+    wrapped_backslash = wrap_paragraph_lines(text_with_backslash, width=80, is_markdown=True)
+    assert wrapped_backslash == ["This line ends with backslash\\", "This is a new line"]
+
+    long_text = (
+        "This is a very long line that will be wrapped and it ends with a line break  \nNext line"
+    )
+    wrapped_long = wrap_paragraph_lines(long_text, width=40, is_markdown=True)
+    assert wrapped_long == [
+        "This is a very long line that will be",
+        "wrapped and it ends with a line break\\",
+        "Next line",
+    ]
+
+    # Test mixed normal and line-break lines
+    mixed_text = (
+        "Normal line\nThis ends with break  \nAnother normal\nThis has backslash\\\nLast line"
+    )
+    wrapped_mixed = wrap_paragraph_lines(mixed_text, width=20, is_markdown=True)
+    assert wrapped_mixed == [
+        "Normal line This",
+        "ends with break\\",
+        "Another normal This",
+        "has backslash\\",
+        "Last line",
+    ]

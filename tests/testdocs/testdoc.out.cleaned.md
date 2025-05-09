@@ -471,6 +471,8 @@ Recommendations:
 
 ### 3.6 Comparative Features Matrix
 
+This line has a two-space line break.\ And this is a regular line.
+
 The following table summarizes the native capabilities of the primary platforms
 evaluated against the core requirements:
 
@@ -510,6 +512,38 @@ Linux offers a rich set of POSIX\-compliant and Linux\-specific mechanisms.
     termination.<sup>19</sup> While convenient, POSIX notes potential permission issues
     and recommends mkstemp followed by fdopen for multithreaded apps to avoid leaking
     file descriptors.<sup>59</sup>
+
+* **Recommended Python Approach for Atomic Writes:**
+
+  1. **Use a Library:** Employing a dedicated library like atomicwriter or atomicfile is
+     generally the most robust approach, as they handle temporary file creation in the
+     correct location, atomic renaming (os.replace), and error cleanup across platforms.
+
+  2. **Manual Implementation (if necessary):**
+
+     + Determine the destination directory: dest\_dir = os.path.dirname(dest\_path)
+
+     + Create the temporary file in the destination directory: temp\_file =
+       tempfile.NamedTemporaryFile(mode='w', dir=dest\_dir, delete=False) (use
+       appropriate mode, e.g., wb for binary).
+
+
+     + Use a try...finally block to ensure cleanup:\ Python\ temp\_file = None\ try:\
+       temp\_file = tempfile.NamedTemporaryFile(mode='w', dir=dest\_dir, delete=False,
+       prefix='tmp', suffix='.tmp')\
+       # Write data to temp\_file.file (or temp\_file directly in older Pythons)\
+       temp\_file.write(...)\
+       # Ensure data is on disk before renaming\
+       temp\_file.flush()\ os.fsync(temp\_file.fileno())\
+       # Close the file handle before renaming\
+       temp\_file.close()\
+       # Atomic rename/replace\
+       os.replace(temp\_file.name, dest\_path)\ temp\_file = None # Prevent cleanup in
+       finally block if successful\ finally:\ if temp\_file is not None and
+       os.path.exists(temp\_file.name):\ try:\ os.unlink(temp\_file.name)\ except
+       OSError:\
+       # Log error, but continue\
+       pass\
 
 ### Boldface, italics, and links
 

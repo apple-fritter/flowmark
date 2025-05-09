@@ -116,7 +116,7 @@ the Center for American Entrepreneurship.)
 
 ### A few paragraphs and bullets
 
-A good heuristic is to assume your readers will be **100% intelligent and 100% ignorant**. Of course, in reality, varied experience exists within an individual reader. Most people may already know *something*, and some people are quicker learners than others. Even world class experts most likely only really know parts of a subject, and contributors may have practical experience in one role--perhaps they have been an entrepreneur, for example, but not an investor. So writing with the assumption that each reader could be both has a variety of advantages:  
+A good heuristic is to assume your readers will be **100% intelligent and 100% ignorant**. Of course, in reality, varied experience exists within an individual reader. Most people may already know *something*, and some people are quicker learners than others. Even world class experts most likely only really know parts of a subject, and contributors may have practical experience in one role--perhaps they have been an entrepreneur, for example, but not an investor. So writing with the assumption that each reader could be both has a variety of advantages:
 
 
 - Assuming 100% ignorance will help people who think they know a lot about a subject understand **what they didn't know they didn't know**, and fill in the gaps in their knowledge. It encourages contribution from experts and people with practical experience.
@@ -297,6 +297,9 @@ Recommendations:
 
 ### **3.6 Comparative Features Matrix**
 
+This line has a two-space line break.  
+And this is a regular line.
+
 The following table summarizes the native capabilities of the primary platforms evaluated against the core requirements:
 
 | **Feature** | **Vercel** | **Netlify** | **Cloudflare Pages** | **AWS (S3/CloudFront)** |
@@ -323,6 +326,34 @@ Linux offers a rich set of POSIX\-compliant and Linux\-specific mechanisms.
     + mkdtemp(3\): Similar to mkstemp but creates a unique directory with 0700 permissions based on a template (prefixXXXXXX), returning the path.<sup>19</sup> The caller must remove the directory.
     + tmpfile(3\): Creates an unnamed temporary file opened in wb\+ mode (binary read/write), automatically deleted when closed or on process termination.<sup>19</sup> While convenient, POSIX notes potential permission issues and recommends mkstemp followed by
       fdopen for multithreaded apps to avoid leaking file descriptors.<sup>59</sup>
+
+* **Recommended Python Approach for Atomic Writes:**
+    1. **Use a Library:** Employing a dedicated library like atomicwriter or atomicfile is generally the most robust approach, as they handle temporary file creation in the correct location, atomic renaming (os.replace), and error cleanup across platforms.
+    2. **Manual Implementation (if necessary):**
+        + Determine the destination directory: dest\_dir = os.path.dirname(dest\_path)
+        + Create the temporary file in the destination directory: temp\_file = tempfile.NamedTemporaryFile(mode='w', dir=dest\_dir, delete=False) (use appropriate mode, e.g., wb for binary).
+        + Use a try...finally block to ensure cleanup:\
+        Python\
+        temp\_file = None\
+        try:\
+          temp\_file = tempfile.NamedTemporaryFile(mode='w', dir=dest\_dir, delete=False, prefix='tmp', suffix='.tmp')\
+          # Write data to temp\_file.file (or temp\_file directly in older Pythons)\
+          temp\_file.write(...)\
+          # Ensure data is on disk before renaming\
+          temp\_file.flush()\
+          os.fsync(temp\_file.fileno())\
+          # Close the file handle before renaming\
+          temp\_file.close()\
+          # Atomic rename/replace\
+          os.replace(temp\_file.name, dest\_path)\
+          temp\_file = None # Prevent cleanup in finally block if successful\
+        finally:\
+          if temp\_file is not None and os.path.exists(temp\_file.name):\
+          try:\
+            os.unlink(temp\_file.name)\
+          except OSError:\
+          # Log error, but continue\
+          pass\
 
 ### Boldface, italics, and links
 
