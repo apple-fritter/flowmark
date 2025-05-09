@@ -30,10 +30,11 @@ def _normalize_html_comments(text: str, break_str: str = "\n\n") -> str:
 
     # Small hack to avoid changing frontmatter format, for the rare corner
     # case where Markdown contains HTML-style frontmatter.
+    # https://github.com/jlevy/frontmatter-format
     def not_frontmatter(text: str) -> bool:
-        return "<!---" not in text
+        return "<!---" not in text  # Three dashes for frontmatter format.
 
-    # TODO: Probably want do this for <div>s too.
+    # TODO: Perhaps could add support to do this for block elements like <div>s too?
     return _ensure_surrounding_breaks(
         text, [("<!--", "-->")], break_str=break_str, filter=not_frontmatter
     )

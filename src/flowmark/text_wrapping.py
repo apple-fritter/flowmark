@@ -118,34 +118,6 @@ def wrap_paragraph_lines(
     """
     lines: list[str] = []
 
-    # Handling Markdown line breaks:
-    # We don't want to ever wrap across hard line breaks, so we just treat each as
-    # its own paragraph and then join them back together.
-    if is_markdown:
-        # Split text only on explicit line breaks (`\\` or `  `).
-        splits = re.split(r"\\\n|  \n", text)
-        if len(splits) > 1:
-            for i, split in enumerate(splits):
-                # Determine the effective initial column for this segment's wrapping.
-                cur_initial_column = initial_column if i == 0 else subsequent_offset
-                wrapped_lines = wrap_paragraph_lines(
-                    split,
-                    width,
-                    initial_column=cur_initial_column,
-                    subsequent_offset=subsequent_offset,
-                    replace_whitespace=replace_whitespace,
-                    drop_whitespace=drop_whitespace,
-                    splitter=splitter,
-                    len_fn=len_fn,
-                    is_markdown=is_markdown,
-                )
-
-                if i < len(splits) - 1 and len(wrapped_lines) > 0:
-                    # Normalize to backslash-newline line breaks.
-                    wrapped_lines[-1] += "\\"
-                lines.extend(wrapped_lines)
-            return lines
-
     if replace_whitespace:
         text = re.sub(r"\s+", " ", text)
 

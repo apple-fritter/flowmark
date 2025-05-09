@@ -1,3 +1,4 @@
+import re
 from collections.abc import Callable
 from typing import Protocol
 
@@ -27,6 +28,51 @@ def split_sentences_no_min_length(text: str) -> list[str]:
     return split_sentences_regex(text, min_length=0)
 
 
+_line_break_re = re.compile(r"\\\n|  \n")
+
+
+def split_markdown_hard_breaks(text: str) -> list[str]:
+    """
+    Split text by explicit Markdown line breaks.
+    """
+    return _line_break_re.split(text)
+
+
+def _add_markdown_hard_break_handling(base_wrapper: LineWrapper) -> LineWrapper:
+    """
+    Augments a LineWrapper to first split the text by Markdown hard breaks,
+    wrap each segment using the base_wrapper, and then rejoin them with
+    a normalized Markdown hard break (backslash-newline).
+    """
+
+    def enhanced_wrapper(text: str, initial_indent: str, subsequent_indent: str) -> str:
+        segments = split_markdown_hard_breaks(text)
+
+        # Handle empty input.
+        if not segments:
+            return ""
+        # Handle single segment (no hard line breaks).
+        if len(segments) == 1:
+            return base_wrapper(text, initial_indent, subsequent_indent)
+
+        wrapped_segments: list[str] = []
+
+        for i, segment in enumerate(segments):
+            is_first = i == 0
+            is_last = i == len(segments) - 1
+
+            cur_initial_indent = initial_indent if is_first else subsequent_indent
+            wrapped_segment = base_wrapper(segment, cur_initial_indent, subsequent_indent)
+            if is_last:
+                wrapped_segments.append(wrapped_segment)
+            else:
+                wrapped_segments.append(wrapped_segment + "\\")
+
+        return "\n".join(wrapped_segments)
+
+    return enhanced_wrapper
+
+
 def line_wrap_to_width(
     width: int = DEFAULT_WRAP_WIDTH,
     len_fn: Callable[[str], int] = DEFAULT_LEN_FUNCTION,
@@ -46,7 +92,10 @@ def line_wrap_to_width(
             is_markdown=is_markdown,
         )
 
-    return line_wrapper
+    if is_markdown:
+        return _add_markdown_hard_break_handling(line_wrapper)
+    else:
+        return line_wrapper
 
 
 def line_wrap_by_sentence(
@@ -106,4 +155,7 @@ def line_wrap_by_sentence(
 
         return "\n".join(lines)
 
-    return line_wrapper
+    if is_markdown:
+        return _add_markdown_hard_break_handling(line_wrapper)
+    else:
+        return line_wrapper

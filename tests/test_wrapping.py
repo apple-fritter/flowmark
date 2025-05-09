@@ -223,36 +223,51 @@ def test_wrap_width():
     assert all(len(line) <= width for line in wrapped)
 
 
-def test_markdown_line_breaks():
+def test_line_wrap_to_width_with_markdown_breaks():
+    from flowmark.line_wrappers import line_wrap_to_width
+
+    # Get a markdown-aware line wrapper
+    wrapper = line_wrap_to_width(width=80, is_markdown=True)
+
     # Test trailing space line breaks
     text_with_spaces = "This line ends with spaces  \nThis is a new line"
-    wrapped_spaces = wrap_paragraph_lines(text_with_spaces, width=80, is_markdown=True)
-    assert wrapped_spaces == ["This line ends with spaces\\", "This is a new line"]
+    wrapped_spaces = wrapper(text_with_spaces, initial_indent="", subsequent_indent="")
+    assert wrapped_spaces == "This line ends with spaces\\\nThis is a new line"
 
     # Test backslash line breaks
     text_with_backslash = "This line ends with backslash\\\nThis is a new line"
-    wrapped_backslash = wrap_paragraph_lines(text_with_backslash, width=80, is_markdown=True)
-    assert wrapped_backslash == ["This line ends with backslash\\", "This is a new line"]
+    wrapped_backslash = wrapper(text_with_backslash, initial_indent="", subsequent_indent="")
+    assert wrapped_backslash == "This line ends with backslash\\\nThis is a new line"
 
+    # Test wrapping with indentation
+    indented_wrapper = line_wrap_to_width(width=40, is_markdown=True)
     long_text = (
-        "This is a very long line that will be wrapped and it ends with a line break  \nNext line"
+        "This is a very long line that will be wrapped and it ends with a line break  \n"
+        "Next line with content that continues"
     )
-    wrapped_long = wrap_paragraph_lines(long_text, width=40, is_markdown=True)
-    assert wrapped_long == [
-        "This is a very long line that will be",
-        "wrapped and it ends with a line break\\",
-        "Next line",
-    ]
+    wrapped_long = indented_wrapper(long_text, initial_indent="  ", subsequent_indent="    ")
+    assert wrapped_long == (
+        "  This is a very long line that will be\n"
+        "    wrapped and it ends with a line\n"
+        "    break\\\n"
+        "    Next line with content that\n"
+        "    continues"
+    )
 
-    # Test mixed normal and line-break lines
-    mixed_text = (
-        "Normal line\nThis ends with break  \nAnother normal\nThis has backslash\\\nLast line"
+    # Test different indentation for segments
+    mixed_indent_wrapper = line_wrap_to_width(width=30, is_markdown=True)
+    mixed_indent_text = "First segment  \nSecond segment\\\nThird segment"
+    wrapped_mixed_indent = mixed_indent_wrapper(
+        mixed_indent_text, initial_indent="* ", subsequent_indent="  "
     )
-    wrapped_mixed = wrap_paragraph_lines(mixed_text, width=20, is_markdown=True)
-    assert wrapped_mixed == [
-        "Normal line This",
-        "ends with break\\",
-        "Another normal This",
-        "has backslash\\",
-        "Last line",
-    ]
+    assert wrapped_mixed_indent == ("* First segment\\\n  Second segment\\\n  Third segment")
+
+    # Test empty segments
+    empty_segment_text = "Before  \n\\\nAfter"
+    wrapped_empty = wrapper(empty_segment_text, initial_indent="", subsequent_indent="")
+    assert wrapped_empty == "Before\\\n\\\nAfter"
+
+    # Test single segment (no line breaks)
+    single_segment = "Text with no breaks"
+    wrapped_single = wrapper(single_segment, initial_indent="> ", subsequent_indent="  ")
+    assert wrapped_single == "> Text with no breaks"
