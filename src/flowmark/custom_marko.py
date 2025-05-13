@@ -279,11 +279,31 @@ class MarkdownNormalizer(Renderer):
         return f"~~{self.render_children(element)}~~"
 
     def render_table(self, element: gfm_elements.Table) -> str:
-        """Render a GFM table."""
+        """
+        Render a GFM table. Does not do whitespace padding and normalizes
+        the delimiters to use three dashes consistently.
+        """
         lines: list[str] = []
         head, *body = element.children
         lines.append(self.render(head))
-        lines.append(f"| {' | '.join(element.delimiters)} |\n")
+
+        normalized_delimiters: list[str] = []
+        for delimiter in element.delimiters:
+            if delimiter.startswith(":") and delimiter.endswith(":"):
+                # Center alignment
+                normalized_delimiter = ":---:"
+            elif delimiter.startswith(":"):
+                # Left alignment
+                normalized_delimiter = ":---"
+            elif delimiter.endswith(":"):
+                # Right alignment
+                normalized_delimiter = "---:"
+            else:
+                # No alignment
+                normalized_delimiter = "---"
+            normalized_delimiters.append(normalized_delimiter)
+
+        lines.append(f"| {' | '.join(normalized_delimiters)} |\n")
         for row in body:
             lines.append(self.render(row))
         return "".join(lines)

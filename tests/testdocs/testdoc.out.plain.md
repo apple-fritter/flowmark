@@ -965,7 +965,7 @@ valuation, shares, fundraising, and dilution (<a
 href="http://ownyourventure.com/equitySim.html">source</a>) <br> </div>
 
 | Specific AWS Services | Basics | Tips | Gotchas |
-| --------------------------------------- | -------------------------------- | ------------------------------- | ------------------------------------------------ |
+| --- | --- | --- | --- |
 | [Security and IAM](#security-and-iam) | [📗](#security-and-iam-basics) | [📘](#security-and-iam-tips) | [📙](#security-and-iam-gotchas-and-limitations) |
 | [S3](#s3) | [📗](#s3-basics) | [📘](#s3-tips) | [📙](#s3-gotchas-and-limitations) |
 | [EC2](#ec2) | [📗](#ec2-basics) | [📘](#ec2-tips) | [📙](#ec2-gotchas-and-limitations) |

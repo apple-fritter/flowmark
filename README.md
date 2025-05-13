@@ -10,6 +10,11 @@ This is much like [markdownfmt](https://github.com/shurcooL/markdownfmt) or
 [prettier's Markdown support](https://prettier.io/blog/2017/11/07/1.8.0) but is pure
 Python and has (in my humble opinion) better options and defaults.
 
+It aims to be small and simple and have only a few dependencies, currently only
+[`marko`](https://github.com/frostming/marko),
+[`regex`](https://pypi.org/project/regex/), and
+[`strif`](https://github.com/jlevy/strif).
+
 ## Installation
 
 The simplest way to use the tool is to use [uv](https://github.com/astral-sh/uv).
@@ -97,11 +102,6 @@ Other features:
   and simpler than a proper sentence parser like SpaCy).
   It should work fine for English and many other latin/Cyrillic languages but hasn't
   been tested on CJK.
-
-It aims to be small and simple and have only a few dependencies, currently only
-[`marko`](https://github.com/frostming/marko),
-[`regex`](https://pypi.org/project/regex/), and
-[`strif`](https://github.com/jlevy/strif).
 
 Because **YAML frontmatter** is common on Markdown files, the Markdown autoformat
 preserves all frontmatter (content between `---` delimiters at the front of a file).

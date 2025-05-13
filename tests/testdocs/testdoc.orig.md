@@ -303,7 +303,7 @@ And this is a regular line.
 The following table summarizes the native capabilities of the primary platforms evaluated against the core requirements:
 
 | **Feature** | **Vercel** | **Netlify** | **Cloudflare Pages** | **AWS (S3/CloudFront)** |
-| --- | --- | --- | --- | --- |
+| ------------- | ----------- | -------- | --- | ------------ |
 | **CLI Tool Availability** | Yes (vercel) 1 | Yes (netlify) 2 | Yes (wrangler) 3 | Yes (aws) 4 |
 | **Primary CLI Auth Method** | User Access Token 9 | Personal Access Token (PAT) 2 | API Token 10 | IAM Credentials / STS Token 11 |
 | **Native Token/Key Scoping** | User/Team Level 24 | User/Site Level 30 | Account Level (for Pages Edit) 3 | Path/Prefix Level (via IAM) 4 |
