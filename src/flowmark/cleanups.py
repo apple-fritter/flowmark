@@ -69,6 +69,25 @@ def unbold_headings(doc: Document) -> None:
     transform_tree(doc, _unbold_heading_transformer)
 
 
+def rewrite_text_content(doc: Document, rewrite_func: Callable[[str], str]) -> None:
+    """
+    Apply a string rewrite function to all `RawText` nodes that are not part of
+    code blocks.
+
+    This function modifies the Marko document tree in place.
+    It traverses the document and applies `string_rewrite_func` to the content
+    of `marko.inline.RawText` elements. It skips text within any kind of code
+    block (`FencedCode`, `CodeBlock`, `CodeSpan`).
+    """
+
+    def transformer(element: Element) -> None:
+        if isinstance(element, inline.RawText):
+            assert isinstance(element.children, str)
+            element.children = rewrite_func(element.children)
+
+    transform_tree(doc, transformer)
+
+
 def doc_cleanups(doc: Document):
     """
     Apply (ideally quite safe) cleanups to the document.

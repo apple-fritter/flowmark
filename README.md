@@ -15,6 +15,11 @@ It aims to be small and simple and have only a few dependencies, currently only
 [`regex`](https://pypi.org/project/regex/), and
 [`strif`](https://github.com/jlevy/strif).
 
+Via Marko (with some customizations) it supports
+[CommonMark](https://spec.commonmark.org/0.31.2/) and
+[GitHub-Flavored Markdown (GFM)](https://github.github.com/gfm/), including tables and
+footnotes
+
 ## Installation
 
 The simplest way to use the tool is to use [uv](https://github.com/astral-sh/uv).

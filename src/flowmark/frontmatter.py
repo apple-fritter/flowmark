@@ -1,6 +1,7 @@
 def split_frontmatter(text: str) -> tuple[str, str]:
     """
-    Split a text document into frontmatter and content parts.
+    Split a text document into frontmatter and content parts as a tuple
+    `(frontmatter, content)`.
 
     Checks if the string starts with YAML frontmatter, delimited by `---`
     lines. If so, returns the frontmatter, including the `---` lines, and the

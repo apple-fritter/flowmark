@@ -34,6 +34,8 @@ def test_reference_doc_formats():
         TestCase(name="cleaned", filename="testdoc.out.cleaned.md", semantic=True, cleanups=True),
     ]
 
+    expecteds: list[str] = []
+    actuals: list[str] = []
     for case in test_cases:
         test_doc = testdoc_dir / case.filename
         expected = test_doc.read_text()
@@ -45,4 +47,8 @@ def test_reference_doc_formats():
             print(f"Saving actual to: {actual_path}")
             actual_path.write_text(actual)
 
+        expecteds.append(expected)
+        actuals.append(actual)
+
+    for expected, actual in zip(expecteds, actuals, strict=True):
         assert expected == actual
