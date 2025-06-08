@@ -56,7 +56,7 @@ Then add to your `settings.json`:
   "emeraldwalk.runonsave": {
     "commands": [
         {
-            "match": "\\.md$",
+            "match": "(\\.md|\\.md\\.jinja|\\.mdc)$",
             "cmd": "flowmark --auto ${file}"
         }
     ]
