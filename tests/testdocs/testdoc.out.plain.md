@@ -111,6 +111,44 @@ be paying $\$0.55116 \times \$0.80$ per share, or $0.44093 per share. And $\$420
 > proposed disposition and such disposition is made in accordance with such registration
 > statement; or
 
+## Typical ChatGPT Output
+
+| **Feature** | **OpenAPI 3.1** | **OpenAI tool schema** | **Anthropic tool schema** | **Model Context Protocol (MCP) 2025-06-18** | **Pydantic v2 generated schema** |
+| --- | --- | --- | --- | --- | --- |
+| **Primary scope** | Full REST contract: paths, verbs, auth, servers **plus** data shapes | *Input-only* definition of a function’s parameters for `/chat/completions` `tools=[…]` | Same for `/v1/messages` `tools=[…]`; also used in Claude server-tools | Tool discovery & invocation over JSON-RPC / SSE; adds output contract & rich result types | In-process data validation; can emit JSON-Schema or OpenAPI components |
+| **Where it lives / transport** | `.yaml`/`.json` served over HTTPS or bundled with code | Embedded inside a chat request | Embedded inside a chat request | Separate MCP server; clients list and call tools via `tools/*` RPC methods | Python code emits schema at runtime (`model_json_schema()` or `.schema_json()`) |
+| **JSON-Schema dialect** | Official OAS dialect, built on **draft 2020-12**([spec.openapis.org][1]) | Fixed **draft 07 subset** (no `$ref` across docs, no `oneOf` of heterogeneous types)([community.openai.com][2], [community.openai.com][3]) | **draft 2020-12** (full vocabulary)([docs.anthropic.com][4]) | **draft 2020-12** for both `inputSchema` & `outputSchema`([modelcontextprotocol.io][5]) | **draft 2020-12** (and emits OpenAPI 3.1 when asked)([docs.pydantic.dev][6]) |
+| **Advanced keywords allowed** (`$ref`, `oneOf`, `allOf`, `format`, …) | All JSON-Schema 2020-12, plus OAS extensions | **Limited** – many validators ignored, `$ref` must stay within the same object | **Allowed** – `$ref`, `enum`, `oneOf`, formats, examples | Fully allowed; additionally supports `annotations` object for T\&S metadata | Whatever the target dialect allows; user may disable/enable `$ref` flattening |
+| **Output schema support** | Yes (`components.schemas`, responses) | **No** – output is free-form chat or follow-up `tool` message | **No** (planned) | **Yes** – `outputSchema` field; clients are encouraged to validate results([modelcontextprotocol.io][5]) | Yes – any Pydantic model’s JSON-Schema can describe outputs |
+| **Streaming / partial results** | Via HTTP chunked or SSE, not part of schema | Supported in chat streaming but schema is unaffected | `stream:"auto"` yields incremental `tool_use` blocks | Built-in: server can stream intermediate `notifications/tools/*` & progress events | Not applicable (library) |
+| **Runtime validation guarantee** | External validators or server framework (e.g., FastAPI) | **Caller must validate**; model may hallucinate | **Caller must validate** | MCP server **must** validate both inputs & outputs | Core-runtime C/Rust validation; raises `ValidationError` on failure |
+| **Versioning cadence** | IETF-style spec; v3.1 is current | Implicit in OpenAI API releases | Versioned via `anthropic-version` header; schema fields stable | dated revisions (e.g., 2025-06-18) with change log | Semantic-versioned PyPI releases |
+| **Typical Python authoring flow** | FastAPI/Django-Ninja introspect **Pydantic** models and function signatures to emit spec | Dicts or libraries like **Instructor**, LangChain, your `FunctionDescription` helper | `anthropic.tools` helper (wraps Pydantic/TypedDict) | `@mcp.tool` decorator in the reference SDK auto-derives schema from type hints | `class Model(BaseModel)…` or `@validate_call` on a function |
+| **Notable limitations / gotchas** | Large; learning curve, must keep paths & refs consistent | *Must* root at `{type:"object"}`; no circular `$ref`; 64-char `name`; rejects empty `properties` | 16-KB per-tool limit; still beta; server-tool names are versioned (`web_search_20250305`) | Requires running MCP server; JSON-RPC adds another hop; security model still maturing | Performance slower than **msgspec**; still Python focused (no on-wire format) |
+
+#### Key points
+
+* **OpenAPI 3.1** is the most *expressive* and HTTP-oriented.
+
+* **OpenAI’s schema** is the *smallest*, locked to draft-07, input-only.
+
+* **Anthropic’s schema** lets you use *full* 2020-12, so the same Pydantic model works
+  unchanged.
+
+* **MCP** generalises tooling across vendors, adds output validation, discovery, and
+  progress streams.
+
+* **Pydantic v2** remains the Python “source-of-truth” generator: you can compile the
+  **same** model into OpenAPI, plain JSON-Schema, OpenAI-tools, Anthropic-tools, or MCP
+  definitions with one line of code.
+
+[1]: https://spec.openapis.org/oas/3.1/dialect/2024-11-10.html "\"JSON Schema dialect for OpenAPI | OpenAPI Initiative Publications\""
+[2]: https://community.openai.com/t/the-assistant-will-never-recognize-a-required-parameter-that-is-of-object-type-in-function-tools/614154?utm_source=chatgpt.com "\"The Assistant will never recognize a required parameter that is of ...\""
+[3]: https://community.openai.com/t/extended-or-minimal-schemas-for-tool-parameters/578636?utm_source=chatgpt.com "\"Extended or minimal Schemas for tool parameters? - API\""
+[4]: https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview "\"Tool use with Claude - Anthropic\""
+[5]: https://modelcontextprotocol.io/specification/2025-06-18/server/tools "\"Tools - Model Context Protocol\""
+[6]: https://docs.pydantic.dev/latest/concepts/json_schema/ "\"JSON Schema - Pydantic\""
+
 ## Wrapping tests
 
 ### Some wrapping
@@ -433,7 +471,7 @@ Social Survey data).
 - **Visionary projects.** Projects that were in a completely brand-new space without a
   precedent, going from 0 to 1.
 
-Recommendations:
+More line spacing challenges with multi-paragraph items:
 
 - Use `z` (zoxide) instead of `cd`.
 
@@ -445,6 +483,23 @@ Recommendations:
   ```
 - Use `eza` instead of `ls`. It has color support, support for Nerd Font icons, and
   other improvements.
+
+And enumerations:
+
+4. **Format a doc:** You can convert a doc to nicely formatted HTML with
+
+   ```shell
+   tp format '~/Downloads/Airspeed Velocity of Unladen Birds.docx' --show
+   ```
+
+   Replace with the path above to a .docx or .md file. (The `--show` is optional)
+
+   You can try other format docs. Currently DOCX, HTML, and Markdown foramt work. (PDF
+   coming soon!)
+5. **View locally:** You'll see from the above output both an `.md` and an `.html` file.
+   You can look at these locally and do what you want with them.
+
+6. **Publish:** Publish the file with:
 
 ### **3.6 Comparative Features Matrix**
 
