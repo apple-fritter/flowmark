@@ -148,12 +148,12 @@ And $\$420K \div 0.44093$ is $952{,}532$ shares.
   **same** model into OpenAPI, plain JSON-Schema, OpenAI-tools, Anthropic-tools, or MCP
   definitions with one line of code.
 
-[1]: https://spec.openapis.org/oas/3.1/dialect/2024-11-10.html "\"JSON Schema dialect for OpenAPI | OpenAPI Initiative Publications\""
-[2]: https://community.openai.com/t/the-assistant-will-never-recognize-a-required-parameter-that-is-of-object-type-in-function-tools/614154?utm_source=chatgpt.com "\"The Assistant will never recognize a required parameter that is of ...\""
-[3]: https://community.openai.com/t/extended-or-minimal-schemas-for-tool-parameters/578636?utm_source=chatgpt.com "\"Extended or minimal Schemas for tool parameters? - API\""
-[4]: https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview "\"Tool use with Claude - Anthropic\""
-[5]: https://modelcontextprotocol.io/specification/2025-06-18/server/tools "\"Tools - Model Context Protocol\""
-[6]: https://docs.pydantic.dev/latest/concepts/json_schema/ "\"JSON Schema - Pydantic\""
+[1]: https://spec.openapis.org/oas/3.1/dialect/2024-11-10.html "JSON Schema dialect for OpenAPI | OpenAPI Initiative Publications"
+[2]: https://community.openai.com/t/the-assistant-will-never-recognize-a-required-parameter-that-is-of-object-type-in-function-tools/614154?utm_source=chatgpt.com "The Assistant will never recognize a required parameter that is of ..."
+[3]: https://community.openai.com/t/extended-or-minimal-schemas-for-tool-parameters/578636?utm_source=chatgpt.com "Extended or minimal Schemas for tool parameters? - API"
+[4]: https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview "Tool use with Claude - Anthropic"
+[5]: https://modelcontextprotocol.io/specification/2025-06-18/server/tools "Tools - Model Context Protocol"
+[6]: https://docs.pydantic.dev/latest/concepts/json_schema/ "JSON Schema - Pydantic"
 
 ## Wrapping tests
 
