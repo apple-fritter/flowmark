@@ -81,6 +81,10 @@ class MarkdownNormalizer(Renderer):
         # Suppress item breaks on list items following a top-level paragraph.
         if not self._prefix:
             self._suppress_item_break = True
+        else:
+            # For paragraphs within list items, ensure proper spacing after multi-paragraph items
+            # This handles the case where a paragraph follows a BlankLine within a list item
+            self._suppress_item_break = False
 
         children: Any = self.render_children(element)
 
@@ -97,14 +101,6 @@ class MarkdownNormalizer(Renderer):
         self._prefix = self._second_prefix
         return wrapped_text + "\n"
 
-    def _has_multiple_paragraphs(self, item: object) -> bool:
-        """
-        Check if a list item contains multiple paragraphs.
-        """
-        list_item = cast(block.ListItem, item)
-        paragraphs = [c for c in list_item.children if isinstance(c, block.Paragraph)]
-        return len(paragraphs) > 1
-
     def render_list(self, element: block.List) -> str:
         result: list[str] = []
 
@@ -119,11 +115,8 @@ class MarkdownNormalizer(Renderer):
                 subsequent_indent = "  "
 
             with self.container(prefix, subsequent_indent):
-                # Add an extra newline before multi-paragraph list items (except the first)
-                if i > 0 and self._has_multiple_paragraphs(child):
-                    result.append(self._second_prefix.strip() + "\n")
-
-                result.append(self.render(child))
+                rendered_item = self.render(child)
+                result.append(rendered_item)
 
         self._prefix = self._second_prefix
         return "".join(result)
@@ -139,12 +132,16 @@ class MarkdownNormalizer(Renderer):
             result += self._second_prefix.strip() + "\n"
 
         result += self.render_children(element)
+
         return result
 
     def render_quote(self, element: block.Quote) -> str:
         with self.container("> ", "> "):
             result = self.render_children(element).rstrip("\n")
         self._prefix = self._second_prefix
+        # After rendering a quote block, don't suppress the next item break
+        # This ensures proper spacing after list items with quote blocks
+        self._suppress_item_break = False
         return f"{result}\n"
 
     def _render_code(self, element: block.CodeBlock | block.FencedCode) -> str:
@@ -159,6 +156,9 @@ class MarkdownNormalizer(Renderer):
         lines.extend(f"{self._second_prefix}{line}" for line in code_content.splitlines())
         lines.append(f"{self._second_prefix}```")
         self._prefix = self._second_prefix
+        # After rendering a code block, don't suppress the next item break
+        # This ensures proper spacing after list items with code blocks
+        self._suppress_item_break = False
         return "\n".join(lines) + "\n"
 
     def render_fenced_code(self, element: block.FencedCode) -> str:

@@ -504,6 +504,7 @@ More line spacing challenges with multi-paragraph items:
   # Thereafter it's faster:
   z foo
   ```
+
 - Use `eza` instead of `ls`. It has color support, support for Nerd Font icons, and
   other improvements.
 
@@ -521,6 +522,7 @@ And enumerations:
    You can try other format docs.
    Currently DOCX, HTML, and Markdown foramt work.
    (PDF coming soon!)
+
 5. **View locally:** You'll see from the above output both an `.md` and an `.html` file.
    You can look at these locally and do what you want with them.
 
@@ -584,7 +586,6 @@ Linux offers a rich set of POSIX\-compliant and Linux\-specific mechanisms.
      + Create the temporary file in the destination directory: temp\_file =
        tempfile.NamedTemporaryFile(mode='w', dir=dest\_dir, delete=False) (use
        appropriate mode, e.g., wb for binary).
-
 
      + Use a try...finally block to ensure cleanup:\
        Python\

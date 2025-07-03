@@ -20,6 +20,7 @@ If they do NOT match, it is a bug and the test fails.
 After a failure, the testdoc.actual.*.md files are still updated and can be
 compared to the expected testdoc.out.*.md files to understand what went wrong.
 
-DO NOT change the testdoc.out.*.md files since they should be the expected output.
+DO NOT change the testdoc.out.*.md files since they should be the expected output,
+unless the user confirms that the testdoc.out.*.md files are incorrect.
 
 Change the code to fix bugs until the testdoc.actual.*.md files match the expected testdoc.out.*.md files.
