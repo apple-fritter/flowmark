@@ -17,6 +17,14 @@ from typing_extensions import override
 from flowmark.line_wrappers import LineWrapper
 
 
+def _normalize_title_quotes(title: str) -> str:
+    """
+    Normalize title quotes.
+    """
+    escaped = title.strip('"').replace('"', '\\"')
+    return f'"{escaped}"'
+
+
 # XXX Turn off Marko's parsing of block HTML.
 # Block parsing with comments or block elements has some counterintuitive issues:
 # https://github.com/frostming/marko/issues/202
@@ -193,9 +201,7 @@ class MarkdownNormalizer(Renderer):
         """
         link_text = element.dest
         if element.title:
-            # Ensure title quotes are handled correctly
-            escaped_title = element.title.replace('"', '\\"')
-            link_text += f' "{escaped_title}"'
+            link_text += f" {_normalize_title_quotes(element.title)}"
         result = f"{self._prefix}[{element.label}]: {link_text}\n"
         self._prefix = self._second_prefix
         self._suppress_item_break = True
@@ -212,7 +218,7 @@ class MarkdownNormalizer(Renderer):
 
     def render_link(self, element: inline.Link) -> str:
         link_text = self.render_children(element)
-        link_title = '"{}"'.format(element.title.replace('"', '\\"')) if element.title else None
+        link_title = _normalize_title_quotes(element.title) if element.title else None
         assert self.root_node
         label = next(
             (k for k, v in self.root_node.link_ref_defs.items() if v == (element.dest, link_title)),
@@ -230,7 +236,7 @@ class MarkdownNormalizer(Renderer):
 
     def render_image(self, element: inline.Image) -> str:
         template = "![{}]({}{})"
-        title = ' "{}"'.format(element.title.replace('"', '\\"')) if element.title else ""
+        title = f" {_normalize_title_quotes(element.title)}" if element.title else ""
         return template.format(self.render_children(element), element.dest, title)
 
     def render_literal(self, element: inline.Literal) -> str:
