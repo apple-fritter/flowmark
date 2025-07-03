@@ -1,0 +1,25 @@
+---
+description: Flowmark project rules
+globs:
+alwaysApply: true
+---
+
+## Testing Flowmark
+
+Most comprehensive testing is done via the test files in the tests/testdocs directory.
+
+The input is tests/testdocs/testdoc.orig.md.
+
+The expected output is in tests/testdocs/testdoc.out.*.md.
+
+When you run `make test`, the actual output from the code is written to tests/testdocs/testdoc.actual.*.md.
+
+The test passes if the actual output matches the expected output.
+
+If they do NOT match, it is a bug and the test fails.
+After a failure, the testdoc.actual.*.md files are still updated and can be
+compared to the expected testdoc.out.*.md files to understand what went wrong.
+
+DO NOT change the testdoc.out.*.md files since they should be the expected output.
+
+Change the code to fix bugs until the testdoc.actual.*.md files match the expected testdoc.out.*.md files.
