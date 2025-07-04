@@ -25,16 +25,36 @@ def test_reference_doc_formats():
         filename: str
         semantic: bool
         cleanups: bool
+        smartquotes: bool
 
     test_cases: list[TestCase] = [
         TestCase(
-            name="plain", filename="testdoc.expected.plain.md", semantic=False, cleanups=False
+            name="plain",
+            filename="testdoc.expected.plain.md",
+            semantic=False,
+            cleanups=False,
+            smartquotes=False,
         ),
         TestCase(
-            name="semantic", filename="testdoc.expected.semantic.md", semantic=True, cleanups=False
+            name="semantic",
+            filename="testdoc.expected.semantic.md",
+            semantic=True,
+            cleanups=False,
+            smartquotes=False,
         ),
         TestCase(
-            name="cleaned", filename="testdoc.expected.cleaned.md", semantic=True, cleanups=True
+            name="cleaned",
+            filename="testdoc.expected.cleaned.md",
+            semantic=True,
+            cleanups=True,
+            smartquotes=False,
+        ),
+        TestCase(
+            name="auto",
+            filename="testdoc.expected.auto.md",
+            semantic=True,
+            cleanups=True,
+            smartquotes=True,
         ),
     ]
 
@@ -44,7 +64,12 @@ def test_reference_doc_formats():
         test_doc = testdoc_dir / case.filename
         expected = test_doc.read_text()
 
-        actual = fill_markdown(orig_content, semantic=case.semantic, cleanups=case.cleanups)
+        actual = fill_markdown(
+            orig_content,
+            semantic=case.semantic,
+            cleanups=case.cleanups,
+            smartquotes=case.smartquotes,
+        )
         if actual != expected:
             actual_path = testdoc_dir / f"testdoc.actual.{case.name}.md"
             print(f"actual was different from expected for {case.name}!")
