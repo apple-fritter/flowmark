@@ -43,5 +43,5 @@ clean:
 	-find . -type d -name "__pycache__" -exec rm -rf {} +
 
 gen_test_docs:
-	poetry run flowmark tests/testdocs/testdoc.orig.md -o tests/testdocs/testdoc.out.plain.md
-	poetry run flowmark --semantic tests/testdocs/testdoc.orig.md -o tests/testdocs/testdoc.out.semantic.md
+	poetry run flowmark tests/testdocs/testdoc.orig.md -o tests/testdocs/testdoc.expected.plain.md
+	poetry run flowmark --semantic tests/testdocs/testdoc.orig.md -o tests/testdocs/testdoc.expected.semantic.md

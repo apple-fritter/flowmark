@@ -27,11 +27,15 @@ def test_reference_doc_formats():
         cleanups: bool
 
     test_cases: list[TestCase] = [
-        TestCase(name="plain", filename="testdoc.out.plain.md", semantic=False, cleanups=False),
         TestCase(
-            name="semantic", filename="testdoc.out.semantic.md", semantic=True, cleanups=False
+            name="plain", filename="testdoc.expected.plain.md", semantic=False, cleanups=False
         ),
-        TestCase(name="cleaned", filename="testdoc.out.cleaned.md", semantic=True, cleanups=True),
+        TestCase(
+            name="semantic", filename="testdoc.expected.semantic.md", semantic=True, cleanups=False
+        ),
+        TestCase(
+            name="cleaned", filename="testdoc.expected.cleaned.md", semantic=True, cleanups=True
+        ),
     ]
 
     expecteds: list[str] = []
