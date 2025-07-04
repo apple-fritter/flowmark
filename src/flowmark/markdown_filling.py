@@ -15,11 +15,12 @@ import re
 from collections.abc import Callable
 from textwrap import dedent
 
-from flowmark.cleanups import doc_cleanups
+from flowmark.cleanups import doc_cleanups, rewrite_text_content
 from flowmark.custom_marko import custom_marko
 from flowmark.frontmatter import split_frontmatter
 from flowmark.line_wrappers import LineWrapper, line_wrap_by_sentence, line_wrap_to_width
 from flowmark.sentence_split_regex import split_sentences_regex
+from flowmark.smartquotes import smart_quotes
 from flowmark.text_filling import DEFAULT_WRAP_WIDTH
 
 
@@ -79,6 +80,7 @@ def fill_markdown(
     width: int = DEFAULT_WRAP_WIDTH,
     semantic: bool = False,
     cleanups: bool = False,
+    smartquotes: bool = False,
     line_wrapper: LineWrapper | None = None,
 ) -> str:
     """
@@ -125,6 +127,8 @@ def fill_markdown(
     document = marko.parse(markdown_text)
     if cleanups:
         doc_cleanups(document)
+    if smartquotes:
+        rewrite_text_content(document, smart_quotes)
     result = marko.render(document)
 
     # Reattach frontmatter if it was present

@@ -1,14 +1,17 @@
 # flowmark
 
-Flowmark is a new Python implementation of **text and Markdown line wrapping and
-filling**, with an emphasis on making **git diffs** and **LLM edits** to text documents
-easier to diff and review.
+Flowmark is a pure Python implementation of **Markdown auto-formatting and
+normalization** and **text and Markdown line wrapping and filling**. It can be used from
+the command line or a library.
 
-In addition, it offers **Markdown auto-formatting and normalization** as a library or
-from the command line.
 This is much like [markdownfmt](https://github.com/shurcooL/markdownfmt) or
-[prettier's Markdown support](https://prettier.io/blog/2017/11/07/1.8.0) but is pure
-Python and has (in my humble opinion) better options and defaults.
+[prettier’s Markdown support](https://prettier.io/blog/2017/11/07/1.8.0) but is pure
+Python and has more options and (in my humble opinion) better defaults.
+In particular, it was written to make **git diffs** and **LLM edits** of Markdown text
+documents much easier to review.
+
+It also offers optional **automatic smart quotes** to convert \"non-oriented quotes\" to
+“oriented quotes” intelligently and conservatively (avoiding code blocks).
 
 It aims to be small and simple and have only a few dependencies, currently only
 [`marko`](https://github.com/frostming/marko),
@@ -49,7 +52,7 @@ To use as a library, use uv/poetry/pip to install
 ## Use in VSCode/Cursor
 
 You can use Flowmark to auto-format Markdown on save in VSCode or Cursor.
-Install the "Run on Save" (`emeraldwalk.runonsave`) extension.
+Install the “Run on Save” (`emeraldwalk.runonsave`) extension.
 Then add to your `settings.json`:
 
 ```json
@@ -63,7 +66,8 @@ Then add to your `settings.json`:
   }
 ```
 
-The `--auto` option is just the same as `--inplace --nobackup --semantic`.
+The `--auto` option is just the same as `--inplace --nobackup --semantic --cleanups
+--smartquotes`.
 
 ## Use Cases
 
@@ -85,11 +89,11 @@ The main ways to use Flowmark are:
   Having this as a simple Python library makes this easy in AI-related document
   pipelines.
 
-- As a **drop-in replacement library for Python's default
+- As a **drop-in replacement library for Python’s default
   [`textwrap`](https://docs.python.org/3/library/textwrap.html)** but with more options.
   It simplifies and generalizes that library, offering better control over **initial and
   subsequent indentation** and **when to split words and lines**, e.g. using a word
-  splitter that won't break lines within HTML tags.
+  splitter that won’t break lines within HTML tags.
 
 Other features:
 
@@ -102,10 +106,10 @@ Other features:
   [Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of
   this readme file.)
 
-- Very simple and fast **regex-based sentence splitting**. It's just based on letters
-  and punctuation so isn't perfect but works well for these purposes (and is much faster
+- Very simple and fast **regex-based sentence splitting**. It’s just based on letters
+  and punctuation so isn’t perfect but works well for these purposes (and is much faster
   and simpler than a proper sentence parser like SpaCy).
-  It should work fine for English and many other latin/Cyrillic languages but hasn't
+  It should work fine for English and many other latin/Cyrillic languages but hasn’t
   been tested on CJK.
 
 Because **YAML frontmatter** is common on Markdown files, the Markdown autoformat
@@ -113,7 +117,7 @@ preserves all frontmatter (content between `---` delimiters at the front of a fi
 
 ## Why a New Markdown Formatter?
 
-Previously I'd implemented something very similar with
+Previously I’d implemented something very similar with
 [for Atom](https://github.com/jlevy/atom-flowmark).
 I found the Markdown formatting conventions enforced by the that plugin worked really
 well for editing and publishing large or collaboratively edited documents.
@@ -154,7 +158,7 @@ options:
                        boldfaced section headers (only applies to Markdown mode)
   -i, --inplace        Edit the file in place (ignores --output)
   --nobackup           Do not make a backup of the original file when using --inplace
-  --auto               Same as `--inplace --nobackup --semantic --cleanups`, as a
+  --auto               Same as `--inplace --nobackup --semantic --cleanups --smartquotes`, as a
                        convenience for fully auto-formatting files
   --version            Show version information and exit
 
@@ -197,13 +201,13 @@ For more details, see: https://github.com/jlevy/flowmark
 - This enables
   [GitHub-flavored Markdown support](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
   using
-  [Marko's extension](https://github.com/frostming/marko/blob/master/marko/ext/footnote.py).
+  [Marko’s extension](https://github.com/frostming/marko/blob/master/marko/ext/footnote.py).
 
 - GFM-style tables are supported and also auto-formatted.
 
 - GFM-style footnotes are supported.
-  But note these aren't actually in the GFM spec, but we follow
-  [micromark's conventions](https://github.com/frostming/marko/blob/master/marko/ext/footnote.py).
+  But note these aren’t actually in the GFM spec, but we follow
+  [micromark’s conventions](https://github.com/frostming/marko/blob/master/marko/ext/footnote.py).
 
 ## Project Docs
 

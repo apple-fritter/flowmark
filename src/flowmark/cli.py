@@ -54,6 +54,7 @@ class Options:
     plaintext: bool
     semantic: bool
     cleanups: bool
+    smartquotes: bool
     inplace: bool
     nobackup: bool
     version: bool
@@ -106,6 +107,13 @@ def _parse_args(args: list[str] | None = None) -> Options:
         "headers (only applies to Markdown mode)",
     )
     parser.add_argument(
+        "--smartquotes",
+        action="store_true",
+        default=False,
+        help="Convert straight quotes to typographic (curly) quotes and apostrophes "
+        "(only applies to Markdown mode)",
+    )
+    parser.add_argument(
         "-i", "--inplace", action="store_true", help="Edit the file in place (ignores --output)"
     )
     parser.add_argument(
@@ -116,7 +124,7 @@ def _parse_args(args: list[str] | None = None) -> Options:
     parser.add_argument(
         "--auto",
         action="store_true",
-        help="Same as `--inplace --nobackup --semantic --cleanups`, as a convenience for "
+        help="Same as `--inplace --nobackup --semantic --cleanups --smartquotes`, as a convenience for "
         "fully auto-formatting files",
     )
     parser.add_argument(
@@ -131,6 +139,7 @@ def _parse_args(args: list[str] | None = None) -> Options:
         opts.nobackup = True
         opts.semantic = True
         opts.cleanups = True
+        opts.smartquotes = True
 
     return Options(
         file=opts.file,
@@ -139,6 +148,7 @@ def _parse_args(args: list[str] | None = None) -> Options:
         plaintext=opts.plaintext,
         semantic=opts.semantic,
         cleanups=opts.cleanups,
+        smartquotes=opts.smartquotes,
         inplace=opts.inplace,
         nobackup=opts.nobackup,
         version=opts.version,
@@ -176,6 +186,7 @@ def main(args: list[str] | None = None) -> int:
             plaintext=options.plaintext,
             semantic=options.semantic,
             cleanups=options.cleanups,
+            smartquotes=options.smartquotes,
             make_parents=True,
         )
     except ValueError as e:
