@@ -4,9 +4,9 @@
 
 .DEFAULT_GOAL := default
 
-.PHONY: default install lint test upgrade build clean agent-rules
+.PHONY: default install lint test upgrade build clean agent-rules format-docs
 
-default: agent-rules install lint test 
+default: agent-rules format-docs install lint test 
 
 install:
 	uv sync --all-extras
@@ -42,6 +42,5 @@ clean:
 	-rm -rf CLAUDE.md AGENTS.md
 	-find . -type d -name "__pycache__" -exec rm -rf {} +
 
-gen_test_docs:
-	poetry run flowmark tests/testdocs/testdoc.orig.md -o tests/testdocs/testdoc.expected.plain.md
-	poetry run flowmark --semantic tests/testdocs/testdoc.orig.md -o tests/testdocs/testdoc.expected.semantic.md
+format-docs:
+	uv run flowmark --auto README.md

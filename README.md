@@ -11,7 +11,8 @@ In particular, it was written to make **git diffs** and **LLM edits** of Markdow
 documents much easier to review.
 
 It also offers optional **automatic smart quotes** to convert \"non-oriented quotes\" to
-“oriented quotes” intelligently and conservatively (avoiding code blocks).
+“oriented quotes” and apostrophes intelligently and conservatively (in particular,
+avoiding code blocks).
 
 It aims to be small and simple and have only a few dependencies, currently only
 [`marko`](https://github.com/frostming/marko),
