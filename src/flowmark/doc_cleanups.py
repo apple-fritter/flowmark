@@ -1,39 +1,10 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-
 from marko import block, inline
 from marko.block import Document
 from marko.element import Element
 
-ContainerElement = (
-    block.Document,
-    block.Quote,
-    block.List,
-    block.ListItem,
-    block.Paragraph,  # Paragraphs contain inline elements
-    block.Heading,  # Already handled, but include for completeness if structure changes
-    inline.Emphasis,
-    inline.StrongEmphasis,
-    inline.Link,
-)
-
-
-def transform_tree(element: Element, transformer: Callable[[Element], None]) -> None:
-    """
-    Recursively traverse the element tree and apply a transformer function to each node.
-    """
-    transformer(element)
-
-    # Recursively process children for known container types
-    if isinstance(element, ContainerElement):
-        # Now we know element has a .children attribute that's a Sequence[Element] or str
-        # We only care about processing Element children
-        if isinstance(element.children, list):
-            # Create a copy for safe iteration if modification occurs
-            current_children = list(element.children)
-            for child in current_children:
-                transform_tree(child, transformer)
+from flowmark.doc_transforms import transform_tree
 
 
 def _unbold_heading_transformer(element: Element) -> None:
@@ -67,25 +38,6 @@ def unbold_headings(doc: Document) -> None:
     Example: `## **My Heading**` -> `## My Heading`
     """
     transform_tree(doc, _unbold_heading_transformer)
-
-
-def rewrite_text_content(doc: Document, rewrite_func: Callable[[str], str]) -> None:
-    """
-    Apply a string rewrite function to all `RawText` nodes that are not part of
-    code blocks.
-
-    This function modifies the Marko document tree in place.
-    It traverses the document and applies `string_rewrite_func` to the content
-    of `marko.inline.RawText` elements. It skips text within any kind of code
-    block (`FencedCode`, `CodeBlock`, `CodeSpan`).
-    """
-
-    def transformer(element: Element) -> None:
-        if isinstance(element, inline.RawText):
-            assert isinstance(element.children, str)
-            element.children = rewrite_func(element.children)
-
-    transform_tree(doc, transformer)
 
 
 def doc_cleanups(doc: Document):

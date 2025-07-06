@@ -127,3 +127,67 @@ def test_complex_cases_unchanged():
     assert smart_quotes("'apos") == "'apos"
     assert smart_quotes("'apos'trophes") == "'apos'trophes"
     assert smart_quotes("$James'") == "$James'"
+
+
+def test_quotes_with_newlines():
+    """Test quotes that contain newlines."""
+    # Double quotes with newlines
+    assert smart_quotes('"Hello\nWorld"') == "\u201cHello\nWorld\u201d"
+    assert smart_quotes('He said "Hello\nWorld" today') == "He said \u201cHello\nWorld\u201d today"
+    assert (
+        smart_quotes('"First line\nSecond line\nThird line"')
+        == "\u201cFirst line\nSecond line\nThird line\u201d"
+    )
+
+    # Single quotes with newlines
+    assert smart_quotes("'Hello\nWorld'") == "\u2018Hello\nWorld\u2019"
+    assert (
+        smart_quotes("She said 'Hello\nWorld' today") == "She said \u2018Hello\nWorld\u2019 today"
+    )
+    assert (
+        smart_quotes("'First line\nSecond line\nThird line'")
+        == "\u2018First line\nSecond line\nThird line\u2019"
+    )
+
+    # With punctuation after newline quotes
+    assert smart_quotes('"Hello\nWorld".') == "\u201cHello\nWorld\u201d."
+    assert smart_quotes('"Hello\nWorld"!') == "\u201cHello\nWorld\u201d!"
+    assert smart_quotes("'Hello\nWorld'?") == "\u2018Hello\nWorld\u2019?"
+
+    # Mixed with contractions
+    assert (
+        smart_quotes('I\'m reading "Hello\nWorld" today')
+        == "I\u2019m reading \u201cHello\nWorld\u201d today"
+    )
+
+    # Multiple paragraphs in quotes should NOT be converted
+    text = '"This is paragraph one.\n\nThis is paragraph two."'
+    expected = '"This is paragraph one.\n\nThis is paragraph two."'  # Unchanged
+    assert smart_quotes(text) == expected
+
+    # Quotes at start and end of lines
+    text = '"Start of text\nMiddle line\nEnd of text"'
+    expected = "\u201cStart of text\nMiddle line\nEnd of text\u201d"
+    assert smart_quotes(text) == expected
+
+    # Basic paragraph break
+    assert smart_quotes('"Para 1.\n\nPara 2."') == '"Para 1.\n\nPara 2."'
+    assert smart_quotes("'Para 1.\n\nPara 2.'") == "'Para 1.\n\nPara 2.'"
+
+    # Paragraph break with spaces
+    assert smart_quotes('"Para 1.\n \nPara 2."') == '"Para 1.\n \nPara 2."'
+    assert smart_quotes('"Para 1.\n  \nPara 2."') == '"Para 1.\n  \nPara 2."'
+    assert smart_quotes('"Para 1.\n\t\nPara 2."') == '"Para 1.\n\t\nPara 2."'
+
+    # Multiple paragraph breaks
+    assert smart_quotes('"Para 1.\n\nPara 2.\n\nPara 3."') == '"Para 1.\n\nPara 2.\n\nPara 3."'
+
+    # Paragraph break in context
+    text = 'He said "Para 1.\n\nPara 2." yesterday.'
+    expected = 'He said "Para 1.\n\nPara 2." yesterday.'
+    assert smart_quotes(text) == expected
+
+    # Mixed: some with paragraph breaks, some without
+    text = 'She said "Hello world" and he said "Para 1.\n\nPara 2." today.'
+    expected = 'She said \u201cHello world\u201d and he said "Para 1.\n\nPara 2." today.'
+    assert smart_quotes(text) == expected

@@ -15,8 +15,9 @@ import re
 from collections.abc import Callable
 from textwrap import dedent
 
-from flowmark.cleanups import doc_cleanups, rewrite_text_content
 from flowmark.custom_marko import custom_marko
+from flowmark.doc_cleanups import doc_cleanups
+from flowmark.doc_transforms import rewrite_text_content
 from flowmark.frontmatter import split_frontmatter
 from flowmark.line_wrappers import LineWrapper, line_wrap_by_sentence, line_wrap_to_width
 from flowmark.sentence_split_regex import split_sentences_regex
@@ -128,7 +129,7 @@ def fill_markdown(
     if cleanups:
         doc_cleanups(document)
     if smartquotes:
-        rewrite_text_content(document, smart_quotes)
+        rewrite_text_content(document, smart_quotes, coalesce_lines=True)
     result = marko.render(document)
 
     # Reattach frontmatter if it was present

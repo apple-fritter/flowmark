@@ -1,44 +1,50 @@
 # flowmark
 
-Flowmark is a pure Python implementation of **Markdown auto-formatting and
-normalization** and **text and Markdown line wrapping and filling**. It can be used from
-the command line or a library.
+Flowmark is a pure Python Markdown auto-formatter designed for **better LLM workflows**,
+**clean git diffs**, and **flexible use from CLI, from IDEs, or as a library**.
 
-This is much like [markdownfmt](https://github.com/shurcooL/markdownfmt) or
-[prettier’s Markdown support](https://prettier.io/blog/2017/11/07/1.8.0) but is pure
-Python and has more options and (in my humble opinion) better defaults.
-In particular, it was written to make **git diffs** and **LLM edits** of Markdown text
-documents much easier to review.
+With AI tools increasingly using Markdown, having consistent, diff-friendly formatting
+has become essential for modern writing, editing, and document processing workflows.
+Normalizing Markdown formatting greatly improves collaborative editing and LLM
+workflows, especially when committing documents to git repositories.
 
-It also offers optional **automatic smart quotes** to convert \"non-oriented quotes\" to
-“oriented quotes” and apostrophes intelligently and conservatively (in particular,
-avoiding code blocks).
+You can use Flowmark as a CLI, as an autoformatter in your IDE, or as a Python library.
 
-It aims to be small and simple and have only a few dependencies, currently only
+The key differences from [other Markdown formatters](#why-another-markdown-formatter):
+
+- Carefully chosen default formatting rules that are effective for use in editors/IDEs,
+  in LLM pipelines (and also when paging through docs in a terminal), including
+  normalizing all whitespace, headings, line wrapping, tables, and footnotes.
+
+- “Just works” support for GFM-style tables, footnotes, and YAML frontmatter.
+
+- Advanced and customizable line-wrapping capabilities, including
+  [semantic line breaks](#semantic-line-breaks), a feature that is especially helpful in
+  allowing collaborative edits on a Markdown document while avoiding git conflicts.
+
+- Optional [automatic smart quotes](#smart-quote-support) for professional-looking
+  typography.
+
+Flowmark aims to be conservative about changes so that it is safe to run automatically
+on save or after any stage of a document pipeline.
+
+It supports [CommonMark](https://spec.commonmark.org/0.31.2/) and
+[GitHub-Flavored Markdown (GFM)](https://github.github.com/gfm/) via
+[Marko](https://github.com/frostming/marko).
+
+It aims to be small and simple and have only a few dependencies, currently
 [`marko`](https://github.com/frostming/marko),
 [`regex`](https://pypi.org/project/regex/), and
 [`strif`](https://github.com/jlevy/strif).
 
-Via Marko (with some customizations) it supports
-[CommonMark](https://spec.commonmark.org/0.31.2/) and
-[GitHub-Flavored Markdown (GFM)](https://github.github.com/gfm/), including tables and
-footnotes
-
 ## Installation
 
 The simplest way to use the tool is to use [uv](https://github.com/astral-sh/uv).
-Then run `uvx flowmark --help`.
 
-To install the command-line properly:
-
-```shell
-uv tool install flowmark
-```
-
-Or [pipx](https://github.com/pypa/pipx):
+Run with `uvx flowmark --help` or install it as a tool:
 
 ```shell
-pipx install flowmark
+uv tool install --upgrade flowmark
 ```
 
 Then
@@ -47,28 +53,8 @@ Then
 flowmark --help
 ```
 
-To use as a library, use uv/poetry/pip to install
-[`flowmark`](https://pypi.org/project/flowmark/).
-
-## Use in VSCode/Cursor
-
-You can use Flowmark to auto-format Markdown on save in VSCode or Cursor.
-Install the “Run on Save” (`emeraldwalk.runonsave`) extension.
-Then add to your `settings.json`:
-
-```json
-  "emeraldwalk.runonsave": {
-    "commands": [
-        {
-            "match": "(\\.md|\\.md\\.jinja|\\.mdc)$",
-            "cmd": "flowmark --auto ${file}"
-        }
-    ]
-  }
-```
-
-The `--auto` option is just the same as `--inplace --nobackup --semantic --cleanups
---smartquotes`.
+For use in Python projects, add the [`flowmark`](https://pypi.org/project/flowmark/)
+package via uv, poetry, or pip.
 
 ## Use Cases
 
@@ -80,70 +66,97 @@ The main ways to use Flowmark are:
   It also normalizes all Markdown syntax variations (such as different header or
   formatting styles). This can be especially useful for documentation and editing
   workflows where clean diffs and minimal merge conflicts on GitHub are important.
+  See [below](#use-in-vscodecursor) for recommended VSCode/Cursor setup.
 
 - As a **command line formatter** to format text or Markdown files using the `flowmark`
   command.
 
-- As a **library to autoformat Markdown**. For example, it is great to normalize the
-  outputs from LLMs to be consistent, or to run on the inputs and outputs of LLM
-  transformations that edit text, so that the resulting diffs are clean.
-  Having this as a simple Python library makes this easy in AI-related document
-  pipelines.
+- As a **library to autoformat Markdown** from document pipelines.
+  For example, it is great to normalize the outputs from LLMs to be consistent, or to
+  run on the inputs and outputs of LLM transformations that edit text, so that the
+  resulting diffs are clean.
 
-- As a **drop-in replacement library for Python’s default
+- As a more powerful **drop-in replacement library for Python’s default
   [`textwrap`](https://docs.python.org/3/library/textwrap.html)** but with more options.
   It simplifies and generalizes that library, offering better control over **initial and
   subsequent indentation** and **when to split words and lines**, e.g. using a word
   splitter that won’t break lines within HTML tags.
 
-Other features:
+## Semantic Line Breaks
 
-- Flowmark has the option to to use **semantic line breaks** (using a heuristic to break
-  lines on sentences sentences when that is reasonable), which is an underrated feature
-  that can **make diffs on GitHub much more readable**. The the change may seem subtle
-  but avoids having paragraphs reflow for very small edits, which does a lot to
-  **minimize merge conflicts**. An example of what sentence-guided wrapping looks like,
-  see the
-  [Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1) of
-  this readme file.)
+> [!TIP]
+> 
+> For an example of what an auto-formatted Markdown doc looks with semantic line breaks
+> looks like, see
+> [the Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1)
+> of this readme file.
 
-- Very simple and fast **regex-based sentence splitting**. It’s just based on letters
-  and punctuation so isn’t perfect but works well for these purposes (and is much faster
-  and simpler than a proper sentence parser like SpaCy).
-  It should work fine for English and many other latin/Cyrillic languages but hasn’t
-  been tested on CJK.
+Unlike traditional formatters, Flowmark offers the option to use a heuristic that
+prefers line breaks at sentence boundaries.
+This is a small change that can dramatically improve diff readability when collaborating
+or working with AI tools.
+
+This idea of **semantic line breaks**, which is breaking lines in ways that make sense
+logically when possible (much like with code) is an old one.
+But it usually requires people to agree on how to break lines, which is both difficult
+and sometimes controversial.
+
+However, now we are using versioned Markdown more than ever, it’s a good time to revisit
+this idea, as it can **make diffs in git much more readable**. The change may seem
+subtle but avoids having paragraphs reflow for very small edits, which does a lot to
+**minimize merge conflicts**.
+
+This is my own refinement of the (fairly loose) [semantic line break
+specification](https://github.com/sembr/specification).
+Instead of just allowing you to break lines as you wish, it simply auto-applies fixed
+conventions about likely sentence boundaries in a reasonable way.
+It uses very simple and fast **regex-based sentence splitting**. While not perfect, this
+works well for these purposes (and is much faster and simpler than a proper sentence
+parser like SpaCy). It should work fine for English and many other Latin/Cyrillic
+languages, but hasn’t been tested on CJK.
+
+While this approach to line wrapping may not be familiar, I suggest you just try
+`flowmark --auto` on a document and you will begin to see the benefits as you
+edit/commit documents.
+
+This feature is enabled with the `--semantic` flag or the `--auto` convenience flag.
+
+## Smart Quote Support
+
+Flowmark offers optional **automatic smart quotes** to convert \"non-oriented quotes\"
+to “oriented quotes” and apostrophes intelligently.
+
+This is a robust way to ensure Markdown text can be converted directly to HTML with
+professional-looking typography.
+
+Smart quotes are applied conservatively and won’t affect code blocks, so they don’t
+break code snippets.
+It only applies them within single paragraphs of text, and only applies to \' and \"
+quote marks around regular text.
+
+This feature is enabled with the `--smartquotes` flag or the `--auto` convenience flag.
+
+## Frontmatter Support
 
 Because **YAML frontmatter** is common on Markdown files, the Markdown autoformat
 preserves all frontmatter (content between `---` delimiters at the front of a file).
 
-## Why a New Markdown Formatter?
-
-Previously I’d implemented something very similar with
-[for Atom](https://github.com/jlevy/atom-flowmark).
-I found the Markdown formatting conventions enforced by the that plugin worked really
-well for editing and publishing large or collaboratively edited documents.
-
-This is new, pure Python implementation.
-There are numerous needs for a tool like this on the command line and in Python.
-
-With LLM tools now using Markdown everywhere, there are enormous advantages to having
-very clean and well-formatted Markdown documents, since you can then cleanly see diffs
-or edits made by LLMs.
-
-If you are in a workspace where you are editing lots of text, having them all be
-Markdown with frontmatter, auto-formatted for every git commit makes for a *much* better
-experience.
+> [!TIP]
+> 
+> Flowmark is compatible with
+> [**frontmatter format**](https://github.com/jlevy/flowmark).
+> See the more discussion there on the benefits of using it consistently.
 
 ## Usage
 
 Flowmark can be used as a library or as a CLI.
 
 ```
-usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-c] [-i] [--nobackup] [--auto]
-                [--version]
+usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-c] [--smartquotes] [-i] [--nobackup]
+                [--auto] [--version]
                 [file]
 
-Flowmark: Better line wrapping and formatting for plaintext and Markdown
+Flowmark: Better auto-formatting and line wrapping for Markdown and plaintext
 
 positional arguments:
   file                 Input file (use '-' for stdin)
@@ -153,10 +166,12 @@ options:
   -o, --output OUTPUT  Output file (use '-' for stdout)
   -w, --width WIDTH    Line width to wrap to
   -p, --plaintext      Process as plaintext (no Markdown parsing)
-  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to
-                       Markdown mode)
-  -c, --cleanups       Enable (safe) cleanups for common issues like accidentally
-                       boldfaced section headers (only applies to Markdown mode)
+  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to Markdown
+                       mode)
+  -c, --cleanups       Enable (safe) cleanups for common issues like accidentally boldfaced
+                       section headers (only applies to Markdown mode)
+  --smartquotes        Convert straight quotes to typographic (curly) quotes and apostrophes (only
+                       applies to Markdown mode)
   -i, --inplace        Edit the file in place (ignores --output)
   --nobackup           Do not make a backup of the original file when using --inplace
   --auto               Same as `--inplace --nobackup --semantic --cleanups --smartquotes`, as a
@@ -197,18 +212,57 @@ Command-line usage examples:
 For more details, see: https://github.com/jlevy/flowmark
 ```
 
-## Other Notes
+## Use in VSCode/Cursor
 
-- This enables
-  [GitHub-flavored Markdown support](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
-  using
-  [Marko’s extension](https://github.com/frostming/marko/blob/master/marko/ext/footnote.py).
+You can use Flowmark to auto-format Markdown on save in VSCode or Cursor.
+Install the “Run on Save” (`emeraldwalk.runonsave`) extension.
+Then add to your `settings.json`:
 
-- GFM-style tables are supported and also auto-formatted.
+```json
+  "emeraldwalk.runonsave": {
+    "commands": [
+        {
+            "match": "(\\.md|\\.md\\.jinja|\\.mdc)$",
+            "cmd": "flowmark --auto ${file}"
+        }
+    ]
+  }
+```
 
-- GFM-style footnotes are supported.
-  But note these aren’t actually in the GFM spec, but we follow
-  [micromark’s conventions](https://github.com/frostming/marko/blob/master/marko/ext/footnote.py).
+The `--auto` option is just the same as `--inplace --nobackup --semantic --cleanups
+--smartquotes`.
+
+## Why Another Markdown Formatter?
+
+There are several other Markdown auto-formatters:
+
+- [markdownfmt](https://github.com/shurcooL/markdownfmt) is one of the oldest and most
+  popular Markdown formatters and works well for basic formatting.
+
+- [mdformat](https://github.com/executablebooks/mdformat) is probably the closest
+  alternative to Flowmark and it also uses Python.
+  It preserves line breaks in order to support semantic line breaks, but does not
+  auto-apply them as Flowmark does.
+
+- [Prettier](https://prettier.io/blog/2017/11/07/1.8.0) is the ubiquitous Node formatter
+  that handles Markdown/MDX
+
+- [dprint + dprint-plugin-markdown](https://github.com/dprint/dprint-plugin-markdown) is
+  a fast Rust/WASM engine with a Markdown plugin.
+
+- Rule-based linters like
+  [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) catch violations
+  or sometimes fix, but tend to be far too clumsy in my experience.
+
+- Finally, the [remark ecosystem](https://github.com/remarkjs/remark) is by far the most
+  powerful library ecosystem for building your own Markdown tooling in
+  JavaScript/TypeScript.
+  You can build auto-formatters with it but there isn’t one that’s broadly used as a CLI
+  tool.
+
+All of these are worth looking at, but none offer the more advanced line breaking
+features of Flowmark or seemed to have the “just works” CLI defaults and library usage I
+found most useful.
 
 ## Project Docs
 

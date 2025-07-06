@@ -1,5 +1,19 @@
 import re
-from re import Match
+from re import Match, Pattern
+
+# Precompiled regex patterns
+PARAGRAPH_BREAK_PATTERN: Pattern[str] = re.compile(r"\n\s*\n")
+
+# Pattern excludes content that contains the same type of quote characters
+# Double quotes exclude double quotes, single quotes exclude single quotes
+QUOTE_PATTERN: Pattern[str] = re.compile(
+    r'(^|\s)(?:"([^"\u201c\u201d]*)"|\'([^\'\u2018\u2019]*)\')(\s|$|\.|,|;|:|\?|!)', re.MULTILINE
+)
+
+
+def is_multi_paragraph(text: str) -> bool:
+    """Check if text contains paragraph breaks (two newlines with optional whitespace)."""
+    return PARAGRAPH_BREAK_PATTERN.search(text) is not None
 
 
 def smart_quotes(text: str) -> str:
@@ -11,7 +25,7 @@ def smart_quotes(text: str) -> str:
     Text that is wrapped in single or double quotes is replaced with typographic quotes
     if it has whitespace or a newline at the front and is followed by whitespace or
     a [.,?!]. The content inside quotes must not contain any of the same type (single
-    or double).
+    or double). Quotes containing paragraph breaks (two newlines) are left unchanged.
 
     Straight quotes are converted to apostrophes if they are the only straight quote
     in the word, and have word characters on both sides:
@@ -45,15 +59,17 @@ def smart_quotes(text: str) -> str:
     """
 
     # First handle quoted text - both single and double quotes
-    # Pattern excludes content that contains the same type of quote characters
-    # Double quotes exclude double quotes, single quotes exclude single quotes
-    quote_pattern = r'(^|\s)(?:"([^"\u201c\u201d]*)"|\'([^\'\u2018\u2019]*)\')(\s|$|\.|,|;|:|\?|!)'
-
     def replace_quotes(match: Match[str]) -> str:
         prefix = match.group(1)
         double_content = match.group(2)  # Content of double quotes
         single_content = match.group(3)  # Content of single quotes
         suffix = match.group(4)
+
+        # Check for paragraph breaks in the content
+        content = double_content if double_content is not None else single_content
+        if is_multi_paragraph(content):
+            # Don't convert quotes that contain paragraph breaks
+            return match.group(0)
 
         if double_content is not None:
             # Replace double quotes with typographic quotes
@@ -62,7 +78,7 @@ def smart_quotes(text: str) -> str:
             # Replace single quotes with typographic quotes
             return prefix + "\u2018" + single_content + "\u2019" + suffix
 
-    result = re.sub(quote_pattern, replace_quotes, text)
+    result = QUOTE_PATTERN.sub(replace_quotes, text)
 
     # Now handle apostrophes/contractions
     # Only convert single quotes that are:

@@ -7,7 +7,7 @@ Repository = "https://github.com/jlevy/flowmark"
 
 [project]
 name = "flowmark"
-description = "Better line wrapping and formatting for plaintext and Markdown"
+description = "Better auto-formatting and line wrapping for Markdown and plaintext"
 authors = [
     { name="Joshua Levy", email="joshua@cal.berkeley.edu" },
 ]

@@ -3,7 +3,7 @@ _commit: v0.2.14
 _src_path: gh:jlevy/simple-modern-uv
 package_author_email: joshua@cal.berkeley.edu
 package_author_name: Joshua Levy
-package_description: Better line wrapping and formatting for plaintext and Markdown
+package_description: Better auto-formatting and line wrapping for Markdown and plaintext
 package_github_org: jlevy
 package_module: flowmark
 package_name: flowmark

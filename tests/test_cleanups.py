@@ -1,5 +1,5 @@
-from flowmark.cleanups import unbold_headings
 from flowmark.custom_marko import custom_marko
+from flowmark.doc_cleanups import unbold_headings
 from flowmark.line_wrappers import line_wrap_by_sentence
 
 input_md = """

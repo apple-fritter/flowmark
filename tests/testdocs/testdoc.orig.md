@@ -50,6 +50,13 @@ decisions for those who give and *receive it*. Blah blah blah and blah.
 
 "Hello," he said! "What's... your specialty?" he enquired (in an idle tone).
 
+He read the multiline quote: "This is line one
+and this is line two
+and finally line three." It was beautiful.
+
+She whispered 'Remember this
+important message' softly.
+
 Cas' surprise at John's question hung over them both for a brief moment, like a thinly disguised sack of potatoes. "From 2002-2004 I specialized in the Sarbanes-Oxley Act (Pub.L. 107–204, 116 Stat. 745, enacted July 30, 2002), which was known (in the House) as the 'Corporate and Auditing Accountability, Responsibility, and Transparency Act' and--" But here he cut her off! And who could blame him? He had spoken with the FBI. There was no time to lose.
 
 These companies add (or "issue") stock.

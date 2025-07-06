@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Flowmark: Better line wrapping and formatting for plaintext and Markdown
+Flowmark: Better auto-formatting and line wrapping for Markdown and plaintext
 
 Flowmark provides enhanced text wrapping capabilities with special handling for
 Markdown content. It can:
