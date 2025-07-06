@@ -113,6 +113,12 @@ def line_wrap_by_sentence(
 
     def line_wrapper(text: str, initial_indent: str, subsequent_indent: str) -> str:
         text = text.replace("\n", " ")
+
+        # Handle width <= 0 as "no wrapping"
+        if width <= 0:
+            # Just apply indents and return as single line
+            return initial_indent + text.strip()
+
         lines: list[str] = []
         first_line = True
         length = len_fn

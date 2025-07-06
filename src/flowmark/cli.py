@@ -87,7 +87,13 @@ def _parse_args(args: list[str] | None = None) -> Options:
         default="-",
         help="Output file (use '-' for stdout)",
     )
-    parser.add_argument("-w", "--width", type=int, default=88, help="Line width to wrap to")
+    parser.add_argument(
+        "-w",
+        "--width",
+        type=int,
+        default=88,
+        help="Line width to wrap to, or 0 to disable line wrapping (default: %(default)s)",
+    )
     parser.add_argument(
         "-p", "--plaintext", action="store_true", help="Process as plaintext (no Markdown parsing)"
     )

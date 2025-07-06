@@ -81,6 +81,8 @@ The main ways to use Flowmark are:
   It simplifies and generalizes that library, offering better control over **initial and
   subsequent indentation** and **when to split words and lines**, e.g. using a word
   splitter that won’t break lines within HTML tags.
+  See
+  [`wrap_paragraph_lines`](https://github.com/jlevy/flowmark/blob/main/src/flowmark/text_wrapping.py#L97-L118).
 
 ## Semantic Line Breaks
 
@@ -91,8 +93,13 @@ The main ways to use Flowmark are:
 > [the Markdown source](https://github.com/jlevy/flowmark/blob/main/README.md?plain=1)
 > of this readme file.
 
-Unlike traditional formatters, Flowmark offers the option to use a heuristic that
-prefers line breaks at sentence boundaries.
+Some Markdown auto-formatters never wrap lines, while others wrap at a fixed width.
+
+Flowmark supports both, via the `--width` option.
+Default behavior is **88 columns** (like Black and a few other tools).
+
+However, unlike traditional formatters, Flowmark also offers the option to use a
+heuristic that prefers line breaks at sentence boundaries.
 This is a small change that can dramatically improve diff readability when collaborating
 or working with AI tools.
 
@@ -138,22 +145,22 @@ This feature is enabled with the `--smartquotes` flag or the `--auto` convenienc
 
 ## Frontmatter Support
 
-Because **YAML frontmatter** is common on Markdown files, the Markdown autoformat
-preserves all frontmatter (content between `---` delimiters at the front of a file).
+Because **YAML frontmatter** is common on Markdown files, any YAML frontmatter (content
+between `---` delimiters at the front of a file) is always preserved exactly.
+YAML is not normalized.
 
 > [!TIP]
 > 
-> Flowmark is compatible with
-> [**frontmatter format**](https://github.com/jlevy/flowmark).
-> See the more discussion there on the benefits of using it consistently.
+> See the [frontmatter format](https://github.com/jlevy/frontmatter-format) repo for
+> more discussion of YAML frontmatter and its benefits.
 
 ## Usage
 
 Flowmark can be used as a library or as a CLI.
 
 ```
-usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-c] [--smartquotes] [-i] [--nobackup]
-                [--auto] [--version]
+usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-c] [--smartquotes] [-i]
+                [--nobackup] [--auto] [--version]
                 [file]
 
 Flowmark: Better auto-formatting and line wrapping for Markdown and plaintext
@@ -164,18 +171,21 @@ positional arguments:
 options:
   -h, --help           show this help message and exit
   -o, --output OUTPUT  Output file (use '-' for stdout)
-  -w, --width WIDTH    Line width to wrap to
+  -w, --width WIDTH    Line width to wrap to, or 0 to disable line wrapping
+                       (default: 88)
   -p, --plaintext      Process as plaintext (no Markdown parsing)
-  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to Markdown
-                       mode)
-  -c, --cleanups       Enable (safe) cleanups for common issues like accidentally boldfaced
-                       section headers (only applies to Markdown mode)
-  --smartquotes        Convert straight quotes to typographic (curly) quotes and apostrophes (only
-                       applies to Markdown mode)
+  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to
+                       Markdown mode)
+  -c, --cleanups       Enable (safe) cleanups for common issues like accidentally
+                       boldfaced section headers (only applies to Markdown mode)
+  --smartquotes        Convert straight quotes to typographic (curly) quotes and
+                       apostrophes (only applies to Markdown mode)
   -i, --inplace        Edit the file in place (ignores --output)
-  --nobackup           Do not make a backup of the original file when using --inplace
-  --auto               Same as `--inplace --nobackup --semantic --cleanups --smartquotes`, as a
-                       convenience for fully auto-formatting files
+  --nobackup           Do not make a backup of the original file when using
+                       --inplace
+  --auto               Same as `--inplace --nobackup --semantic --cleanups
+                       --smartquotes`, as a convenience for fully auto-formatting
+                       files
   --version            Show version information and exit
 
 Flowmark provides enhanced text wrapping capabilities with special handling for
@@ -247,8 +257,8 @@ There are several other Markdown auto-formatters:
 - [Prettier](https://prettier.io/blog/2017/11/07/1.8.0) is the ubiquitous Node formatter
   that handles Markdown/MDX
 
-- [dprint + dprint-plugin-markdown](https://github.com/dprint/dprint-plugin-markdown) is
-  a fast Rust/WASM engine with a Markdown plugin.
+- [dprint-plugin-markdown](https://github.com/dprint/dprint-plugin-markdown) is a
+  Markdown plugin for dprint, the fast Rust/WASM engine
 
 - Rule-based linters like
   [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) catch violations

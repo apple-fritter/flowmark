@@ -110,13 +110,22 @@ def wrap_paragraph_lines(
     Rewritten to simplify and generalize Python's textwrap.py.
 
     Set `is_markdown` to True when wrapping markdown text to enable Markdown mode.
+
     This automatically escapes special markdown characters at the start of wrapped
-    lines. It also will preserve line breaks with an explicit Markdown line break,
-    i.e. "\\\n" (backslash-newline) or "  \n" (two spaces followed by newline) at the
+    lines. It also will then correctly preserve explicit hard Markdown line breaks, i.e.
+    "\\\n" (backslash-newline) or "  \n" (two spaces followed by newline) at the
     end of the line. Hard line breaks are normalized to always use "\\\n" as the line
     break.
     """
     lines: list[str] = []
+
+    # Handle width <= 0 as "no wrapping".
+    if width <= 0:
+        if replace_whitespace:
+            text = re.sub(r"\s+", " ", text)
+        if drop_whitespace:
+            text = text.strip()
+        return [text] if text else []
 
     if replace_whitespace:
         text = re.sub(r"\s+", " ", text)
