@@ -54,6 +54,10 @@ def test_quotes_with_punctuation():
     assert smart_quotes('"Really?"') == "\u201cReally?\u201d"
     assert smart_quotes('"Yes!"') == "\u201cYes!\u201d"
     assert smart_quotes('"End."') == "\u201cEnd.\u201d"
+    assert smart_quotes('"Em dash"—') == "\u201cEm dash\u201d—"
+    assert smart_quotes('"Parenthesis")') == "\u201cParenthesis\u201d)"
+    assert smart_quotes("'Single em dash'—") == "\u2018Single em dash\u2019—"
+    assert smart_quotes("'Single parenthesis')") == "\u2018Single parenthesis\u2019)"
 
 
 def test_quotes_at_boundaries():

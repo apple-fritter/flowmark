@@ -7,7 +7,8 @@ PARAGRAPH_BREAK_PATTERN: Pattern[str] = re.compile(r"\n\s*\n")
 # Pattern excludes content that contains the same type of quote characters
 # Double quotes exclude double quotes, single quotes exclude single quotes
 QUOTE_PATTERN: Pattern[str] = re.compile(
-    r'(^|\s)(?:"([^"\u201c\u201d]*)"|\'([^\'\u2018\u2019]*)\')(\s|$|\.|,|;|:|\?|!)', re.MULTILINE
+    r'(^|\s)(?:"([^"\u201c\u201d]*)"|\'([^\'\u2018\u2019]*)\')(\s|$|\.|,|;|:|\?|!|—|\))',
+    re.MULTILINE,
 )
 
 

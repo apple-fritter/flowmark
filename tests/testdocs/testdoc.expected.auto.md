@@ -68,7 +68,7 @@ Auditing Accountability, Responsibility, and Transparency Act' and--” But here
 her off! And who could blame him?
 He had spoken with the FBI. There was no time to lose.
 
-These companies add (or "issue") stock.
+These companies add (or “issue”) stock.
 
 Dash--dash. Dash -- dash.
 Dash -- dash.
