@@ -10,13 +10,18 @@ workflows, especially when committing documents to git repositories.
 
 You can use Flowmark as a CLI, as an autoformatter in your IDE, or as a Python library.
 
+It supports both [CommonMark](https://spec.commonmark.org/0.31.2/) and
+[GitHub-Flavored Markdown (GFM)](https://github.github.com/gfm/) via
+[Marko](https://github.com/frostming/marko).
+
 The key differences from [other Markdown formatters](#why-another-markdown-formatter):
 
 - Carefully chosen default formatting rules that are effective for use in editors/IDEs,
-  in LLM pipelines (and also when paging through docs in a terminal), including
-  normalizing all whitespace, headings, line wrapping, tables, and footnotes.
+  in LLM pipelines, and also when paging through docs in a terminal.
+  It parses and normalizes standard links and special characters, headings, tables,
+  footnotes, and horizontal rules and performing Markdown-aware line wrapping.
 
-- “Just works” support for GFM-style tables, footnotes, and YAML frontmatter.
+- “Just works” support for GFM-style tables, footnotes, and as YAML frontmatter.
 
 - Advanced and customizable line-wrapping capabilities, including
   [semantic line breaks](#semantic-line-breaks), a feature that is especially helpful in
@@ -25,17 +30,20 @@ The key differences from [other Markdown formatters](#why-another-markdown-forma
 - Optional [automatic smart quotes](#smart-quote-support) for professional-looking
   typography.
 
-Flowmark aims to be conservative about changes so that it is safe to run automatically
-on save or after any stage of a document pipeline.
+General philosophy:
 
-It supports [CommonMark](https://spec.commonmark.org/0.31.2/) and
-[GitHub-Flavored Markdown (GFM)](https://github.github.com/gfm/) via
-[Marko](https://github.com/frostming/marko).
+- Be conservative about changes so that it is safe to run automatically on save or after
+  any stage of a document pipeline.
 
-It aims to be small and simple and have only a few dependencies, currently
-[`marko`](https://github.com/frostming/marko),
-[`regex`](https://pypi.org/project/regex/), and
-[`strif`](https://github.com/jlevy/strif).
+- Be opinionated about sensible defaults but not dogmatic by preventing customization.
+  You can adjust or disable most settings.
+  And if you are using it as a library, you can fully control anything you want
+  (including more complex things like custom line wrapping for HTML).
+
+- Be as small and simple as possible, with few dependencies:
+  [`marko`](https://github.com/frostming/marko),
+  [`regex`](https://pypi.org/project/regex/), and
+  [`strif`](https://github.com/jlevy/strif).
 
 ## Installation
 
@@ -62,10 +70,6 @@ The main ways to use Flowmark are:
 
 - To **autoformat Markdown on save in VSCode/Cursor** or any other editor that supports
   running a command on save.
-  Flowmark uses a readable format that makes diffs easy to read and use on GitHub.
-  It also normalizes all Markdown syntax variations (such as different header or
-  formatting styles). This can be especially useful for documentation and editing
-  workflows where clean diffs and minimal merge conflicts on GitHub are important.
   See [below](#use-in-vscodecursor) for recommended VSCode/Cursor setup.
 
 - As a **command line formatter** to format text or Markdown files using the `flowmark`
@@ -94,12 +98,14 @@ The main ways to use Flowmark are:
 > of this readme file.
 
 Some Markdown auto-formatters never wrap lines, while others wrap at a fixed width.
-
 Flowmark supports both, via the `--width` option.
-Default behavior is **88 columns** (like Black and a few other tools).
 
-However, unlike traditional formatters, Flowmark also offers the option to use a
-heuristic that prefers line breaks at sentence boundaries.
+Default line wrapping behavior is **88 columns**. The “[90-ish
+columns](https://youtu.be/esZLCuWs_2Y?si=lUj055ROI--6tVU8&t=1288)” compromise was
+popularized by Black and also works well for Markdown.
+
+However, in addition, unlike traditional formatters, Flowmark also offers the option to
+use a heuristic that prefers line breaks at sentence boundaries.
 This is a small change that can dramatically improve diff readability when collaborating
 or working with AI tools.
 
@@ -111,16 +117,18 @@ and sometimes controversial.
 However, now we are using versioned Markdown more than ever, it’s a good time to revisit
 this idea, as it can **make diffs in git much more readable**. The change may seem
 subtle but avoids having paragraphs reflow for very small edits, which does a lot to
-**minimize merge conflicts**.
+**minimize merge conflicts**. 
 
-This is my own refinement of the (fairly loose) [semantic line break
-specification](https://github.com/sembr/specification).
-Instead of just allowing you to break lines as you wish, it simply auto-applies fixed
-conventions about likely sentence boundaries in a reasonable way.
-It uses very simple and fast **regex-based sentence splitting**. While not perfect, this
+This is my own refinement of [traditional semantic line breaks](https://github.com/sembr/specification).
+Instead of just allowing you to break lines as you wish, it auto-applies fixed
+conventions about likely sentence boundaries in a conservative and reasonable way.
+It uses simple and fast **regex-based sentence splitting**. While not perfect, this
 works well for these purposes (and is much faster and simpler than a proper sentence
 parser like SpaCy). It should work fine for English and many other Latin/Cyrillic
 languages, but hasn’t been tested on CJK.
+You can see some
+[old discussion](https://github.com/shurcooL/markdownfmt/issues/17) of this idea with
+the markdownfmt author.
 
 While this approach to line wrapping may not be familiar, I suggest you just try
 `flowmark --auto` on a document and you will begin to see the benefits as you
@@ -252,7 +260,7 @@ There are several other Markdown auto-formatters:
 - [mdformat](https://github.com/executablebooks/mdformat) is probably the closest
   alternative to Flowmark and it also uses Python.
   It preserves line breaks in order to support semantic line breaks, but does not
-  auto-apply them as Flowmark does.
+  auto-apply them as Flowmark does and has somewhat different features.
 
 - [Prettier](https://prettier.io/blog/2017/11/07/1.8.0) is the ubiquitous Node formatter
   that handles Markdown/MDX
