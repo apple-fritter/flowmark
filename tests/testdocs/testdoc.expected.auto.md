@@ -61,7 +61,7 @@ high-stakes decisions for those who give and *receive it*. Blah blah blah and bl
 
 ## Some apostrophes and quotes--and dashes, too
 
-“Hello,” he said! “What’s... your specialty?”
+“Hello,” he said! “What’s … your specialty?”
 he enquired (in an idle tone).
 
 He read the multiline quote: “This is line one and this is line two and finally line
@@ -614,7 +614,7 @@ Linux offers a rich set of POSIX\-compliant and Linux\-specific mechanisms.
        tempfile.NamedTemporaryFile(mode='w', dir=dest\_dir, delete=False) (use
        appropriate mode, e.g., wb for binary).
 
-     + Use a try...finally block to ensure cleanup:\
+     + Use a try … finally block to ensure cleanup:\
        Python\
        temp\_file = None\
        try:\
@@ -881,7 +881,7 @@ or em*phases* or **bold**face or *em*phases or bold**face** or em*phases* or
 **bold**face or *em*phases or bold**face** or em*phases* or **bold**face or *em*phases
 or bold**face** or em*phases* or **bold**face or *em*phases or bold**face** or
 em*phases* or **bold**face or *em*phases or bold**face** or em*phases* can flow on and
-on...
+on …
 
 *blah blah* *blah blah* *blah blah* *blah blah* *blah blah* *blah blah* *blah blah*
 *blah blah* *blah blah* *blah blah* *blah blah* *blah blah* *blah blah* *blah blah*
@@ -1062,7 +1062,7 @@ And let’s try some links with angle brackets.
     the value proposition of a company and ensuring the alignment of interests between
     the two parties.
 
-[^multiparagraph]: This is an even longer footnote...
+[^multiparagraph]: This is an even longer footnote …
 
     Paragraph 1.
 

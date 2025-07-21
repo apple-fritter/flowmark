@@ -136,7 +136,9 @@ edit/commit documents.
 
 This feature is enabled with the `--semantic` flag or the `--auto` convenience flag.
 
-## Smart Quote Support
+## Typographic Cleanups
+
+### Smart Quote Support
 
 Flowmark offers optional **automatic smart quotes** to convert \"non-oriented quotes\"
 to “oriented quotes” and apostrophes intelligently.
@@ -150,6 +152,14 @@ It only applies them within single paragraphs of text, and only applies to \' an
 quote marks around regular text.
 
 This feature is enabled with the `--smartquotes` flag or the `--auto` convenience flag.
+
+### Ellipsis Support
+
+There is a similar feature for converting `...` to an ellipsis character `…` when it
+appears to be appropriate (i.e., not in code blocks and when adjacent to words or
+punctuation).
+
+This feature is enabled with the `--ellipses` flag or the `--auto` convenience flag.
 
 ## Frontmatter Support
 

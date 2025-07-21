@@ -15,6 +15,7 @@ def reformat_text(
     semantic: bool = True,
     cleanups: bool = True,
     smartquotes: bool = False,
+    ellipses: bool = False,
 ) -> str:
     """
     Reformat text or markdown and wrap lines. Simply a convenient wrapper
@@ -31,7 +32,12 @@ def reformat_text(
     else:
         # Markdown mode
         result = fill_markdown(
-            text, width=width, semantic=semantic, cleanups=cleanups, smartquotes=smartquotes
+            text,
+            width=width,
+            semantic=semantic,
+            cleanups=cleanups,
+            smartquotes=smartquotes,
+            ellipses=ellipses,
         )
 
     return result
@@ -47,6 +53,7 @@ def reformat_file(
     semantic: bool = False,
     cleanups: bool = True,
     smartquotes: bool = False,
+    ellipses: bool = False,
     make_parents: bool = True,
 ) -> None:
     """
@@ -66,6 +73,8 @@ def reformat_file(
             headers (only applies to Markdown mode).
         smartquotes: Convert straight quotes to typographic (curly) quotes and apostrophes
             (only applies to Markdown mode).
+        ellipses: Convert three dots (...) to ellipsis character (…) with normalized spacing
+            (only applies to Markdown mode).
         make_parents: Whether to make parent directories if they don't exist.
     """
     read_stdin = path == "-"
@@ -79,7 +88,7 @@ def reformat_file(
     else:
         text = Path(path).read_text()
 
-    result = reformat_text(text, width, plaintext, semantic, cleanups, smartquotes)
+    result = reformat_text(text, width, plaintext, semantic, cleanups, smartquotes, ellipses)
 
     if inplace:
         backup_suffix = ".orig" if not nobackup else ""

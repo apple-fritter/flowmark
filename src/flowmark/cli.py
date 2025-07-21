@@ -55,6 +55,7 @@ class Options:
     semantic: bool
     cleanups: bool
     smartquotes: bool
+    ellipses: bool
     inplace: bool
     nobackup: bool
     version: bool
@@ -120,6 +121,13 @@ def _parse_args(args: list[str] | None = None) -> Options:
         "(only applies to Markdown mode)",
     )
     parser.add_argument(
+        "--ellipses",
+        action="store_true",
+        default=False,
+        help="Convert three dots (...) to ellipsis character (…) with normalized spacing "
+        "(only applies to Markdown mode)",
+    )
+    parser.add_argument(
         "-i", "--inplace", action="store_true", help="Edit the file in place (ignores --output)"
     )
     parser.add_argument(
@@ -130,7 +138,7 @@ def _parse_args(args: list[str] | None = None) -> Options:
     parser.add_argument(
         "--auto",
         action="store_true",
-        help="Same as `--inplace --nobackup --semantic --cleanups --smartquotes`, as a convenience for "
+        help="Same as `--inplace --nobackup --semantic --cleanups --smartquotes --ellipses`, as a convenience for "
         "fully auto-formatting files",
     )
     parser.add_argument(
@@ -146,6 +154,7 @@ def _parse_args(args: list[str] | None = None) -> Options:
         opts.semantic = True
         opts.cleanups = True
         opts.smartquotes = True
+        opts.ellipses = True
 
     return Options(
         file=opts.file,
@@ -155,6 +164,7 @@ def _parse_args(args: list[str] | None = None) -> Options:
         semantic=opts.semantic,
         cleanups=opts.cleanups,
         smartquotes=opts.smartquotes,
+        ellipses=opts.ellipses,
         inplace=opts.inplace,
         nobackup=opts.nobackup,
         version=opts.version,
@@ -193,6 +203,7 @@ def main(args: list[str] | None = None) -> int:
             semantic=options.semantic,
             cleanups=options.cleanups,
             smartquotes=options.smartquotes,
+            ellipses=options.ellipses,
             make_parents=True,
         )
     except ValueError as e:

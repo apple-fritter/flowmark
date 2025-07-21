@@ -26,6 +26,7 @@ def test_reference_doc_formats():
         semantic: bool
         cleanups: bool
         smartquotes: bool
+        ellipses: bool = False
 
     test_cases: list[TestCase] = [
         TestCase(
@@ -55,6 +56,7 @@ def test_reference_doc_formats():
             semantic=True,
             cleanups=True,
             smartquotes=True,
+            ellipses=True,
         ),
     ]
 
@@ -69,6 +71,7 @@ def test_reference_doc_formats():
             semantic=case.semantic,
             cleanups=case.cleanups,
             smartquotes=case.smartquotes,
+            ellipses=case.ellipses,
         )
         if actual != expected:
             actual_path = testdoc_dir / f"testdoc.actual.{case.name}.md"

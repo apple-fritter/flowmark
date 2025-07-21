@@ -18,6 +18,7 @@ from textwrap import dedent
 from flowmark.custom_marko import custom_marko
 from flowmark.doc_cleanups import doc_cleanups
 from flowmark.doc_transforms import rewrite_text_content
+from flowmark.ellipses import ellipses as apply_ellipses
 from flowmark.frontmatter import split_frontmatter
 from flowmark.line_wrappers import LineWrapper, line_wrap_by_sentence, line_wrap_to_width
 from flowmark.sentence_split_regex import split_sentences_regex
@@ -82,6 +83,7 @@ def fill_markdown(
     semantic: bool = False,
     cleanups: bool = False,
     smartquotes: bool = False,
+    ellipses: bool = False,
     line_wrapper: LineWrapper | None = None,
 ) -> str:
     """
@@ -130,6 +132,8 @@ def fill_markdown(
         doc_cleanups(document)
     if smartquotes:
         rewrite_text_content(document, smart_quotes, coalesce_lines=True)
+    if ellipses:
+        rewrite_text_content(document, apply_ellipses, coalesce_lines=True)
     result = marko.render(document)
 
     # Reattach frontmatter if it was present
