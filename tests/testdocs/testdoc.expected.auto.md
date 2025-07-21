@@ -56,7 +56,7 @@ high-stakes decisions for those who give and *receive it*. Blah blah blah and bl
 
 - Additional parameters become options (e.g., `model=gpt-4o`, `language=en`)
 
-[^uptimenote]: In engineering, "counting nines" traditionally refers to *service
+[^uptimenote]: In engineering, “counting nines” traditionally refers to *service
     availability* (uptime)—99.99% uptime means ≤ 52 minutes of downtime per year.
 
 ## Some apostrophes and quotes--and dashes, too
@@ -69,7 +69,7 @@ three.” It was beautiful.
 
 She whispered ‘Remember this important message’ softly.
 
-The stated reason—"I’m working on myself"—may be sincere on one level.
+The stated reason—“I’m working on myself”—may be sincere on one level.
 
 * **From his Autobiography (1967-69):**
 

@@ -5,6 +5,7 @@ from collections.abc import Callable
 from marko import block, inline
 from marko.block import Document
 from marko.element import Element
+from marko.ext import footnote
 
 ContainerElement = (
     block.Document,
@@ -16,6 +17,7 @@ ContainerElement = (
     inline.Emphasis,
     inline.StrongEmphasis,
     inline.Link,
+    footnote.FootnoteDef,  # Footnote definitions contain paragraphs and other elements
 )
 
 
