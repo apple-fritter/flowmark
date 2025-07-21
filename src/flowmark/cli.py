@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Flowmark: Better auto-formatting and line wrapping for Markdown and plaintext
+Flowmark: Better auto-formatting for Markdown and plaintext
 
 Flowmark provides enhanced text wrapping capabilities with special handling for
 Markdown content. It can:
@@ -18,6 +18,10 @@ Command-line usage examples:
 
   # Format a Markdown file to stdout
   flowmark README.md
+
+  # Format a Markdown file in-place without backups and all auto-formatting
+  # options enabled
+  flowmark --auto README.md
 
   # Format a Markdown file and save to a new file
   flowmark README.md -o README_formatted.md

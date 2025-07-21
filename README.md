@@ -177,11 +177,11 @@ YAML is not normalized.
 Flowmark can be used as a library or as a CLI.
 
 ```
-usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-c] [--smartquotes] [-i]
+usage: flowmark [-h] [-o OUTPUT] [-w WIDTH] [-p] [-s] [-c] [--smartquotes] [--ellipses] [-i]
                 [--nobackup] [--auto] [--version]
                 [file]
 
-Flowmark: Better auto-formatting and line wrapping for Markdown and plaintext
+Flowmark: Better auto-formatting for Markdown and plaintext
 
 positional arguments:
   file                 Input file (use '-' for stdin)
@@ -189,21 +189,20 @@ positional arguments:
 options:
   -h, --help           show this help message and exit
   -o, --output OUTPUT  Output file (use '-' for stdout)
-  -w, --width WIDTH    Line width to wrap to, or 0 to disable line wrapping
-                       (default: 88)
+  -w, --width WIDTH    Line width to wrap to, or 0 to disable line wrapping (default: 88)
   -p, --plaintext      Process as plaintext (no Markdown parsing)
-  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to
-                       Markdown mode)
-  -c, --cleanups       Enable (safe) cleanups for common issues like accidentally
-                       boldfaced section headers (only applies to Markdown mode)
-  --smartquotes        Convert straight quotes to typographic (curly) quotes and
-                       apostrophes (only applies to Markdown mode)
+  -s, --semantic       Enable semantic (sentence-based) line breaks (only applies to Markdown
+                       mode)
+  -c, --cleanups       Enable (safe) cleanups for common issues like accidentally boldfaced
+                       section headers (only applies to Markdown mode)
+  --smartquotes        Convert straight quotes to typographic (curly) quotes and apostrophes
+                       (only applies to Markdown mode)
+  --ellipses           Convert three dots (...) to ellipsis character (…) with normalized
+                       spacing (only applies to Markdown mode)
   -i, --inplace        Edit the file in place (ignores --output)
-  --nobackup           Do not make a backup of the original file when using
-                       --inplace
-  --auto               Same as `--inplace --nobackup --semantic --cleanups
-                       --smartquotes`, as a convenience for fully auto-formatting
-                       files
+  --nobackup           Do not make a backup of the original file when using --inplace
+  --auto               Same as `--inplace --nobackup --semantic --cleanups --smartquotes
+                       --ellipses`, as a convenience for fully auto-formatting files
   --version            Show version information and exit
 
 Flowmark provides enhanced text wrapping capabilities with special handling for
@@ -222,6 +221,10 @@ Command-line usage examples:
 
   # Format a Markdown file to stdout
   flowmark README.md
+
+  # Format a Markdown file in-place without backups and all auto-formatting
+  # options enabled
+  flowmark --auto README.md
 
   # Format a Markdown file and save to a new file
   flowmark README.md -o README_formatted.md
