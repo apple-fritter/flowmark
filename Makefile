@@ -47,3 +47,11 @@ clean:
 
 format-docs:
 	uv run flowmark --auto README.md
+
+# Reset the expected reference docs to the actual ones currently produced.
+reset-ref-docs:
+	cp tests/testdocs/testdoc.actual.auto.md tests/testdocs/testdoc.expected.auto.md
+	cp tests/testdocs/testdoc.actual.cleaned.md tests/testdocs/testdoc.expected.cleaned.md
+	cp tests/testdocs/testdoc.actual.plain.md tests/testdocs/testdoc.expected.plain.md
+	cp tests/testdocs/testdoc.actual.semantic.md tests/testdocs/testdoc.expected.semantic.md
+

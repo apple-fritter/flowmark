@@ -37,7 +37,6 @@ high-stakes decisions for those who give and *receive it*. Blah blah blah and bl
   conventions)
 
 ### A subsection with some citations
-
 - Mark P. Cussen, Investopedia, [*Introduction To Incentive Stock
   Options*](http://www.investopedia.com/articles/stocks/12/introduction-incentive-stock-options.asp),
   updated 2017.
@@ -48,6 +47,16 @@ high-stakes decisions for those who give and *receive it*. Blah blah blah and bl
 - Andy Rachleff, Wealthfront, [*The 14 Crucial Questions about Stock
   Options*](https://blog.wealthfront.com/stock-options-14-crucial-questions), 2014.
 
+### Command Execution
+- `command` - Name of kash command or action to execute
+
+- `args` - Arguments as comma-separated string or individual `arg_0`, `arg_1`, etc.
+
+- Additional parameters become options (e.g., `model=gpt-4o`, `language=en`)
+
+[^uptimenote]: In engineering, "counting nines" traditionally refers to *service
+    availability* (uptime)—99.99% uptime means ≤ 52 minutes of downtime per year.
+
 ## Some apostrophes and quotes--and dashes, too
 
 "Hello," he said! "What's... your specialty?" he enquired (in an idle tone).
@@ -56,6 +65,18 @@ He read the multiline quote: "This is line one and this is line two and finally 
 three." It was beautiful.
 
 She whispered 'Remember this important message' softly.
+
+The stated reason—"I’m working on myself"—may be sincere on one level.
+
+* **From his Autobiography (1967-69):**
+
+  + **On His Life’s Vision ("Reflections on My Eightieth Birthday"):** "I have lived in
+    the pursuit of a vision, both personal and social. Personal: to care for what is
+    noble, for what is beautiful, for what is gentle; to allow moments of insight to
+    give wisdom at more mundane times. Social: to see in imagination the society that is
+    to be created, where individuals grow freely, and where hate and greed and envy die
+    because there is nothing to nourish them. These things I believe, and the world, for
+    all its horrors, has left me unshaken".
 
 Cas' surprise at John's question hung over them both for a brief moment, like a thinly
 disguised sack of potatoes. "From 2002-2004 I specialized in the Sarbanes-Oxley Act

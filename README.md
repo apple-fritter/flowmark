@@ -117,16 +117,16 @@ and sometimes controversial.
 However, now we are using versioned Markdown more than ever, it’s a good time to revisit
 this idea, as it can **make diffs in git much more readable**. The change may seem
 subtle but avoids having paragraphs reflow for very small edits, which does a lot to
-**minimize merge conflicts**. 
+**minimize merge conflicts**.
 
-This is my own refinement of [traditional semantic line breaks](https://github.com/sembr/specification).
+This is my own refinement of [traditional semantic line
+breaks](https://github.com/sembr/specification).
 Instead of just allowing you to break lines as you wish, it auto-applies fixed
 conventions about likely sentence boundaries in a conservative and reasonable way.
 It uses simple and fast **regex-based sentence splitting**. While not perfect, this
 works well for these purposes (and is much faster and simpler than a proper sentence
 parser like SpaCy). It should work fine for English and many other Latin/Cyrillic
-languages, but hasn’t been tested on CJK.
-You can see some
+languages, but hasn’t been tested on CJK. You can see some
 [old discussion](https://github.com/shurcooL/markdownfmt/issues/17) of this idea with
 the markdownfmt author.
 
