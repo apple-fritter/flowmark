@@ -15,10 +15,10 @@ import re
 from collections.abc import Callable
 from textwrap import dedent
 
-from flowmark.custom_marko import custom_marko
 from flowmark.doc_cleanups import doc_cleanups
 from flowmark.doc_transforms import rewrite_text_content
 from flowmark.ellipses import ellipses as apply_ellipses
+from flowmark.flowmark_markdown import flowmark_markdown
 from flowmark.frontmatter import split_frontmatter
 from flowmark.line_wrappers import LineWrapper, line_wrap_by_sentence, line_wrap_to_width
 from flowmark.sentence_split_regex import split_sentences_regex
@@ -126,7 +126,7 @@ def fill_markdown(
     markdown_text = _normalize_html_comments(markdown_text)
 
     # Parse and render.
-    marko = custom_marko(line_wrapper)
+    marko = flowmark_markdown(line_wrapper)
     document = marko.parse(markdown_text)
     if cleanups:
         doc_cleanups(document)

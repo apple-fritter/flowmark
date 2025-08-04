@@ -3,6 +3,7 @@ __all__ = (
     "fill_markdown",
     "first_sentence",
     "first_sentences",
+    "flowmark_markdown",
     "html_md_word_splitter",
     "simple_word_splitter",
     "line_wrap_by_sentence",
@@ -15,6 +16,7 @@ __all__ = (
     "Wrap",
 )
 
+from .flowmark_markdown import flowmark_markdown
 from .line_wrappers import line_wrap_by_sentence, line_wrap_to_width
 from .markdown_filling import fill_markdown
 from .reformat_api import reformat_file, reformat_text

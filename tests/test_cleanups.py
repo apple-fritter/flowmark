@@ -1,5 +1,5 @@
-from flowmark.custom_marko import custom_marko
 from flowmark.doc_cleanups import unbold_headings
+from flowmark.flowmark_markdown import flowmark_markdown
 from flowmark.line_wrappers import line_wrap_by_sentence
 
 input_md = """
@@ -53,7 +53,7 @@ Final text.
 
 
 def test_unbold_headings() -> None:
-    marko = custom_marko(line_wrap_by_sentence())
+    marko = flowmark_markdown(line_wrap_by_sentence())
 
     doc = marko.parse(input_md)
     unbold_headings(doc)

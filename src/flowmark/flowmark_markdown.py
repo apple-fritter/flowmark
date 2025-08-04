@@ -327,17 +327,21 @@ class MarkdownNormalizer(Renderer):
         return element.dest
 
 
-def custom_marko(line_wrapper: LineWrapper) -> Markdown:
+def flowmark_markdown(line_wrapper: LineWrapper) -> Markdown:
     """
-    Marko Markdown setup for GFM with minor customizations and a
-    renderer that normalizes Markdown.
+    Marko Markdown setup for GFM with a few customizations for Flowmark and a new
+    renderer that normalizes Markdown according to Flowmark's conventions.
     """
 
     class CustomRenderer(MarkdownNormalizer):
         def __init__(self) -> None:
             super().__init__(line_wrapper)
 
-    class CustomMarkdown(Markdown):
+    class FlowmarkMarkdown(Markdown):
+        """
+        Marko Markdown API with Flowmark customizations.
+        """
+
         def __init__(self) -> None:  # pyright: ignore[reportMissingSuperCall]
             pass
 
@@ -364,4 +368,4 @@ def custom_marko(line_wrapper: LineWrapper) -> Markdown:
 
             self._setup_done: bool = True
 
-    return CustomMarkdown()
+    return FlowmarkMarkdown()
