@@ -45,7 +45,7 @@ def coalesce_raw_text_nodes(doc: Document) -> None:
     This is useful for smart quotes processing which needs to see text that spans
     across line breaks as a single unit.
     """
-    from flowmark.doc_transforms import transform_tree
+    from flowmark.transforms.doc_transforms import transform_tree
 
     def transformer(element: Element) -> None:
         if hasattr(element, "children") and isinstance(element.children, list):  # pyright: ignore

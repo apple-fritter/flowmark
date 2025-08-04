@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from flowmark.markdown_filling import fill_markdown
+from flowmark.linewrapping.markdown_filling import fill_markdown
 
 testdoc_dir = Path("tests/testdocs")
 

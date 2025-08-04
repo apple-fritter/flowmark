@@ -2,9 +2,13 @@ import re
 from collections.abc import Callable
 from typing import Protocol
 
-from flowmark.sentence_split_regex import split_sentences_regex
-from flowmark.text_filling import DEFAULT_WRAP_WIDTH
-from flowmark.text_wrapping import DEFAULT_LEN_FUNCTION, wrap_paragraph, wrap_paragraph_lines
+from flowmark.linewrapping.sentence_split_regex import split_sentences_regex
+from flowmark.linewrapping.text_filling import DEFAULT_WRAP_WIDTH
+from flowmark.linewrapping.text_wrapping import (
+    DEFAULT_LEN_FUNCTION,
+    wrap_paragraph,
+    wrap_paragraph_lines,
+)
 
 DEFAULT_MIN_LINE_LEN = 20
 """Default minimum line length for sentence breaking."""

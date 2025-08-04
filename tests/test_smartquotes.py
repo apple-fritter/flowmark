@@ -1,4 +1,4 @@
-from flowmark.smartquotes import smart_quotes
+from flowmark.typography.smartquotes import smart_quotes
 
 
 def test_basic_double_quotes():

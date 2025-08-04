@@ -2,7 +2,10 @@ from textwrap import dedent
 
 import marko
 
-from flowmark.markdown_filling import _normalize_html_comments, fill_markdown  # pyright: ignore
+from flowmark.linewrapping.markdown_filling import (
+    _normalize_html_comments,  # pyright: ignore[reportPrivateUsage]
+    fill_markdown,
+)
 
 
 def test_normalize_html_comments():

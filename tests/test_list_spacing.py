@@ -10,7 +10,7 @@ number of paragraphs in the list item.
 
 from textwrap import dedent
 
-from flowmark.markdown_filling import fill_markdown
+from flowmark.linewrapping.markdown_filling import fill_markdown
 
 
 def test_list_items_with_code_blocks():

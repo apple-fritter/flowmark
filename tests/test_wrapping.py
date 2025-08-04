@@ -1,6 +1,6 @@
 from textwrap import dedent
 
-from flowmark.text_wrapping import (
+from flowmark.linewrapping.text_wrapping import (
     _HtmlMdWordSplitter,  # pyright: ignore
     html_md_word_splitter,
     markdown_escape_word,
@@ -224,7 +224,7 @@ def test_wrap_width():
 
 
 def test_line_wrap_to_width_with_markdown_breaks():
-    from flowmark.line_wrappers import line_wrap_to_width
+    from flowmark.linewrapping.line_wrappers import line_wrap_to_width
 
     # Get a markdown-aware line wrapper
     wrapper = line_wrap_to_width(width=80, is_markdown=True)

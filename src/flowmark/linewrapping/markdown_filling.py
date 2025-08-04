@@ -15,15 +15,19 @@ import re
 from collections.abc import Callable
 from textwrap import dedent
 
-from flowmark.doc_cleanups import doc_cleanups
-from flowmark.doc_transforms import rewrite_text_content
-from flowmark.ellipses import ellipses as apply_ellipses
-from flowmark.flowmark_markdown import flowmark_markdown
-from flowmark.frontmatter import split_frontmatter
-from flowmark.line_wrappers import LineWrapper, line_wrap_by_sentence, line_wrap_to_width
-from flowmark.sentence_split_regex import split_sentences_regex
-from flowmark.smartquotes import smart_quotes
-from flowmark.text_filling import DEFAULT_WRAP_WIDTH
+from flowmark.formats.flowmark_markdown import flowmark_markdown
+from flowmark.formats.frontmatter import split_frontmatter
+from flowmark.linewrapping.line_wrappers import (
+    LineWrapper,
+    line_wrap_by_sentence,
+    line_wrap_to_width,
+)
+from flowmark.linewrapping.sentence_split_regex import split_sentences_regex
+from flowmark.linewrapping.text_filling import DEFAULT_WRAP_WIDTH
+from flowmark.transforms.doc_cleanups import doc_cleanups
+from flowmark.transforms.doc_transforms import rewrite_text_content
+from flowmark.typography.ellipses import ellipses as apply_ellipses
+from flowmark.typography.smartquotes import smart_quotes
 
 
 def _normalize_html_comments(text: str, break_str: str = "\n\n") -> str:

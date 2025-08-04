@@ -2,7 +2,7 @@ import re
 from collections.abc import Callable
 from enum import Enum
 
-from flowmark.text_wrapping import (
+from flowmark.linewrapping.text_wrapping import (
     DEFAULT_LEN_FUNCTION,
     WordSplitter,
     html_md_word_splitter,

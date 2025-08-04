@@ -4,7 +4,7 @@ from marko import block, inline
 from marko.block import Document
 from marko.element import Element
 
-from flowmark.doc_transforms import transform_tree
+from flowmark.transforms.doc_transforms import transform_tree
 
 
 def _unbold_heading_transformer(element: Element) -> None:

@@ -1,4 +1,4 @@
-from flowmark.ellipses import ellipses
+from flowmark.typography.ellipses import ellipses
 
 
 def test_ellipses():

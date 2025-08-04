@@ -1,6 +1,6 @@
-from flowmark.doc_cleanups import unbold_headings
-from flowmark.flowmark_markdown import flowmark_markdown
-from flowmark.line_wrappers import line_wrap_by_sentence
+from flowmark.formats.flowmark_markdown import flowmark_markdown
+from flowmark.linewrapping.line_wrappers import line_wrap_by_sentence
+from flowmark.transforms.doc_cleanups import unbold_headings
 
 input_md = """
 # **Bold Heading 1**

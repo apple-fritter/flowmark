@@ -3,9 +3,9 @@ from pathlib import Path
 
 from strif import atomic_output_file
 
-from flowmark.markdown_filling import fill_markdown
-from flowmark.text_filling import Wrap, fill_text
-from flowmark.text_wrapping import html_md_word_splitter
+from flowmark.linewrapping.markdown_filling import fill_markdown
+from flowmark.linewrapping.text_filling import Wrap, fill_text
+from flowmark.linewrapping.text_wrapping import html_md_word_splitter
 
 
 def reformat_text(

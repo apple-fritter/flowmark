@@ -1,5 +1,5 @@
-from flowmark.frontmatter import has_frontmatter, split_frontmatter
-from flowmark.markdown_filling import fill_markdown
+from flowmark.formats.frontmatter import has_frontmatter, split_frontmatter
+from flowmark.linewrapping.markdown_filling import fill_markdown
 
 
 def test_split_frontmatter():

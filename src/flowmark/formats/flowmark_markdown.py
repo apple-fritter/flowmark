@@ -14,7 +14,7 @@ from marko.parser import Parser
 from marko.source import Source
 from typing_extensions import override
 
-from flowmark.line_wrappers import LineWrapper
+from flowmark.linewrapping.line_wrappers import LineWrapper
 
 
 def _normalize_title_quotes(title: str) -> str:
