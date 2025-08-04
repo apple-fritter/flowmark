@@ -14,7 +14,12 @@ from marko.parser import Parser
 from marko.source import Source
 from typing_extensions import override
 
-from flowmark.linewrapping.line_wrappers import LineWrapper
+from flowmark.linewrapping.line_wrappers import (
+    LineWrapper,
+    line_wrap_by_sentence,
+    line_wrap_to_width,
+)
+from flowmark.linewrapping.text_filling import DEFAULT_WRAP_WIDTH
 
 
 def _normalize_title_quotes(title: str) -> str:
@@ -327,7 +332,18 @@ class MarkdownNormalizer(Renderer):
         return element.dest
 
 
-def flowmark_markdown(line_wrapper: LineWrapper) -> Markdown:
+DEFAULT_SEMANTIC_LINE_WRAPPER = line_wrap_by_sentence(width=DEFAULT_WRAP_WIDTH, is_markdown=True)
+"""
+Default line wrapper for semantic line wrapping.
+"""
+
+DEFAULT_FIXED_LINE_WRAPPER = line_wrap_to_width(width=DEFAULT_WRAP_WIDTH, is_markdown=True)
+"""
+Default line wrapper for fixed-width line wrapping.
+"""
+
+
+def flowmark_markdown(line_wrapper: LineWrapper = DEFAULT_SEMANTIC_LINE_WRAPPER) -> Markdown:
     """
     Marko Markdown setup for GFM with a few customizations for Flowmark and a new
     renderer that normalizes Markdown according to Flowmark's conventions.
