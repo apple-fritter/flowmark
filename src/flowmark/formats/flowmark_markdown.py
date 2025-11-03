@@ -67,6 +67,7 @@ class MarkdownNormalizer(Renderer):
         self._second_prefix: str = ""  # The prefix on subsequent lines, such as `    `.
         self._suppress_item_break: bool = True
         self._line_wrapper: LineWrapper = line_wrapper
+        self._skip_next_blank_line: bool = False  # Skip blank line following heading
 
     @override
     def __enter__(self) -> MarkdownNormalizer:
@@ -83,6 +84,8 @@ class MarkdownNormalizer(Renderer):
         self._prefix, self._second_prefix = old_prefix, old_second_prefix
 
     def render_paragraph(self, element: block.Paragraph) -> str:
+        # Reset the skip flag since we're not rendering a blank line
+        self._skip_next_blank_line = False
         # After rendering a paragraph, don't suppress the next item break
         # This ensures proper spacing before list items that follow paragraphs
         self._suppress_item_break = False
@@ -103,6 +106,9 @@ class MarkdownNormalizer(Renderer):
         return wrapped_text + "\n"
 
     def render_list(self, element: block.List) -> str:
+        # Reset the skip flag since we're not rendering a blank line
+        self._skip_next_blank_line = False
+
         result: list[str] = []
 
         for i, child in enumerate(element.children):
@@ -137,6 +143,9 @@ class MarkdownNormalizer(Renderer):
         return result
 
     def render_quote(self, element: block.Quote) -> str:
+        # Reset the skip flag since we're not rendering a blank line
+        self._skip_next_blank_line = False
+
         with self.container("> ", "> "):
             result = self.render_children(element).rstrip("\n")
         self._prefix = self._second_prefix
@@ -146,6 +155,9 @@ class MarkdownNormalizer(Renderer):
         return f"{result}\n"
 
     def _render_code(self, element: block.CodeBlock | block.FencedCode) -> str:
+        # Reset the skip flag since we're not rendering a blank line
+        self._skip_next_blank_line = False
+
         # Preserve code content without reformatting.
         code_child = cast(inline.RawText, element.children[0])
         code_content = code_child.children.rstrip("\n")
@@ -180,17 +192,29 @@ class MarkdownNormalizer(Renderer):
         return result
 
     def render_heading(self, element: block.Heading) -> str:
-        result = f"{self._prefix}{'#' * element.level} {self.render_children(element)}\n"
-        self._prefix = self._second_prefix
-        # After rendering a heading, don't suppress the next item break
-        # This ensures proper spacing before list items that follow headings
-        self._suppress_item_break = False
-        return result
+        children_content = self.render_children(element)
+        # If heading ends with hard break, don't add extra newline
+        if children_content.endswith("\\"):
+            result = f"{self._prefix}{'#' * element.level} {children_content}\n"
+            self._prefix = self._second_prefix
+            # Don't skip next blank line or suppress item break for hard breaks
+            return result
+        else:
+            result = f"{self._prefix}{'#' * element.level} {children_content}\n\n"
+            self._prefix = self._second_prefix
+            # Skip the next blank line since we already added one
+            self._skip_next_blank_line = True
+            # Suppress the next item break since the heading already added spacing
+            self._suppress_item_break = True
+            return result
 
     def render_setext_heading(self, element: block.SetextHeading) -> str:
         return self.render_heading(cast(block.Heading, element))  # pyright: ignore
 
     def render_blank_line(self, _element: block.BlankLine) -> str:
+        if self._skip_next_blank_line:
+            self._skip_next_blank_line = False
+            return ""
         if self._prefix.strip():
             result = f"{self._prefix}\n"
         else:

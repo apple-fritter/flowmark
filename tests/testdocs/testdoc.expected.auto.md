@@ -1131,6 +1131,7 @@ Numbered headings like “## 1. Introduction” should not have the period escap
 Content here.
 
 ### 2. Second Section
+
 More content.
 
 ## 3. Underscore Escaping
@@ -1237,15 +1238,19 @@ Inline images should be joined on the same line if they fit:
 ![Image one](image1.png) ![Image two](image2.png)
 
 ## 13. Heading Spacing
+
 Headings should have consistent blank line spacing.
 
 ### Subheading Test
+
 Paragraph after heading.
 
 ### Another Subheading
+
 > Quote after heading.
 
 ### A Third Subheading
+
 ```markdown
 A fenced block.
 ```
