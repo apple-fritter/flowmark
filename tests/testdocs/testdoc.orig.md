@@ -754,3 +754,159 @@ another.
 
 **Related Architecture**:
 - [arch-execution.md](../architecture/arch-execution.md) - Execution model context
+
+
+## Corner Cases
+
+# Markdown Corner Cases Test Suite
+
+This document tests all discovered edge cases and formatting quirks.
+
+* * *
+
+## 1. Thematic Break Normalization
+
+Thematic breaks should be preserved as `* * *` not normalized to dashes.
+
+Test: Three asterisks with spaces should stay as `* * *` not become `-----`.
+
+* * *
+
+## 2. Numbered Heading Escaping
+
+Numbered headings like "## 1. Introduction" should not have the period escaped.
+
+### 1. First Section
+
+Content here.
+
+### 2. Second Section
+More content.
+
+## 3. Underscore Escaping
+
+Technical terms with underscores should not be escaped in normal text:
+
+- x86_64 architecture
+
+- ARM64 (aarch64) platforms
+- Linux x86_64 (glibc and musl/static)
+
+- macOS Intel (x86_64)
+
+- Windows x86_64
+
+## 4. Less-Than Escaping
+
+Comparison operators should not be escaped:
+
+- Startup time: < 10ms
+
+- Binary size < 10MB
+
+- Processing speed < 50ms
+
+## 5. Hash Escaping
+
+Hash symbols in inline strings should not be escaped:
+
+> The string `##` should not become `\#\#` in quotes.
+
+## 6. Code Fence with Indented Lists
+
+YAML code blocks with indented lists should be preserved correctly:
+
+```yaml
+jobs:
+  fmt:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+```
+
+## 7. Quote Block Formatting
+
+Quote blocks should have correct blank line spacing:
+
+> **Completion Gate:** Acceptance requires exact 100% passing of every test, exact 100%
+> parity with every original Python test, and exact byte-for-byte matching on all
+> comparisons (zero diffs).
+> This includes:
+> 
+> - Test output and processing results
+>
+> - CLI command output (help, errors, warnings, status messages)
+>
+> - Cross-validation across all fixtures
+>
+> - File outputs (no whitespace or encoding differences unless documented)
+
+## 8. Badge Link Wrapping
+
+Badge links should each be on separate lines:
+
+[![CI](https://github.com/jlevy/flowmark-rs/workflows/CI/badge.svg)](https://github.com/jlevy/flowmark-rs/actions)
+[![Release](https://github.com/jlevy/flowmark-rs/workflows/Release/badge.svg)](https://github.com/jlevy/flowmark-rs/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+## 9. Paragraph Wrapping
+
+Regular paragraphs should join lines and wrap at the configured width:
+
+First line of text.
+Second line of text.
+Third line of text that continues here.
+
+## 10. Quote Block Line Joining
+
+Quote blocks should join lines within paragraphs:
+
+> First line in quote.
+> Second line in quote.
+> Third line in quote.
+
+## 11. Link Wrapping
+
+Regular links should be joined on the same line if they fit:
+
+[Link one](https://example.com/first)
+[Link two](https://example.com/second)
+
+## 12. Inline Image Wrapping
+
+Inline images should be joined on the same line if they fit:
+
+![Image one](image1.png)
+![Image two](image2.png)
+
+## 13. Heading Spacing
+Headings should have consistent blank line spacing.
+
+### Subheading Test
+Paragraph after heading.
+
+### Another Subheading
+> Quote after heading.
+
+### A Third Subheading
+```markdown
+A fenced block.
+```
+
+### List After Heading
+- List item one
+- List item two
+
+## Summary
+
+
+All these corner cases should format consistently and predictably.
