@@ -297,11 +297,11 @@ found most useful.
 
 ## Project Docs
 
-For how to install uv and Python, see [installation.md](installation.md).
+For how to install uv and Python, see [docs/installation.md](installation.md).
 
-For development workflows, see [development.md](development.md).
+For development workflows, see [docs/development.md](development.md).
 
-For instructions on publishing to PyPI, see [publishing.md](publishing.md).
+For instructions on publishing to PyPI, see [docs/publishing.md](publishing.md).
 
 * * *
 
