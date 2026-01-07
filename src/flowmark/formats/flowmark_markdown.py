@@ -547,6 +547,30 @@ class MarkdownNormalizer(Renderer):
         """For GFM autolink URLs, just output the URL directly."""
         return element.dest
 
+    def render_alert(self, element: gfm_elements.Alert) -> str:
+        """
+        Render a GFM alert/callout block.
+
+        GitHub-flavored Markdown supports alert blocks like:
+        > [!NOTE]
+        > Content here
+
+        Valid alert types are: NOTE, TIP, IMPORTANT, WARNING, CAUTION
+        """
+        # Reset the skip flag since we're not rendering a blank line
+        self._skip_next_blank_line = False
+
+        # First render the alert header
+        alert_header = f"> [!{element.alert_type}]\n"
+
+        with self.container("> ", "> "):
+            result = self.render_children(element).rstrip("\n")
+
+        self._prefix = self._second_prefix
+        # After rendering an alert block, don't suppress the next item break
+        self._suppress_item_break = False
+        return f"{alert_header}{result}\n"
+
 
 DEFAULT_SEMANTIC_LINE_WRAPPER = line_wrap_by_sentence(width=DEFAULT_WRAP_WIDTH, is_markdown=True)
 """

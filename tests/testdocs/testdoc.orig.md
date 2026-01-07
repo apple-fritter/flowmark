@@ -942,6 +942,64 @@ print('hello')
 ```
 ~~~
 
+## 15. GitHub Alerts/Callouts
+
+GitHub-flavored Markdown supports alert blocks (callouts) for highlighting important information.
+
+### Basic Alerts
+
+> [!NOTE]
+> This is a note alert for highlighting information.
+
+> [!TIP]
+> This is a tip alert for helpful suggestions.
+
+> [!IMPORTANT]
+> This is an important alert for crucial information.
+
+> [!WARNING]
+> This is a warning alert for potential issues.
+
+> [!CAUTION]
+> This is a caution alert for dangerous actions.
+
+### Multi-line Alert Content
+
+> [!NOTE]
+> This is a note with multiple lines of content.
+> The content continues on the next line.
+> And keeps going on this third line.
+
+### Alert with Multiple Paragraphs
+
+> [!TIP]
+> First paragraph of the tip.
+>
+> Second paragraph with more details.
+
+### Alert with Code Block
+
+> [!WARNING]
+> Be careful with this code:
+>
+> ```python
+> dangerous_operation()
+> ```
+
+### Alert with List
+
+> [!IMPORTANT]
+> Remember these items:
+>
+> - First item
+> - Second item
+> - Third item
+
+### Lowercase Alert Type (normalized to uppercase)
+
+> [!note]
+> This lowercase alert should be normalized to uppercase.
+
 ## Summary
 
 
