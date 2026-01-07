@@ -1332,7 +1332,7 @@ Misspelled standard types should also be preserved as regular quotes.
 
 > [!NOOT] This misspelled NOTE should be a regular quote.
 
-> [!WRANING] This misspelled WARNING should be a regular quote.
+> [!WARNNG] This misspelled WARNING should be a regular quote.
 
 ### Malformed Alert Syntax (preserved as regular quotes)
 

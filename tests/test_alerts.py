@@ -78,6 +78,7 @@ def test_misspelled_alert_preserves_quote():
     """
     test_cases = [
         ("> [!NOOT]\n> Content here", "[!NOOT]"),
+        ("> [!WARNNG]\n> Content here", "[!WARNNG]"),  # Missing 'I'
         ("> [!WARNUNG]\n> Content here", "[!WARNUNG]"),
         ("> [!NOTEE]\n> Content here", "[!NOTEE]"),
         ("> [!HINT]\n> Content here", "[!HINT]"),
@@ -98,6 +99,7 @@ def test_unknown_alert_types_preserve_quote():
     CRITICAL: Unknown/custom alert types must NOT cause quote formatting to be stripped.
     """
     test_cases = [
+        "> [!FOO]\n> Foo type",
         "> [!CUSTOM]\n> Custom type",
         "> [!INFO]\n> Info type",
         "> [!DANGER]\n> Danger type",
