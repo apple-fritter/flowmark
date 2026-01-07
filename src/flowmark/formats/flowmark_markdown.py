@@ -547,7 +547,10 @@ class MarkdownNormalizer(Renderer):
         """For GFM autolink URLs, just output the URL directly."""
         return element.dest
 
-    def render_alert(self, element: gfm_elements.Alert) -> str:
+    def render_alert(
+        self,
+        element: block.Quote,  # pyright: ignore[reportUnknownParameterType]
+    ) -> str:
         """
         Render a GFM alert/callout block.
 
@@ -556,12 +559,16 @@ class MarkdownNormalizer(Renderer):
         > Content here
 
         Valid alert types are: NOTE, TIP, IMPORTANT, WARNING, CAUTION
+
+        Note: The element is typed as block.Quote since Alert extends Quote but isn't
+        in Marko's type stubs. At runtime, element is gfm_elements.Alert.
         """
         # Reset the skip flag since we're not rendering a blank line
         self._skip_next_blank_line = False
 
-        # First render the alert header
-        alert_header = f"> [!{element.alert_type}]\n"
+        # First render the alert header (Alert has alert_type attribute)
+        alert_type: str = element.alert_type  # pyright: ignore
+        alert_header = f"> [!{alert_type}]\n"
 
         with self.container("> ", "> "):
             result = self.render_children(element).rstrip("\n")
