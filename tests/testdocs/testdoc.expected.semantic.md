@@ -1362,6 +1362,34 @@ information.
 > [!NOTE]
 > This lowercase alert should be normalized to uppercase.
 
+### Non-standard Alert Types (preserved as regular quotes)
+
+Non-standard alert types like `[!FOO]` are not recognized by GitHub but should be
+preserved as regular block quotes without losing any content.
+
+> [!FOO] This uses a non-standard alert type.
+> It should be preserved as a regular quote.
+
+> [!CUSTOM] Another non-standard type that should be preserved.
+
+> [!INFO] Info is not a standard GitHub alert type.
+
+### Misspelled Alert Types (preserved as regular quotes)
+
+Misspelled standard types should also be preserved as regular quotes.
+
+> [!NOOT] This misspelled NOTE should be a regular quote.
+
+> [!WRANING] This misspelled WARNING should be a regular quote.
+
+### Malformed Alert Syntax (preserved as regular quotes)
+
+Various malformed alert syntaxes should be preserved as regular quotes.
+
+> [NOTE] Missing exclamation mark - regular quote.
+
+> [!] Empty alert type - regular quote.
+
 ## Summary
 
 All these corner cases should format consistently and predictably.
